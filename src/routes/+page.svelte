@@ -3,6 +3,20 @@
 	import type { IconName } from '$lib/data/categories';
 
 	let { data } = $props();
+
+	let formName = $state('');
+	let formEmail = $state('');
+	let formMessage = $state('');
+	let formSent = $state(false);
+	let formLoading = $state(false);
+
+	async function handleSubmit(e: Event) {
+		e.preventDefault();
+		formLoading = true;
+		await new Promise((r) => setTimeout(r, 1200));
+		formLoading = false;
+		formSent = true;
+	}
 </script>
 
 <div class="landing">
@@ -17,7 +31,7 @@
 				Baza Wiedzy z AI
 			</span>
 			<h1>Zrozum starość.<br />Buduj relacje.<br /><span class="accent">Pomagaj mądrze.</span></h1>
-			<p>Materiały edukacyjne, ćwiczenia pamięci i asystent AI -- wszystko o starzeniu się i wsparciu seniorów.</p>
+			<p>Materiały edukacyjne, ćwiczenia pamięci i wsparcie — wszystko o starzeniu się i pomocy seniorom.</p>
 			<div class="hero-buttons">
 				<a href="/wiedza" class="btn btn-primary">
 					<Icon name="book" size={18} color="white" />
@@ -78,8 +92,8 @@
 				<h2>Samotność to cierpienie w milczeniu</h2>
 				<div class="impact-stats">
 					<div class="impact-stat">
-						<strong>15</strong>
-						<span>papierosów dziennie — tyle szkodzi osamotnienie</span>
+						<strong>26%</strong>
+						<span>wyższe ryzyko przedwczesnej śmierci z powodu osamotnienia</span>
 					</div>
 					<div class="impact-stat">
 						<strong>50%</strong>
@@ -160,15 +174,46 @@
 		</div>
 	</section>
 
-	<section class="banner-end">
-		<img src="/img/hands.png" alt="" class="banner-bg" />
-		<div class="banner-body">
-			<h2>Każda rozmowa ma znaczenie</h2>
-			<p>Przełam barierę samotności -- zacznij od jednego pytania</p>
-			<a href="/asystent" class="btn btn-primary">
-				<Icon name="sparkle" size={18} color="white" />
-				Zapytaj Asystenta AI
-			</a>
+	<section class="join-section" id="dolacz">
+		<div class="container join-layout">
+			<div class="join-text">
+				<span class="label-tag">Dołącz do nas</span>
+				<h2>Każda rozmowa ma znaczenie</h2>
+				<p>Zostaw swoje dane, a odezwiemy się do Ciebie z informacjami o wolontariacie i możliwościach wsparcia seniorów w Twojej okolicy.</p>
+			</div>
+			<div class="join-form-wrap">
+				{#if formSent}
+					<div class="form-success">
+						<div class="success-icon">
+							<Icon name="heart" size={32} color="#1AAC3A" />
+						</div>
+						<h3>Dziękujemy!</h3>
+						<p>Twoje zgłoszenie zostało wysłane. Skontaktujemy się z Tobą wkrótce.</p>
+					</div>
+				{:else}
+					<form class="join-form" onsubmit={handleSubmit}>
+						<div class="form-row">
+							<label for="name">Imię i nazwisko</label>
+							<input id="name" type="text" bind:value={formName} placeholder="Anna Kowalska" required />
+						</div>
+						<div class="form-row">
+							<label for="email">E-mail</label>
+							<input id="email" type="email" bind:value={formEmail} placeholder="anna@example.com" required />
+						</div>
+						<div class="form-row">
+							<label for="message">Wiadomość (opcjonalnie)</label>
+							<textarea id="message" bind:value={formMessage} placeholder="Chcę pomagać..." rows="3"></textarea>
+						</div>
+						<button type="submit" class="btn btn-primary btn-full" disabled={formLoading}>
+							{#if formLoading}
+								Wysyłanie...
+							{:else}
+								Wyślij zgłoszenie
+							{/if}
+						</button>
+					</form>
+				{/if}
+			</div>
 		</div>
 	</section>
 </div>
@@ -569,35 +614,94 @@
 		font-size: $font-size-sm;
 	}
 
-	/* ── BANNER ── */
-	.banner-end {
-		position: relative;
-		min-height: 260px;
-		overflow: hidden;
+	/* ── JOIN / FORM ── */
+	.join-section {
+		background: linear-gradient(160deg, #EDF6FC, #E0F0FA);
+		padding: $spacing-3xl 0;
 	}
 
-	.banner-bg {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
+	.join-layout {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: $spacing-3xl;
+		align-items: start;
+
+		@media (max-width: 768px) {
+			grid-template-columns: 1fr;
+			gap: $spacing-xl;
+		}
 	}
 
-	.banner-body {
-		position: relative;
-		z-index: 1;
-		min-height: 260px;
+	.join-text {
+		h2 { font-size: $font-size-xl; font-weight: 800; margin-bottom: $spacing-md; line-height: 1.2; }
+		p { font-size: $font-size-sm; color: $color-text-muted; line-height: 1.7; }
+	}
+
+	.join-form-wrap {
+		background: white;
+		border-radius: $radius-lg;
+		padding: $spacing-xl;
+		box-shadow: $shadow-sm;
+		border: 1px solid $color-border;
+	}
+
+	.join-form {
 		display: flex;
 		flex-direction: column;
+		gap: $spacing-md;
+	}
+
+	.form-row {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+
+		label {
+			font-size: $font-size-xs;
+			font-weight: 600;
+			color: $color-text;
+		}
+
+		input, textarea {
+			padding: 10px 14px;
+			border: 1px solid $color-border;
+			border-radius: $radius;
+			font-size: $font-size-sm;
+			font-family: inherit;
+			background: $color-bg;
+			transition: border-color 0.15s;
+			resize: vertical;
+
+			&:focus {
+				outline: none;
+				border-color: $color-primary;
+				box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+			}
+
+			&::placeholder {
+				color: $color-text-muted;
+				opacity: 0.6;
+			}
+		}
+	}
+
+	.btn-full { width: 100%; justify-content: center; }
+
+	.form-success {
+		text-align: center;
+		padding: $spacing-xl 0;
+
+		h3 { font-size: $font-size-lg; font-weight: 800; margin: $spacing-md 0 $spacing-xs; }
+		p { font-size: $font-size-sm; color: $color-text-muted; line-height: 1.6; }
+	}
+
+	.success-icon {
+		width: 64px;
+		height: 64px;
+		border-radius: 50%;
+		background: #E8F9EC;
+		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		text-align: center;
-		padding: $spacing-2xl $spacing-lg;
-		color: white;
-		background: rgba(20,20,18,0.6);
-
-		h2 { font-size: $font-size-xl; font-weight: 800; margin-bottom: $spacing-xs; }
-		p { opacity: 0.8; margin-bottom: $spacing-lg; }
 	}
 </style>
