@@ -30,6 +30,7 @@ ${knowledgeContext}`;
 
 	const response = await openai.chat.completions.create({
 		model: 'gpt-5.2',
+		reasoning_effort: 'low',
 		messages: [
 			{ role: 'system', content: systemPrompt },
 			...messages.map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content }))
