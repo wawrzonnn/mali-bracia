@@ -76,6 +76,7 @@
 	.ann-bar {
 		background: var(--rd-ink);
 		color: #f1e8da;
+		font-family: 'Inter', system-ui, sans-serif;
 		font-size: 14px;
 		letter-spacing: 0.01em;
 	}
@@ -102,6 +103,7 @@
 		background: rgba(250, 246, 239, 0.86);
 		backdrop-filter: blur(10px);
 		border-bottom: 1px solid var(--rd-border);
+		font-family: 'Inter', system-ui, sans-serif;
 	}
 	.nav-inner {
 		padding: 15px 24px;

@@ -50,7 +50,7 @@
 		a {
 			padding: 16px 2px;
 			text-decoration: none;
-			font-family: 'Hanken Grotesk', system-ui, sans-serif;
+			font-family: 'Inter', system-ui, sans-serif;
 			font-weight: 500;
 			font-size: 16.5px;
 			color: var(--rd-ink, #221d18);

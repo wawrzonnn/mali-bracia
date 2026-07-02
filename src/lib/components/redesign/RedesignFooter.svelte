@@ -37,7 +37,7 @@
 		padding: 0 24px;
 	}
 
-	.footer { background: var(--rd-ink-2); color: var(--rd-muted-dark); font-size: 14.5px; }
+	.footer { background: var(--rd-ink-2); color: var(--rd-muted-dark); font-family: 'Inter', system-ui, sans-serif; font-size: 14.5px; }
 	.footer-grid { padding: 64px 24px 40px; display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 40px; }
 	.footer-brand { display: flex; align-items: center; gap: 11px; margin-bottom: 18px; }
 	.brand-badge {
