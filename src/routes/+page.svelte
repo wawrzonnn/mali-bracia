@@ -1,8 +1,4 @@
 <script lang="ts">
-	import A11yToolbar from '$lib/components/A11yToolbar.svelte';
-	import RedesignNav from '$lib/components/redesign/RedesignNav.svelte';
-	import RedesignFooter from '$lib/components/redesign/RedesignFooter.svelte';
-
 	let { data } = $props();
 
 	const catMap = $derived(Object.fromEntries(data.categories.map((c) => [c.slug, c])));
@@ -39,12 +35,7 @@
 	/>
 </svelte:head>
 
-<a href="#main-content" class="skip-link">Przejdź do treści</a>
-
 <div class="landing2">
-	<RedesignNav />
-
-	<main id="main-content" tabindex="-1">
 		<!-- hero -->
 		<section class="hero wrap">
 			<div class="hero-copy">
@@ -246,12 +237,7 @@
 				</div>
 			</div>
 		</section>
-	</main>
-
-	<RedesignFooter />
 </div>
-
-<A11yToolbar withSidebar={false} />
 
 <style lang="scss">
 	.landing2 {
@@ -259,21 +245,6 @@
 		color: var(--rd-ink);
 		background: var(--rd-bg-paper);
 		-webkit-font-smoothing: antialiased;
-	}
-
-	.skip-link {
-		position: fixed;
-		top: -80px;
-		left: 8px;
-		z-index: 1000;
-		background: var(--rd-primary, #0a80c4);
-		color: #fff;
-		padding: 10px 18px;
-		border-radius: 8px;
-		font-weight: 700;
-		text-decoration: none;
-		transition: top 0.16s ease;
-		&:focus { top: 8px; }
 	}
 
 	.wrap {

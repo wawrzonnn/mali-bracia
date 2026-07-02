@@ -2,15 +2,38 @@
 	import '$lib/styles/global.scss';
 	import Icon from '$lib/components/Icon.svelte';
 	import A11yToolbar from '$lib/components/A11yToolbar.svelte';
+	import RedesignNav from '$lib/components/redesign/RedesignNav.svelte';
+	import RedesignFooter from '$lib/components/redesign/RedesignFooter.svelte';
+	import ChromeSwitcher from '$lib/components/redesign/ChromeSwitcher.svelte';
 	import { page } from '$app/state';
 	import { browser } from '$app/environment';
 
 	let { children } = $props();
 	const isAdmin = $derived(page.url.pathname.startsWith('/administracja'));
-	/* Strony przebudowane w nowym designie (własny nav/stopka) — na razie tylko
-	   te trzy trasy dokładnie; podstrony jak /wiedza/[slug] wciąż mają stary sidebar. */
-	const redesignedRoutes = ['/', '/wiedza', '/cwiczenia', '/wsparcie', '/pytania'];
-	const isLanding = $derived(redesignedRoutes.includes(page.url.pathname));
+
+	/* Globalny przełącznik nawigacji (do prezentacji — porównanie dwóch ścieżek). */
+	let chromeMode = $state<'navbar' | 'sidebar'>('navbar');
+
+	$effect(() => {
+		if (!browser) return;
+		const saved = localStorage.getItem('mbu-chrome-mode');
+		if (saved === 'navbar' || saved === 'sidebar') chromeMode = saved;
+	});
+
+	function setChromeMode(mode: 'navbar' | 'sidebar') {
+		chromeMode = mode;
+		if (browser) localStorage.setItem('mbu-chrome-mode', mode);
+	}
+
+	const navActive = $derived.by(() => {
+		const p = page.url.pathname;
+		if (p.startsWith('/wiedza')) return 'wiedza' as const;
+		if (p.startsWith('/cwiczenia')) return 'cwiczenia' as const;
+		if (p.startsWith('/wsparcie')) return 'wsparcie' as const;
+		if (p.startsWith('/pytania')) return 'pytania' as const;
+		return undefined;
+	});
+
 	let mobileMenuOpen = $state(false);
 	let chatOpen = $state(false);
 	let chatInput = $state('');
@@ -75,8 +98,81 @@
 	}
 </script>
 
-{#if isAdmin || isLanding}
+{#snippet chatWidget(hideOnMobile: boolean)}
+	{#if !page.url.pathname.startsWith('/asystent')}
+		{#if chatOpen}
+			<div class="chat-popup">
+				<div class="popup-header">
+					<div class="popup-avatar"><Icon name="sparkle" size={16} color="white" /></div>
+					<span>Asystent MBU</span>
+					<button class="popup-close" onclick={() => (chatOpen = false)} aria-label="Zamknij czat">
+						<Icon name="x" size={18} color="rgba(255,255,255,0.7)" />
+					</button>
+				</div>
+				<div class="popup-body">
+					{#if chatMessages.length === 0}
+						<div class="popup-welcome">
+							<p>Cześć! Jestem asystentem Bazy Wiedzy MBU. Mogę pomóc w tematach dotyczących starzenia, samotności i wsparcia seniorów.</p>
+							<span class="popup-label">Popularne pytania:</span>
+							<button class="popup-suggestion" onclick={() => { chatInput = 'Jak mogę pomóc samotnemu seniorowi?'; sendMiniChat(); }}>Jak pomóc samotnemu seniorowi?</button>
+							<button class="popup-suggestion" onclick={() => { chatInput = 'Czym jest demencja i jak ją rozpoznać?'; sendMiniChat(); }}>Czym jest demencja?</button>
+							<button class="popup-suggestion" onclick={() => { chatInput = 'Gdzie szukać wsparcia dla osoby starszej?'; sendMiniChat(); }}>Gdzie szukać wsparcia?</button>
+							<button class="popup-suggestion" onclick={() => { chatInput = 'Jak zostać wolontariuszem MBU?'; sendMiniChat(); }}>Jak zostać wolontariuszem?</button>
+						</div>
+					{/if}
+					{#each chatMessages as msg}
+						<div class="popup-msg" class:user={msg.role === 'user'}>
+							{msg.content}
+						</div>
+					{/each}
+					{#if chatLoading}
+						<div class="popup-msg"><em>Piszę...</em></div>
+					{/if}
+				</div>
+				<div class="popup-input">
+					<input
+						type="text"
+						bind:value={chatInput}
+						placeholder="Napisz pytanie..."
+						onkeydown={(e) => e.key === 'Enter' && sendMiniChat()}
+						disabled={chatLoading}
+					/>
+					<button onclick={sendMiniChat} disabled={!chatInput.trim() || chatLoading} aria-label="Wyślij wiadomość">
+						<Icon name="send" size={16} color="white" />
+					</button>
+				</div>
+				<a href="/asystent" class="popup-expand">
+					Otwórz pełnego asystenta
+					<Icon name="arrow-right" size={14} color="#169FDB" />
+				</a>
+			</div>
+		{/if}
+
+		<button class="chat-fab" class:hide-mobile={hideOnMobile} onclick={() => (chatOpen = !chatOpen)} aria-label="Otwórz czat">
+			{#if chatOpen}
+				<Icon name="x" size={24} color="white" />
+			{:else}
+				<Icon name="sparkle" size={24} color="white" />
+			{/if}
+		</button>
+	{/if}
+{/snippet}
+
+{#if isAdmin}
 	{@render children()}
+{:else if chromeMode === 'navbar'}
+<div class="navbar-shell">
+	<a href="#main-content" class="skip-link">Przejdź do treści</a>
+	<RedesignNav active={navActive} />
+
+	<main id="main-content" tabindex="-1">
+		{@render children()}
+		<RedesignFooter />
+	</main>
+</div>
+
+	{@render chatWidget(false)}
+	<A11yToolbar withSidebar={false} />
 {:else}
 <div class="app-layout">
 	<a href="#main-content" class="skip-link">Przejdź do treści</a>
@@ -147,66 +243,13 @@
 		</main>
 	</div>
 
-	{#if !page.url.pathname.startsWith('/asystent')}
-		{#if chatOpen}
-			<div class="chat-popup">
-				<div class="popup-header">
-					<div class="popup-avatar"><Icon name="sparkle" size={16} color="white" /></div>
-					<span>Asystent MBU</span>
-					<button class="popup-close" onclick={() => (chatOpen = false)} aria-label="Zamknij czat">
-						<Icon name="x" size={18} color="rgba(255,255,255,0.7)" />
-					</button>
-				</div>
-				<div class="popup-body">
-					{#if chatMessages.length === 0}
-						<div class="popup-welcome">
-							<p>Cześć! Jestem asystentem Bazy Wiedzy MBU. Mogę pomóc w tematach dotyczących starzenia, samotności i wsparcia seniorów.</p>
-							<span class="popup-label">Popularne pytania:</span>
-							<button class="popup-suggestion" onclick={() => { chatInput = 'Jak mogę pomóc samotnemu seniorowi?'; sendMiniChat(); }}>Jak pomóc samotnemu seniorowi?</button>
-							<button class="popup-suggestion" onclick={() => { chatInput = 'Czym jest demencja i jak ją rozpoznać?'; sendMiniChat(); }}>Czym jest demencja?</button>
-							<button class="popup-suggestion" onclick={() => { chatInput = 'Gdzie szukać wsparcia dla osoby starszej?'; sendMiniChat(); }}>Gdzie szukać wsparcia?</button>
-							<button class="popup-suggestion" onclick={() => { chatInput = 'Jak zostać wolontariuszem MBU?'; sendMiniChat(); }}>Jak zostać wolontariuszem?</button>
-						</div>
-					{/if}
-					{#each chatMessages as msg}
-						<div class="popup-msg" class:user={msg.role === 'user'}>
-							{msg.content}
-						</div>
-					{/each}
-					{#if chatLoading}
-						<div class="popup-msg"><em>Piszę...</em></div>
-					{/if}
-				</div>
-				<div class="popup-input">
-					<input
-						type="text"
-						bind:value={chatInput}
-						placeholder="Napisz pytanie..."
-						onkeydown={(e) => e.key === 'Enter' && sendMiniChat()}
-						disabled={chatLoading}
-					/>
-					<button onclick={sendMiniChat} disabled={!chatInput.trim() || chatLoading} aria-label="Wyślij wiadomość">
-						<Icon name="send" size={16} color="white" />
-					</button>
-				</div>
-				<a href="/asystent" class="popup-expand">
-					Otwórz pełnego asystenta
-					<Icon name="arrow-right" size={14} color="#169FDB" />
-				</a>
-			</div>
-		{/if}
-
-		<button class="chat-fab" onclick={() => (chatOpen = !chatOpen)} aria-label="Otwórz czat">
-			{#if chatOpen}
-				<Icon name="x" size={24} color="white" />
-			{:else}
-				<Icon name="sparkle" size={24} color="white" />
-			{/if}
-		</button>
-	{/if}
-
+	{@render chatWidget(true)}
 	<A11yToolbar />
 </div>
+{/if}
+
+{#if !isAdmin}
+	<ChromeSwitcher mode={chromeMode} onSelect={setChromeMode} />
 {/if}
 
 <style lang="scss">
@@ -215,6 +258,13 @@
 	.app-layout {
 		display: flex;
 		min-height: 100dvh;
+	}
+
+	.navbar-shell {
+		display: flex;
+		flex-direction: column;
+		height: 100dvh;
+		overflow: hidden;
 	}
 
 	.sidebar {
@@ -429,7 +479,7 @@
 		justify-content: center;
 	}
 
-	main { flex: 1; }
+	main { flex: 1; min-height: 0; overflow-y: auto; }
 
 	/* ─── CHAT FAB ─── */
 	.chat-fab {
@@ -447,9 +497,12 @@
 		box-shadow: 0 4px 20px rgba($color-primary, 0.35);
 		transition: transform 0.15s, box-shadow 0.15s;
 
-		/* Na mobile rolę szybkiego dostępu do AI pełni już przycisk w topbarze —
-		   ukrywamy FAB, żeby nie zasłaniał treści na dole ekranu. */
-		@media (max-width: 768px) { display: none; }
+		/* W trybie sidebar rolę szybkiego dostępu do AI na mobile pełni już
+		   przycisk w topbarze — tam ukrywamy FAB. W trybie navbar (bez topbara)
+		   FAB zostaje jedynym dostępem do asystenta, więc go nie chowamy. */
+		&.hide-mobile {
+			@media (max-width: 768px) { display: none; }
+		}
 
 		&:hover {
 			transform: scale(1.08);

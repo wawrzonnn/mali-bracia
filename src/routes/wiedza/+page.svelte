@@ -1,7 +1,4 @@
 <script lang="ts">
-	import RedesignNav from '$lib/components/redesign/RedesignNav.svelte';
-	import RedesignFooter from '$lib/components/redesign/RedesignFooter.svelte';
-
 	let { data } = $props();
 
 	const catMap = $derived(Object.fromEntries(data.categories.map((c) => [c.slug, c])));
@@ -51,12 +48,7 @@
 	/>
 </svelte:head>
 
-<a href="#main-content" class="skip-link">Przejdź do treści</a>
-
 <div class="landing2">
-	<RedesignNav active="wiedza" />
-
-	<main id="main-content" tabindex="-1">
 		<!-- page header -->
 		<section class="page-head">
 			<div class="wrap head-inner">
@@ -151,9 +143,6 @@
 				{/if}
 			</div>
 		</section>
-	</main>
-
-	<RedesignFooter />
 </div>
 
 <style lang="scss">
@@ -162,21 +151,6 @@
 		color: var(--rd-ink);
 		background: var(--rd-bg-paper);
 		-webkit-font-smoothing: antialiased;
-	}
-
-	.skip-link {
-		position: fixed;
-		top: -80px;
-		left: 8px;
-		z-index: 1000;
-		background: var(--rd-primary);
-		color: #fff;
-		padding: 10px 18px;
-		border-radius: 8px;
-		font-weight: 700;
-		text-decoration: none;
-		transition: top 0.16s ease;
-		&:focus { top: 8px; }
 	}
 
 	.wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }

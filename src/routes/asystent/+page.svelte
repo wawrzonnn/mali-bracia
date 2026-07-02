@@ -195,7 +195,8 @@
 	.chat-page {
 		display: flex;
 		flex-direction: column;
-		height: 100dvh;
+		height: 100%;
+		min-height: 0;
 		background: $color-bg;
 	}
 

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import RedesignNav from '$lib/components/redesign/RedesignNav.svelte';
-	import RedesignFooter from '$lib/components/redesign/RedesignFooter.svelte';
 	import { browser } from '$app/environment';
 
 	let generating = $state(false);
@@ -74,12 +72,7 @@ h2{font-size:18px;margin-top:24px}ol,ul{margin:12px 0}li{margin:8px 0}
 	/>
 </svelte:head>
 
-<a href="#main-content" class="skip-link">Przejdź do treści</a>
-
 <div class="landing2">
-	<RedesignNav active="cwiczenia" />
-
-	<main id="main-content" tabindex="-1">
 		<!-- page header -->
 		<section class="page-head">
 			<div class="wrap head-inner">
@@ -161,9 +154,6 @@ h2{font-size:18px;margin-top:24px}ol,ul{margin:12px 0}li{margin:8px 0}
 				{/if}
 			</div>
 		</section>
-	</main>
-
-	<RedesignFooter />
 </div>
 
 <style lang="scss">
@@ -172,21 +162,6 @@ h2{font-size:18px;margin-top:24px}ol,ul{margin:12px 0}li{margin:8px 0}
 		color: var(--rd-ink);
 		background: var(--rd-bg-paper);
 		-webkit-font-smoothing: antialiased;
-	}
-
-	.skip-link {
-		position: fixed;
-		top: -80px;
-		left: 8px;
-		z-index: 1000;
-		background: var(--rd-primary);
-		color: #fff;
-		padding: 10px 18px;
-		border-radius: 8px;
-		font-weight: 700;
-		text-decoration: none;
-		transition: top 0.16s ease;
-		&:focus { top: 8px; }
 	}
 
 	.wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
