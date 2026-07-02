@@ -1,815 +1,593 @@
 <script lang="ts">
-	import Icon from '$lib/components/Icon.svelte';
-	import type { IconName } from '$lib/data/categories';
+	import A11yToolbar from '$lib/components/A11yToolbar.svelte';
+	import RedesignNav from '$lib/components/redesign/RedesignNav.svelte';
+	import RedesignFooter from '$lib/components/redesign/RedesignFooter.svelte';
 
 	let { data } = $props();
+
+	const catMap = $derived(Object.fromEntries(data.categories.map((c) => [c.slug, c])));
+	const topics = $derived(
+		data.categories.map((c, i) => ({
+			num: String(i + 1).padStart(2, '0'),
+			title: c.name,
+			desc: c.description,
+			slug: c.slug
+		}))
+	);
+	const articlesShown = $derived(
+		data.recentArticles.slice(0, 3).map((a) => ({
+			cat: catMap[a.categorySlug]?.name ?? a.categorySlug,
+			title: a.title,
+			desc: a.summary,
+			read: `${a.readingTimeMin} min czytania`,
+			slug: a.slug
+		}))
+	);
 </script>
 
-<div class="landing">
-	<!-- ── HERO ── -->
-	<section class="hero">
-		<div class="hero-bg">
-			<img src="/img/intro.png" alt="" class="hero-bg-img" />
-			<div class="hero-gradient"></div>
-		</div>
-		<div class="wrap hero-wrap">
-			<div class="hero-content">
-				<span class="chip">
-					<Icon name="sparkle" size={14} color="#B3E0F7" />
-					Baza wiedzy z asystentem AI
-				</span>
-				<h1>Bądź obecny.<br />Starość nie musi oznaczać <span class="accent">samotności</span>.</h1>
-				<p>
-					Materiały o starzeniu się, ćwiczenia pamięci i asystent AI — wszystko, czego potrzebujesz,
-					by zrozumieć seniora i zbudować z nim prawdziwą relację.
+<svelte:head>
+	<title>mali bracia Ubogich — Program „Obecność" dla samotnych seniorów</title>
+	<meta
+		name="description"
+		content="1,7 miliona seniorów w Polsce żyje w osamotnieniu. Łączymy ich z wolontariuszami, budujemy trwałe relacje i dzielimy się wiedzą o starości."
+	/>
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap"
+		rel="stylesheet"
+	/>
+</svelte:head>
+
+<a href="#main-content" class="skip-link">Przejdź do treści</a>
+
+<div class="landing2">
+	<RedesignNav />
+
+	<main id="main-content" tabindex="-1">
+		<!-- hero -->
+		<section class="hero wrap">
+			<div class="hero-copy">
+				<span class="eyebrow accent"><span class="rule"></span>Program „Obecność"</span>
+				<h1>Starość nie musi oznaczać <em>samotności.</em></h1>
+				<p class="lead">
+					1,7 miliona seniorów w Polsce żyje w osamotnieniu. Łączymy ich z wolontariuszami, budujemy
+					trwałe relacje i dzielimy się wiedzą o starości — dla rodzin, opiekunów i każdego, kto chce
+					być obecny.
 				</p>
 				<div class="hero-actions">
-					<a href="/wiedza" class="btn btn-primary">
-						<Icon name="book" size={18} color="white" />
-						Przeglądaj wiedzę
-					</a>
-					<a href="/asystent" class="btn btn-glass">
-						<Icon name="sparkle" size={18} color="white" />
-						Zapytaj asystenta AI
-					</a>
-				</div>
-				<div class="hero-trust">
-					<span><strong>Od 2002</strong> w Polsce</span>
-					<span class="dot"></span>
-					<span><strong>14</strong> miast</span>
-					<span class="dot"></span>
-					<span><strong>1000+</strong> wolontariuszy</span>
+					<a href="#wolontariat" class="btn-solid btn-lg">Zostań wolontariuszem →</a>
+					<a href="#wiedza" class="btn-line btn-lg">Przeglądaj wiedzę</a>
 				</div>
 			</div>
-		</div>
-	</section>
+			<div class="hero-art">
+				<div class="placeholder ph-45">
+					<span class="ph-caption">zdjęcie — senior i wolontariusz przy stole</span>
+				</div>
+				<div class="hero-float">
+					<div class="hero-float-num">1 godz.</div>
+					<div class="hero-float-txt">tygodniowo wystarczy, by odmienić czyjąś samotność</div>
+				</div>
+			</div>
+		</section>
 
-	<!-- ── STATYSTYKI ── -->
-	<section class="stats">
-		<div class="wrap stats-grid">
-			<div class="stat">
-				<span class="stat-num">800</span>
-				<span class="stat-txt">seniorów pod opieką każdego dnia</span>
+		<!-- trust strip -->
+		<section class="wrap trust-wrap">
+			<div class="trust-strip">
+				<div class="trust-item">
+					<div class="trust-num">od 2002</div>
+					<div class="trust-label">działamy w Polsce</div>
+				</div>
+				<div class="trust-item">
+					<div class="trust-num">14 miast</div>
+					<div class="trust-label">w całym kraju</div>
+				</div>
+				<div class="trust-item">
+					<div class="trust-num">1000+</div>
+					<div class="trust-label">wolontariuszy</div>
+				</div>
+				<div class="trust-item">
+					<div class="trust-num">800</div>
+					<div class="trust-label">seniorów pod opieką dziennie</div>
+				</div>
 			</div>
-			<div class="stat">
-				<span class="stat-num">80&nbsp;tys.</span>
-				<span class="stat-txt">godzin wolontariatu rocznie</span>
-			</div>
-			<div class="stat">
-				<span class="stat-num">14</span>
-				<span class="stat-txt">miast w całej Polsce</span>
-			</div>
-			<div class="stat">
-				<span class="stat-num">20+</span>
-				<span class="stat-txt">lat doświadczenia</span>
-			</div>
-		</div>
-		<p class="stats-source">Dane: Stowarzyszenie mali bracia Ubogich</p>
-	</section>
+		</section>
 
-	<!-- ── CYTAT ── -->
-	<section class="section quote">
-		<div class="wrap quote-inner">
-			<span class="quote-mark">„</span>
-			<blockquote>Kwiaty przed chlebem</blockquote>
-			<p class="quote-desc">
-				Ta myśl towarzyszy nam od 1946 roku. Seniorom brakuje nie tyle rzeczy, ile
-				<strong>drugiego człowieka</strong> — rozmowy, uwagi, bliskości. Bliskość jest tak samo ważna
-				jak potrzeby materialne.
-			</p>
-			<cite>Armand Marquiset · założyciel Stowarzyszenia</cite>
-		</div>
-	</section>
-
-	<!-- ── TEMATY ── -->
-	<section class="section">
-		<div class="wrap">
-			<header class="head">
-				<h2>Tematy do poznania</h2>
-				<p class="head-sub">Cztery obszary, od których warto zacząć.</p>
-			</header>
-			<div class="topics">
-				{#each data.categories as cat}
-					<a href="/wiedza?kategoria={cat.slug}" class="topic" style="--c: {cat.color}">
-						<span class="topic-ic">
-							<Icon name={cat.icon as IconName} size={22} color={cat.color} />
-						</span>
-						<span class="topic-body">
-							<span class="topic-h">{cat.name}</span>
-							<span class="topic-p">{cat.description}</span>
-						</span>
-						<span class="topic-arrow"><Icon name="arrow-right" size={18} color={cat.color} /></span>
-					</a>
-				{/each}
-			</div>
-		</div>
-	</section>
-
-	<!-- ── IMPACT (jedyny mocny akcent) ── -->
-	<section class="impact" style="background-image: url('/img/oldman.png');">
-		<div class="impact-overlay">
-			<div class="wrap impact-inner">
-				<span class="eyebrow">Wyzwanie</span>
-				<h2>Samotność to cierpienie w milczeniu</h2>
-				<div class="impact-stats">
-					<div class="impact-stat">
-						<strong>26%</strong>
-						<span>wyższe ryzyko przedwczesnej śmierci z powodu osamotnienia</span>
+		<!-- wyzwanie (dark) -->
+		<section class="dark-section">
+			<div class="wrap dark-inner">
+				<span class="eyebrow accent-soft"><span class="rule accent-soft-rule"></span>Wyzwanie</span>
+				<h2 class="dark-h2">Samotność to cierpienie w milczeniu.</h2>
+				<p class="dark-lead">
+					Osamotnienie nie jest tylko smutkiem. To realne zagrożenie dla zdrowia i życia osób
+					starszych — a wciąż pozostaje niewidoczne.
+				</p>
+				<div class="wyzwanie-grid">
+					<div class="wyzwanie-stat">
+						<div class="wyzwanie-big">26%</div>
+						<div class="wyzwanie-txt">wyższe ryzyko przedwczesnej śmierci z powodu osamotnienia</div>
 					</div>
-					<div class="impact-stat">
-						<strong>50%</strong>
-						<span>wyższe ryzyko demencji u osób doświadczających samotności</span>
+					<div class="wyzwanie-stat">
+						<div class="wyzwanie-big">50%</div>
+						<div class="wyzwanie-txt">wyższe ryzyko demencji u osób doświadczających samotności</div>
 					</div>
-					<div class="impact-stat">
-						<strong>1,7 mln</strong>
-						<span>seniorów w Polsce żyje w osamotnieniu</span>
+					<div class="wyzwanie-stat">
+						<div class="wyzwanie-big">1,7 mln</div>
+						<div class="wyzwanie-txt">seniorów w Polsce żyje w osamotnieniu</div>
 					</div>
 				</div>
-				<div class="impact-foot">
-					<a href="/wiedza/epidemia-osamotnienia" class="arrow-link light">
-						Dowiedz się więcej <Icon name="arrow-right" size={14} color="white" />
-					</a>
-					<span class="impact-source">Na podstawie badań nad samotnością osób starszych</span>
+				<p class="dark-source">Na podstawie badań nad samotnością osób starszych.</p>
+			</div>
+		</section>
+
+		<!-- cytat założyciela -->
+		<section class="wrap quote-section">
+			<div class="placeholder ph-11">
+				<span class="ph-caption">portret — Armand Marquiset</span>
+			</div>
+			<div class="quote-body">
+				<div class="quote-mark">„</div>
+				<blockquote>Kwiaty przed chlebem.</blockquote>
+				<p class="quote-desc">
+					Ta myśl towarzyszy nam od 1946 roku. Seniorom brakuje nie tyle rzeczy, ile
+					<strong>drugiego człowieka</strong> — rozmowy, uwagi, bliskości. Obecność jest tak samo
+					ważna jak potrzeby materialne.
+				</p>
+				<div class="quote-attr"><span class="attr-rule"></span><span><strong>Armand Marquiset</strong> · założyciel Stowarzyszenia</span></div>
+			</div>
+		</section>
+
+		<!-- baza wiedzy -->
+		<section id="wiedza" class="wiedza-section">
+			<div class="wrap">
+				<div class="section-head">
+					<div>
+						<span class="eyebrow primary">Baza wiedzy</span>
+						<h2 class="section-h2">Zrozum, zanim zaczniesz pomagać</h2>
+					</div>
+					<a href="/wiedza" class="link-arrow">Wszystkie tematy →</a>
+				</div>
+				<div class="topics-grid">
+					{#each topics as t}
+						<a href="/wiedza?kategoria={t.slug}" class="topic-card">
+							<span class="topic-num">{t.num}</span>
+							<h3>{t.title}</h3>
+							<p>{t.desc}</p>
+							<span class="topic-read">Czytaj →</span>
+						</a>
+					{/each}
 				</div>
 			</div>
-		</div>
-	</section>
+		</section>
 
-	<!-- ── ARTYKUŁY ── -->
-	<section class="section">
-		<div class="wrap">
-			<header class="head head-row">
+		<!-- wolontariat -->
+		<section id="wolontariat" class="wrap vol-section">
+			<div class="vol-copy">
+				<span class="eyebrow accent">Wolontariat</span>
+				<h2 class="section-h2">Zostań przyjacielem osoby starszej</h2>
+				<p class="lead">
+					Regularnie odwiedzasz seniora, rozmawiasz, pijecie herbatę, spacerujecie. Zapewniamy
+					szkolenie i wsparcie koordynatora w 14 miastach — nie jesteś w tym sam.
+				</p>
+				<div class="vol-points">
+					<div class="vol-point"><span class="check">✓</span><span>Wystarczy 1 godzina tygodniowo, w Twoim mieście.</span></div>
+					<div class="vol-point"><span class="check">✓</span><span>Pełne szkolenie i stałe wsparcie koordynatora.</span></div>
+					<div class="vol-point"><span class="check">✓</span><span>Dołączasz do wspólnoty ponad 1000 wolontariuszy.</span></div>
+				</div>
+				<a href="/dolacz?sciezka=wolontariat" class="btn-accent btn-lg">Dołącz do wolontariatu →</a>
+			</div>
+			<div class="placeholder ph-54">
+				<span class="ph-caption">zdjęcie — wspólny spacer w parku</span>
+			</div>
+		</section>
+
+		<!-- jak pomóc (dark) -->
+		<section id="pomoc" class="dark-section">
+			<div class="wrap">
+				<span class="eyebrow accent-soft">Jak pomóc</span>
+				<h2 class="dark-h2 pomoc-h2">Każdy gest ma znaczenie</h2>
+				<div class="pomoc-grid">
+					<a href="/1-procent" class="pomoc-card">
+						<h3>Przekaż 1,5% podatku</h3>
+						<p>Rozlicz PIT i przekaż 1,5% dla seniorów zmagających się z samotnością.</p>
+						<span class="pomoc-cta">Przekaż →</span>
+					</a>
+					<a href="/dolacz?sciezka=wsparcie" class="pomoc-card">
+						<h3>Wspieraj co miesiąc</h3>
+						<p>50 zł miesięcznie potrafi uwolnić jedną starszą osobę od samotności.</p>
+						<span class="pomoc-cta">Wspieram →</span>
+					</a>
+					<a href="/dolacz?sciezka=wolontariat" class="pomoc-card">
+						<h3>Zostań wolontariuszem</h3>
+						<p>Buduj relacje z seniorami w swojej okolicy — zapewniamy szkolenie.</p>
+						<span class="pomoc-cta">Dołącz →</span>
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- artykuły -->
+		<section class="wrap art-section">
+			<div class="section-head">
 				<div>
-					<h2>Najnowsze artykuły</h2>
-					<p class="head-sub">Praktyczna wiedza o starości i budowaniu relacji.</p>
+					<span class="eyebrow primary">Artykuły</span>
+					<h2 class="section-h2">Praktyczna wiedza o starości</h2>
 				</div>
-				<a href="/wiedza" class="arrow-link">Wszystkie artykuły <Icon name="arrow-right" size={14} color="#169FDB" /></a>
-			</header>
-			<div class="articles">
-				{#each data.recentArticles as article}
-					<a href="/wiedza/{article.slug}" class="art">
-						<span class="art-badge">{article.categorySlug.replace(/-/g, ' ')}</span>
-						<span class="art-h">{article.title}</span>
-						<span class="art-p">{article.summary}</span>
-						<span class="art-meta">
-							<Icon name="clock" size={13} color="#8794A1" />
-							{article.readingTimeMin} min czytania
-						</span>
+				<a href="/wiedza" class="link-arrow">Wszystkie artykuły →</a>
+			</div>
+			<div class="art-grid">
+				{#each articlesShown as art}
+					<a href="/wiedza/{art.slug}" class="art-card">
+						<div class="placeholder ph-1610"></div>
+						<div class="art-body">
+							<span class="art-cat">{art.cat}</span>
+							<h3>{art.title}</h3>
+							<p>{art.desc}</p>
+							<span class="art-read">{art.read}</span>
+						</div>
 					</a>
 				{/each}
 			</div>
-		</div>
-	</section>
+		</section>
 
-	<!-- ── WOLONTARIAT (panel) ── -->
-	<section class="section">
-		<div class="wrap">
-			<div class="panel vol">
-				<div class="vol-text">
-					<span class="eyebrow green">Wolontariat</span>
-					<h2>Zostań przyjacielem osoby starszej</h2>
+		<!-- final CTA -->
+		<section id="kontakt" class="wrap cta-wrap">
+			<div class="cta-block">
+				<div class="cta-copy">
+					<h2>Każda rozmowa ma znaczenie.</h2>
 					<p>
-						Regularnie odwiedzasz seniora, rozmawiasz, pijesz herbatę, spacerujesz. Wystarczy
-						<strong>1 godzina tygodniowo</strong>. Stowarzyszenie zapewnia szkolenie i wsparcie
-						koordynatora — nie jesteś w tym sam.
+						Zostaw swoje dane, a odezwiemy się z informacjami o wolontariacie i możliwościach
+						wsparcia seniorów w Twojej okolicy. Bez zobowiązań, odpowiadamy w ciągu kilku dni.
 					</p>
-					<a href="/dolacz?sciezka=wolontariat" class="btn btn-accent">
-						Dołącz do wolontariatu <Icon name="arrow-right" size={16} color="white" />
-					</a>
 				</div>
-				<div class="vol-img">
-					<img src="/img/oldwoman.png" alt="Seniorka podczas spotkania z wolontariuszem" />
+				<div class="cta-actions">
+					<a href="/dolacz" class="btn-white">Wypełnij formularz</a>
+					<a href="tel:+48608018110" class="btn-ghost-white">Zadzwoń: 608 018 110</a>
 				</div>
 			</div>
-		</div>
-	</section>
+		</section>
+	</main>
 
-	<!-- ── OD CZEGO ZACZĄĆ ── -->
-	<section class="section">
-		<div class="wrap">
-			<header class="head center">
-				<h2>Od czego zacząć?</h2>
-				<p class="head-sub">Trzy najczęstsze potrzeby — wybierz swoją.</p>
-			</header>
-			<div class="trio">
-				<div class="card-t">
-					<span class="trio-ic blue"><Icon name="sparkle" size={22} color="white" /></span>
-					<span class="trio-h">Asystent AI</span>
-					<span class="trio-p">Odpowie na pytania o starzeniu się, samotności i wsparciu seniorów.</span>
-					<a href="/asystent" class="btn btn-primary btn-sm">Zapytaj</a>
-				</div>
-				<div class="card-t">
-					<span class="trio-ic green"><Icon name="puzzle" size={22} color="white" /></span>
-					<span class="trio-h">Ćwiczenia</span>
-					<span class="trio-p">Gotowe PDF-y do pobrania i generator ćwiczeń pamięci do wydruku.</span>
-					<a href="/cwiczenia" class="btn btn-accent btn-sm">Ćwicz</a>
-				</div>
-				<div class="card-t">
-					<span class="trio-ic red"><Icon name="phone" size={22} color="white" /></span>
-					<span class="trio-h">Wsparcie</span>
-					<span class="trio-p">Telefony zaufania, organizacje pomocowe i materiały dla opiekunów.</span>
-					<a href="/wsparcie" class="btn btn-secondary btn-sm">Zobacz</a>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- ── DOŁĄCZ / FORMULARZ (panel) ── -->
-	<section class="section" id="dolacz">
-		<div class="wrap">
-			<div class="panel join">
-				<div class="join-text">
-					<span class="eyebrow">Dołącz do nas</span>
-					<h2>Każda rozmowa ma znaczenie</h2>
-					<p>
-						Zostaw swoje dane, a odezwiemy się do Ciebie z informacjami o wolontariacie i
-						możliwościach wsparcia seniorów w Twojej okolicy.
-					</p>
-					<span class="join-assure">
-						<Icon name="shield" size={18} color="#1FA138" />
-						Bez zobowiązań. Odpowiadamy w ciągu kilku dni.
-					</span>
-				</div>
-				<div class="join-teaser">
-					<div class="teaser-row">
-						<span class="teaser-ic blue"><Icon name="heart" size={20} color="white" /></span>
-						<span>Zostań wolontariuszem</span>
-					</div>
-					<div class="teaser-row">
-						<span class="teaser-ic warm"><Icon name="gift" size={20} color="white" /></span>
-						<span>Wesprzyj finansowo</span>
-					</div>
-					<div class="teaser-row">
-						<span class="teaser-ic primary"><Icon name="message" size={20} color="white" /></span>
-						<span>Zadaj pytanie</span>
-					</div>
-					<a href="/dolacz" class="btn btn-primary btn-full">
-						Wypełnij formularz <Icon name="arrow-right" size={18} color="white" />
-					</a>
-				</div>
-			</div>
-		</div>
-	</section>
+	<RedesignFooter />
 </div>
 
+<A11yToolbar withSidebar={false} />
+
 <style lang="scss">
-	@use 'variables' as *;
+	.landing2 {
+		font-family: 'Hanken Grotesk', system-ui, sans-serif;
+		color: var(--rd-ink);
+		background: var(--rd-bg-paper);
+		-webkit-font-smoothing: antialiased;
+	}
 
-	$wrap: 1140px;
+	.skip-link {
+		position: fixed;
+		top: -80px;
+		left: 8px;
+		z-index: 1000;
+		background: var(--rd-primary, #0a80c4);
+		color: #fff;
+		padding: 10px 18px;
+		border-radius: 8px;
+		font-weight: 700;
+		text-decoration: none;
+		transition: top 0.16s ease;
+		&:focus { top: 8px; }
+	}
 
-	.landing { background: $color-bg; }
-
-	/* ── wspólny layout ── */
 	.wrap {
-		max-width: $wrap;
+		max-width: 1200px;
 		margin: 0 auto;
-		padding: 0 $spacing-2xl;
-		width: 100%;
-		@media (max-width: 768px) { padding: 0 $spacing-lg; }
+		padding: 0 24px;
 	}
 
-	.section {
-		padding: 84px 0;
-		@media (max-width: 768px) { padding: 56px 0; }
+	h1, h2, h3, blockquote {
+		font-family: 'Newsreader', serif;
 	}
 
-	.head {
-		margin-bottom: $spacing-2xl;
-
-		h2 {
-			font-family: $font-serif;
-			font-size: 32px;
-			font-weight: 700;
-			letter-spacing: -0.01em;
-			color: $color-secondary;
-			@media (max-width: 600px) { font-size: 26px; }
-		}
-
-		.head-sub {
-			font-size: $font-size-base;
-			color: $color-text-muted;
-			margin-top: 8px;
-		}
-
-		&.center { text-align: center; }
-
-		&.head-row {
-			display: flex;
-			justify-content: space-between;
-			align-items: flex-end;
-			gap: $spacing-lg;
-			@media (max-width: 600px) { flex-direction: column; align-items: flex-start; gap: $spacing-md; }
-		}
-	}
-
-	.eyebrow {
-		display: inline-block;
-		font-size: 12px;
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 1.4px;
-		color: $color-primary;
-		margin-bottom: 12px;
-
-		&.green { color: $color-accent; }
-	}
-
-	.arrow-link {
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		font-size: $font-size-sm;
-		font-weight: 600;
-		color: $color-primary;
+	/* ── buttons ── */
+	.btn-solid,
+	.btn-line,
+	.btn-accent,
+	.btn-white,
+	.btn-ghost-white {
 		text-decoration: none;
-		white-space: nowrap;
-		transition: gap 0.15s ease;
-		&:hover { gap: 10px; }
-		&.light { color: white; }
-	}
-
-	/* ── HERO ── */
-	.hero {
-		position: relative;
-		min-height: 600px;
-		display: flex;
-		align-items: center;
-		overflow: hidden;
-	}
-
-	.hero-bg { position: absolute; inset: 0; }
-
-	.hero-bg-img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		object-position: 65% 28%;
-	}
-
-	.hero-gradient {
-		position: absolute;
-		inset: 0;
-		background: linear-gradient(
-			98deg,
-			rgba(15, 23, 28, 0.95) 0%,
-			rgba(15, 23, 28, 0.85) 34%,
-			rgba(15, 23, 28, 0.45) 62%,
-			rgba(15, 23, 28, 0.15) 100%
-		);
-	}
-
-	.hero-wrap { position: relative; z-index: 2; }
-
-	.hero-content {
-		max-width: 600px;
-		color: white;
-		padding: 72px 0;
-
-		h1 {
-			font-family: $font-serif;
-			font-size: clamp(30px, 3.6vw, 46px);
-			font-weight: 700;
-			line-height: 1.16;
-			letter-spacing: -0.01em;
-			margin: 18px 0 20px;
-		}
-
-		p {
-			font-size: $font-size-base;
-			line-height: 1.6;
-			color: rgba(255, 255, 255, 0.8);
-			margin-bottom: $spacing-xl;
-			max-width: 500px;
-		}
-	}
-
-	.accent { color: $color-primary-light; }
-
-	.chip {
-		display: inline-flex;
-		align-items: center;
-		gap: 7px;
-		padding: 7px 15px;
-		border-radius: $radius-full;
-		background: rgba(255, 255, 255, 0.12);
-		border: 1px solid rgba(255, 255, 255, 0.2);
-		backdrop-filter: blur(8px);
-		font-size: 12px;
-		font-weight: 700;
-		letter-spacing: 0.5px;
-		text-transform: uppercase;
-		color: $color-primary-light;
-	}
-
-	.hero-actions {
-		display: flex;
-		gap: $spacing-md;
-		flex-wrap: wrap;
-	}
-
-	.btn-glass {
-		background: rgba(255, 255, 255, 0.14);
-		color: white;
-		backdrop-filter: blur(8px);
-		border: 1px solid rgba(255, 255, 255, 0.24);
-		&:hover { background: rgba(255, 255, 255, 0.24); }
-	}
-
-	.hero-trust {
-		display: flex;
-		align-items: center;
-		gap: 14px;
-		margin-top: $spacing-xl;
-		font-size: $font-size-sm;
-		color: rgba(255, 255, 255, 0.7);
-		flex-wrap: wrap;
-
-		strong { color: white; font-weight: 700; }
-		.dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255, 255, 255, 0.35); }
-	}
-
-	/* ── STATYSTYKI ── */
-	.stats {
-		background: $color-bg-soft;
-		border-top: 1px solid $color-border;
-		border-bottom: 1px solid $color-border;
-		padding: $spacing-2xl 0 $spacing-lg;
-	}
-
-	.stats-grid {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		@media (max-width: 600px) { grid-template-columns: repeat(2, 1fr); gap: $spacing-lg; }
-	}
-
-	.stat {
-		text-align: center;
-		padding: 0 $spacing-md;
-		position: relative;
-
-		&:not(:last-child)::after {
-			content: '';
-			position: absolute;
-			right: 0;
-			top: 15%;
-			height: 70%;
-			width: 1px;
-			background: $color-border;
-			@media (max-width: 600px) { display: none; }
-		}
-	}
-
-	.stat-num {
-		display: block;
-		font-family: $font-heading;
-		font-size: 40px;
-		font-weight: 800;
-		letter-spacing: -0.02em;
-		line-height: 1;
-		color: $color-primary;
-		@media (max-width: 600px) { font-size: 32px; }
-	}
-
-	.stat-txt {
-		display: block;
-		font-size: $font-size-sm;
-		color: $color-text-muted;
-		line-height: 1.4;
-		margin-top: 10px;
-	}
-
-	.stats-source {
-		text-align: center;
-		font-size: 12px;
-		color: $color-text-muted;
-		opacity: 0.7;
-		margin-top: $spacing-xl;
-	}
-
-	/* ── CYTAT ── */
-	.quote { background: $color-bg; text-align: center; }
-
-	.quote-inner { max-width: 720px; }
-
-	.quote-mark {
-		display: block;
-		font-family: Georgia, serif;
-		font-size: 80px;
-		line-height: 0.5;
-		height: 34px;
-		color: $color-primary-light;
-	}
-
-	blockquote {
-		font-family: $font-serif;
-		font-size: clamp(28px, 3.4vw, 42px);
-		font-weight: 700;
-		font-style: italic;
-		letter-spacing: -0.01em;
-		color: $color-secondary;
-		margin-bottom: $spacing-md;
-	}
-
-	.quote-desc {
-		font-size: $font-size-lg;
-		line-height: 1.6;
-		color: $color-text-muted;
-		max-width: 600px;
-		margin: 0 auto $spacing-lg;
-		strong { color: $color-secondary; font-weight: 700; }
-		@media (max-width: 600px) { font-size: $font-size-base; }
-	}
-
-	cite {
-		font-style: normal;
-		font-size: $font-size-sm;
-		font-weight: 600;
-		color: $color-primary;
-	}
-
-	/* ── TEMATY ── */
-	.topics {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: $spacing-md;
-		@media (max-width: 640px) { grid-template-columns: 1fr; }
-	}
-
-	.topic {
-		display: flex;
-		align-items: center;
-		gap: $spacing-lg;
-		padding: $spacing-lg $spacing-xl;
-		border-radius: $radius;
-		border: 1px solid $color-border;
-		background: $color-bg-card;
-		text-decoration: none;
-		color: inherit;
-		transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
-
-		&:hover {
-			transform: translateY(-2px);
-			border-color: color-mix(in srgb, var(--c) 45%, $color-border);
-			box-shadow: $shadow-md;
-			.topic-arrow { opacity: 1; transform: translateX(0); }
-		}
-	}
-
-	.topic-ic {
-		width: 52px;
-		height: 52px;
-		border-radius: $radius;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		background: color-mix(in srgb, var(--c) 12%, transparent);
-		flex-shrink: 0;
+		gap: 10px;
+		font-weight: 600;
+		font-size: 15px;
+		padding: 10px 16px;
+		border-radius: 999px;
+		transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+		white-space: nowrap;
 	}
+	.btn-solid { background: var(--rd-primary); color: #fff; &:hover { background: var(--rd-primary-hover); } }
+	.btn-line { border: 1.5px solid var(--rd-ink); color: var(--rd-ink); &:hover { background: var(--rd-ink); color: #fff; } }
+	.btn-accent { background: var(--rd-accent); color: #fff; &:hover { background: var(--rd-accent-hover); } }
+	.btn-white { background: #fff; color: var(--rd-primary); &:hover { background: #f1e8da; } }
+	.btn-ghost-white { border: 1.5px solid rgba(255, 255, 255, 0.55); color: #fff; &:hover { background: rgba(255, 255, 255, 0.12); } }
+	.btn-lg { font-size: 16px; padding: 16px 28px; }
 
-	.topic-body { flex: 1; display: flex; flex-direction: column; gap: 4px; }
-	.topic-h { font-size: $font-size-base; font-weight: 700; color: $color-secondary; }
-	.topic-p { font-size: $font-size-sm; color: $color-text-muted; line-height: 1.45; }
-
-	.topic-arrow {
-		flex-shrink: 0;
-		opacity: 0;
-		transform: translateX(-6px);
-		transition: opacity 0.16s ease, transform 0.16s ease;
-		@media (max-width: 640px) { display: none; }
-	}
-
-	/* ── IMPACT ── */
-	.impact { background-size: cover; background-position: center 30%; }
-
-	.impact-overlay {
-		background: linear-gradient(120deg, rgba(15, 23, 28, 0.94) 0%, rgba(15, 23, 28, 0.78) 100%);
-		padding: 84px 0;
-		@media (max-width: 768px) { padding: 56px 0; }
-	}
-
-	.impact-inner {
-		.eyebrow { color: $color-warm; }
-		h2 {
-			font-family: $font-serif;
-			font-size: 34px;
-			font-weight: 700;
-			letter-spacing: -0.01em;
-			color: white;
-			margin-bottom: $spacing-2xl;
-			line-height: 1.15;
-			@media (max-width: 600px) { font-size: 26px; }
-		}
-	}
-
-	.impact-stats {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: $spacing-lg;
-		margin-bottom: $spacing-2xl;
-		@media (max-width: 700px) { grid-template-columns: 1fr; gap: $spacing-md; }
-	}
-
-	.impact-stat {
-		padding: $spacing-lg $spacing-xl;
-		background: rgba(255, 255, 255, 0.06);
-		border-radius: $radius;
-		border: 1px solid rgba(255, 255, 255, 0.12);
-
-		strong {
-			display: block;
-			font-family: $font-heading;
-			font-size: 40px;
-			font-weight: 800;
-			letter-spacing: -0.02em;
-			color: $color-warm;
-			margin-bottom: 8px;
-			line-height: 1;
-		}
-		span { font-size: $font-size-sm; color: rgba(255, 255, 255, 0.78); line-height: 1.5; }
-	}
-
-	.impact-foot {
+	/* ── placeholders ── */
+	.placeholder {
+		border-radius: 22px;
+		overflow: hidden;
+		background: repeating-linear-gradient(48deg, var(--rd-ph-a), var(--rd-ph-a) 12px, var(--rd-ph-b) 12px, var(--rd-ph-b) 24px);
+		border: 1px solid var(--rd-ph-border);
 		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+		padding: 18px;
+	}
+	.ph-caption {
+		font-family: ui-monospace, Menlo, monospace;
+		font-size: 12px;
+		color: #9a8e7c;
+		background: rgba(250, 246, 239, 0.85);
+		padding: 6px 12px;
+		border-radius: 8px;
+		text-align: center;
+	}
+	.ph-45 { aspect-ratio: 4 / 5; }
+	.ph-11 { aspect-ratio: 1 / 1; border-radius: 20px; }
+	.ph-54 { aspect-ratio: 5 / 4; }
+	.ph-1610 { aspect-ratio: 16 / 10; border-radius: 0; border: none; border-bottom: 1px solid var(--rd-border-card); padding: 0; }
+
+	/* ── eyebrow ── */
+	.eyebrow {
+		display: inline-flex;
 		align-items: center;
-		justify-content: space-between;
-		gap: $spacing-md;
-		flex-wrap: wrap;
-	}
-
-	.impact-source { font-size: 12px; color: rgba(255, 255, 255, 0.5); }
-
-	/* ── ARTYKUŁY ── */
-	.articles {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: $spacing-lg;
-		@media (max-width: 640px) { grid-template-columns: 1fr; }
-	}
-
-	.art {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		background: $color-bg-card;
-		border-radius: $radius;
-		padding: $spacing-xl;
-		border: 1px solid $color-border;
-		text-decoration: none;
-		color: inherit;
-		transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
-
-		&:hover {
-			transform: translateY(-2px);
-			border-color: $color-primary-light;
-			box-shadow: $shadow-md;
-		}
-	}
-
-	.art-badge {
-		padding: 4px 12px;
-		border-radius: $radius-full;
-		font-size: 11px;
-		font-weight: 700;
-		background: $color-primary-bg;
-		color: $color-primary;
+		gap: 9px;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.09em;
 		text-transform: uppercase;
-		letter-spacing: 0.4px;
-		margin-bottom: $spacing-md;
+		margin-bottom: 20px;
+		.rule { width: 22px; height: 1.5px; display: inline-block; }
+		&.accent { color: var(--rd-accent); .rule { background: var(--rd-accent); } }
+		&.accent-soft { color: var(--rd-accent-soft); .rule.accent-soft-rule { background: var(--rd-accent-soft); } }
+		&.primary { color: var(--rd-primary); }
 	}
 
-	.art-h { font-size: $font-size-lg; font-weight: 700; color: $color-secondary; line-height: 1.3; margin-bottom: 8px; }
-	.art-p { font-size: $font-size-sm; color: $color-text-muted; line-height: 1.55; flex: 1; }
-	.art-meta { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #8794A1; margin-top: $spacing-lg; }
-
-	/* ── PANEL (wolontariat + dołącz) ── */
-	.panel {
-		border-radius: $radius-lg;
-		border: 1px solid $color-border;
-		padding: $spacing-2xl;
-		@media (min-width: 900px) { padding: 56px; }
-	}
-
-	.vol {
-		background: linear-gradient(135deg, $color-accent-bg 0%, #EAF7ED 100%);
+	/* ── hero ── */
+	.hero {
+		padding: 72px 24px 40px;
 		display: grid;
-		grid-template-columns: 1.15fr 1fr;
+		grid-template-columns: 1.05fr 0.95fr;
 		gap: 56px;
 		align-items: center;
-		@media (max-width: 860px) { grid-template-columns: 1fr; gap: $spacing-xl; }
-
-		h2 { font-family: $font-serif; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; color: $color-secondary; margin-bottom: $spacing-md; line-height: 1.15; @media (max-width: 600px) { font-size: 26px; } }
-		p { font-size: $font-size-base; color: $color-text-muted; line-height: 1.7; margin-bottom: $spacing-xl; strong { color: $color-secondary; } }
 	}
-
-	.vol-img {
-		@media (max-width: 860px) { order: -1; }
-		img {
-			width: 100%;
-			max-width: 380px;
-			border-radius: $radius;
-			box-shadow: $shadow-lg;
-			display: block;
-			margin: 0 auto;
-			aspect-ratio: 4 / 3;
-			object-fit: cover;
-		}
+	.hero-copy h1 {
+		font-weight: 500;
+		font-size: 60px;
+		line-height: 1.04;
+		letter-spacing: -0.015em;
+		margin: 0 0 22px;
+		em { font-style: italic; color: var(--rd-primary); }
 	}
+	.lead { font-size: 19px; line-height: 1.6; color: var(--rd-muted); max-width: 30em; margin: 0 0 32px; }
+	.hero-actions { display: flex; flex-wrap: wrap; gap: 13px; }
 
-	/* ── TRIO ── */
-	.trio {
+	.hero-art { position: relative; }
+	.hero-float {
+		position: absolute;
+		bottom: -22px;
+		left: -22px;
+		background: #fff;
+		border: 1px solid var(--rd-border-card);
+		border-radius: 16px;
+		padding: 18px 22px;
+		box-shadow: 0 18px 40px -20px rgba(34, 29, 24, 0.35);
+	}
+	.hero-float-num { font-family: 'Newsreader', serif; font-size: 38px; font-weight: 600; line-height: 1; color: var(--rd-accent); }
+	.hero-float-txt { font-size: 13px; color: var(--rd-muted-2); margin-top: 5px; max-width: 11em; }
+
+	/* ── trust strip ── */
+	.trust-wrap { padding: 26px 24px 8px; }
+	.trust-strip {
+		border-top: 1px solid var(--rd-border);
+		border-bottom: 1px solid var(--rd-border);
+		padding: 26px 0;
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: $spacing-lg;
-		@media (max-width: 820px) { grid-template-columns: 1fr; }
+		grid-template-columns: repeat(4, 1fr);
+		gap: 24px;
 	}
+	.trust-num { font-family: 'Newsreader', serif; font-size: 32px; font-weight: 600; line-height: 1; }
+	.trust-label { font-size: 14px; color: var(--rd-muted-2); margin-top: 4px; }
 
-	.card-t {
+	/* ── dark sections ── */
+	.dark-section { background: var(--rd-ink-dark); color: #f1e8da; }
+	.dark-inner { padding: 88px 24px; }
+	.dark-h2 { font-weight: 500; font-size: 44px; line-height: 1.1; letter-spacing: -0.01em; margin: 0 0 14px; max-width: 16em; color: #fff; }
+	.dark-lead { font-size: 18px; line-height: 1.6; color: var(--rd-muted-dark); max-width: 36em; margin: 0 0 52px; }
+	.dark-source { font-size: 13px; color: var(--rd-faint-dark); margin: 44px 0 0; }
+
+	.wyzwanie-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+	.wyzwanie-stat { border-top: 1px solid var(--rd-border-dark); padding-top: 22px; }
+	.wyzwanie-big { font-family: 'Newsreader', serif; font-size: 56px; font-weight: 600; line-height: 1; color: #fff; }
+	.wyzwanie-txt { font-size: 16px; line-height: 1.5; color: var(--rd-muted-dark-2); margin-top: 12px; }
+
+	/* ── founder quote ── */
+	.quote-section {
+		padding: 96px 24px;
+		display: grid;
+		grid-template-columns: 0.8fr 1.2fr;
+		gap: 56px;
+		align-items: center;
+	}
+	.quote-mark { font-family: 'Newsreader', serif; font-size: 80px; line-height: 0.6; color: #d9ccb8; height: 44px; }
+	blockquote {
+		margin: 0;
+		font-style: italic;
+		font-weight: 400;
+		font-size: 38px;
+		line-height: 1.2;
+		letter-spacing: -0.01em;
+		color: var(--rd-ink);
+	}
+	.quote-desc { font-size: 18px; line-height: 1.65; color: var(--rd-muted); margin: 22px 0 24px; max-width: 34em; strong { font-weight: 600; color: var(--rd-ink); } }
+	.quote-attr { display: flex; align-items: center; gap: 12px; font-size: 15px; }
+	.attr-rule { width: 32px; height: 1.5px; background: var(--rd-accent); display: inline-block; }
+
+	/* ── section head (shared) ── */
+	.section-head {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 16px;
+		align-items: flex-end;
+		justify-content: space-between;
+		margin-bottom: 44px;
+	}
+	.section-h2 { font-weight: 500; font-size: 40px; line-height: 1.1; margin: 12px 0 0; }
+	.link-arrow { text-decoration: none; font-weight: 600; font-size: 15px; color: var(--rd-primary); }
+
+	/* ── baza wiedzy ── */
+	.wiedza-section { background: var(--rd-bg-paper-2); border-top: 1px solid var(--rd-border); border-bottom: 1px solid var(--rd-border); padding: 88px 0; }
+	.topics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+	.topic-card {
+		text-decoration: none;
+		color: inherit;
+		background: var(--rd-surface);
+		border: 1px solid var(--rd-border-card);
+		border-radius: 16px;
+		padding: 26px 24px;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		text-align: center;
-		background: $color-bg-card;
-		border-radius: $radius;
-		padding: $spacing-2xl $spacing-xl;
-		border: 1px solid $color-border;
-		transition: transform 0.16s ease, box-shadow 0.16s ease;
-		&:hover { transform: translateY(-3px); box-shadow: $shadow-md; }
+		min-height: 220px;
+		transition: border-color 0.15s ease, transform 0.15s ease;
+		&:hover { border-color: var(--rd-primary); transform: translateY(-3px); }
+		.topic-num { font-family: 'Newsreader', serif; font-size: 15px; font-weight: 600; color: var(--rd-accent); }
+		h3 { font-weight: 600; font-size: 22px; line-height: 1.2; margin: 14px 0 10px; }
+		p { font-size: 14.5px; line-height: 1.55; color: var(--rd-muted-2); margin: 0; }
+		.topic-read { margin-top: auto; padding-top: 16px; font-weight: 600; font-size: 14px; color: var(--rd-primary); }
 	}
 
-	.trio-ic {
-		width: 56px;
-		height: 56px;
-		border-radius: 50%;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		margin-bottom: $spacing-md;
-		&.blue { background: linear-gradient(135deg, $color-primary, $color-primary-dark); }
-		&.green { background: linear-gradient(135deg, $color-accent, $color-accent-dark); }
-		&.red { background: linear-gradient(135deg, #E74C3C, #C0392B); }
-	}
-
-	.trio-h { font-size: $font-size-lg; font-weight: 700; color: $color-secondary; margin-bottom: 8px; }
-	.trio-p { font-size: $font-size-sm; color: $color-text-muted; line-height: 1.55; margin-bottom: $spacing-lg; flex: 1; }
-
-	.btn-sm { padding: 10px $spacing-lg; min-height: 42px; font-size: $font-size-sm; }
-
-	/* ── DOŁĄCZ ── */
-	.join {
-		background: linear-gradient(135deg, $color-primary-bg 0%, #E4F1FB 100%);
+	/* ── wolontariat ── */
+	.vol-section {
+		padding: 96px 24px;
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 56px;
 		align-items: center;
-		@media (max-width: 860px) { grid-template-columns: 1fr; gap: $spacing-xl; }
-
-		h2 { font-family: $font-serif; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; color: $color-secondary; margin-bottom: $spacing-md; line-height: 1.15; @media (max-width: 600px) { font-size: 26px; } }
-		p { font-size: $font-size-base; color: $color-text-muted; line-height: 1.7; }
+	}
+	.vol-points { display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
+	.vol-point {
+		display: flex;
+		gap: 13px;
+		align-items: flex-start;
+		.check {
+			flex: none;
+			width: 22px;
+			height: 22px;
+			border-radius: 50%;
+			background: var(--rd-accent-soft-bg);
+			color: var(--rd-accent);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 13px;
+			font-weight: 700;
+			margin-top: 1px;
+		}
+		span:last-child { font-size: 16px; line-height: 1.5; color: #3a342c; }
 	}
 
-	.join-assure {
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-		margin-top: $spacing-lg;
-		font-size: $font-size-sm;
-		font-weight: 600;
-		color: $color-accent-dark;
-	}
-
-	.join-teaser {
-		background: $color-bg-card;
-		border-radius: $radius;
-		padding: $spacing-xl;
-		box-shadow: $shadow-lg;
-		border: 1px solid $color-border;
+	/* ── jak pomóc ── */
+	.pomoc-h2 { margin: 12px 0 44px; }
+	.pomoc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+	.pomoc-card {
+		text-decoration: none;
+		background: var(--rd-ink-card-dark);
+		border: 1px solid var(--rd-border-dark);
+		border-radius: 16px;
+		padding: 28px 26px;
 		display: flex;
 		flex-direction: column;
-		gap: $spacing-md;
+		min-height: 180px;
+		transition: border-color 0.15s ease, background 0.15s ease;
+		&:hover { border-color: var(--rd-accent-soft); background: var(--rd-ink-card-dark-hover); }
+		h3 { font-weight: 600; font-size: 23px; color: #fff; margin: 0 0 10px; }
+		p { font-size: 15px; line-height: 1.55; color: var(--rd-muted-dark); margin: 0; }
+		.pomoc-cta { margin-top: auto; padding-top: 18px; font-weight: 600; font-size: 14px; color: var(--rd-accent-soft); }
 	}
 
-	.teaser-row {
+	/* ── artykuły ── */
+	.art-section { padding: 96px 24px; }
+	.art-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+	.art-card {
+		text-decoration: none;
+		color: inherit;
 		display: flex;
-		align-items: center;
-		gap: $spacing-md;
-		font-size: $font-size-base;
-		font-weight: 600;
-		color: $color-secondary;
+		flex-direction: column;
+		background: var(--rd-surface);
+		border: 1px solid var(--rd-border-card);
+		border-radius: 16px;
+		overflow: hidden;
+		transition: border-color 0.15s ease, transform 0.15s ease;
+		&:hover { border-color: var(--rd-primary); transform: translateY(-3px); }
+	}
+	.art-body {
+		padding: 22px 22px 24px;
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		.art-cat { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--rd-accent); }
+		h3 { font-weight: 600; font-size: 21px; line-height: 1.22; margin: 11px 0 9px; }
+		p { font-size: 14.5px; line-height: 1.55; color: var(--rd-muted-2); margin: 0; }
+		.art-read { margin-top: auto; padding-top: 16px; font-size: 13px; color: #9a8e7c; }
 	}
 
-	.teaser-ic {
-		width: 40px;
-		height: 40px;
-		border-radius: $radius-sm;
-		display: inline-flex;
+	/* ── final CTA ── */
+	.cta-wrap { margin: 0 auto 88px; padding: 0 24px; }
+	.cta-block {
+		background: var(--rd-primary);
+		border-radius: 26px;
+		padding: 72px 56px;
+		color: #fff;
+		display: grid;
+		grid-template-columns: 1.3fr 0.7fr;
+		gap: 40px;
 		align-items: center;
-		justify-content: center;
-		flex-shrink: 0;
+	}
+	.cta-copy {
+		h2 { font-weight: 500; font-size: 44px; line-height: 1.08; letter-spacing: -0.01em; margin: 0 0 16px; }
+		p { font-size: 18px; line-height: 1.6; color: #d6ecf9; margin: 0; max-width: 34em; }
+	}
+	.cta-actions { display: flex; flex-direction: column; gap: 12px; }
 
-		&.blue { background: linear-gradient(135deg, $color-primary, $color-primary-dark); }
-		&.warm { background: linear-gradient(135deg, $color-warm, #D98E10); }
-		&.primary { background: linear-gradient(135deg, $color-accent, $color-accent-dark); }
+	/* ── responsive ── */
+	@media (max-width: 980px) {
+		.hero { grid-template-columns: 1fr; padding-top: 40px; }
+		.hero-art { order: -1; max-width: 420px; margin: 0 auto 40px; }
+		.hero-copy h1 { font-size: 44px; }
+		.quote-section { grid-template-columns: 1fr; }
+		.quote-section .placeholder { max-width: 320px; margin: 0 auto; }
+		.vol-section { grid-template-columns: 1fr; }
+		.vol-section .placeholder { order: -1; max-width: 420px; margin: 0 auto; }
+		.topics-grid { grid-template-columns: repeat(2, 1fr); }
+		.pomoc-grid { grid-template-columns: 1fr; }
+		.art-grid { grid-template-columns: repeat(2, 1fr); }
+		.cta-block { grid-template-columns: 1fr; padding: 48px 32px; }
 	}
 
-	.btn-full { width: 100%; justify-content: center; margin-top: 4px; }
+	@media (max-width: 768px) {
+		.wrap { padding: 0 16px; }
+		.hero { padding: 32px 16px 24px; }
+		.hero-copy h1 { font-size: 34px; }
+		.lead { font-size: 17px; }
+		.trust-strip { grid-template-columns: repeat(2, 1fr); gap: 20px 12px; }
+		.dark-inner, .art-section, .vol-section, .quote-section { padding: 56px 16px; }
+		.wiedza-section { padding: 56px 0; }
+		.dark-h2 { font-size: 30px; }
+		.section-h2 { font-size: 28px; }
+		.wyzwanie-grid { grid-template-columns: 1fr; gap: 20px; }
+		.wyzwanie-big { font-size: 42px; }
+		blockquote { font-size: 28px; }
+		.topics-grid { grid-template-columns: 1fr; }
+		.art-grid { grid-template-columns: 1fr; }
+		.cta-copy h2 { font-size: 30px; }
+	}
 </style>

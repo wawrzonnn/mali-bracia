@@ -1,4 +1,7 @@
 @use 'variables' as *;
+@use 'redesign-tokens';
+
+html { scroll-behavior: smooth; }
 
 /* ─── Dostępność: neutralne kolory jako zmienne (sterowane trybem kontrastu) ─── */
 :root {

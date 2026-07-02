@@ -1,371 +1,378 @@
 <script lang="ts">
-	import Icon from '$lib/components/Icon.svelte';
-	import PageHeader from '$lib/components/PageHeader.svelte';
+	import RedesignNav from '$lib/components/redesign/RedesignNav.svelte';
+	import RedesignFooter from '$lib/components/redesign/RedesignFooter.svelte';
 	import { resources } from '$lib/data/resources';
 
 	const helplines = resources.filter((r) => r.type === 'helpline');
 	const organizations = resources.filter((r) => r.type === 'organization');
+
+	function orgInitial(title: string): string {
+		return title.includes('Mali Bracia Ubogich') ? 'm' : title.charAt(0);
+	}
 	const guides = resources.filter((r) => r.type === 'guide');
-
-	const orgColors = ['#169FDB', '#1FA138', '#9B59B6', '#F5A623'];
-
-	const HELPLINE_LIMIT = 4;
-	const ORG_LIMIT = 3;
-	let showAllHelplines = $state(false);
-	let showAllOrgs = $state(false);
-
-	const visibleHelplines = $derived(showAllHelplines ? helplines : helplines.slice(0, HELPLINE_LIMIT));
-	const visibleOrgs = $derived(showAllOrgs ? organizations : organizations.slice(0, ORG_LIMIT));
 </script>
 
-<div class="page">
-	<div class="head-row">
-		<PageHeader
-			eyebrow="Pomoc"
-			title="Wsparcie i pomoc"
-			subtitle="Jeśli Ty lub ktoś bliski potrzebuje pomocy — nie jesteś sam/sama. Poniżej sprawdzone kontakty i materiały."
-		/>
-		<svg class="hero-art" viewBox="0 0 220 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-			<circle cx="150" cy="70" r="70" fill="#1FA138" opacity="0.08" />
-			<path d="M30 40q30-18 55 5" stroke="#169FDB" stroke-width="2" stroke-dasharray="4 6" stroke-linecap="round" opacity="0.5" />
-			<path d="M172 40c-4-6-13-6-16 1-3-7-12-7-16-1-5 7 0 15 16 26 16-11 21-19 16-26z" fill="#1FA138" opacity="0.55" />
-			<circle cx="88" cy="88" r="17" fill="#169FDB" opacity="0.85" />
-			<path d="M60 160c0-24 15-42 34-42s34 12 34 30v12H60z" fill="#169FDB" opacity="0.85" />
-			<circle cx="132" cy="94" r="15" fill="#1FA138" opacity="0.85" />
-			<path d="M104 162c0-22 13-38 30-38 15 0 27 12 29 28v10H104z" fill="#1FA138" opacity="0.85" />
-		</svg>
-	</div>
+<svelte:head>
+	<title>Wsparcie i pomoc — mali bracia Ubogich</title>
+	<meta
+		name="description"
+		content="Telefony zaufania, organizacje pomocowe i materiały do pobrania dla seniorów, ich bliskich i wolontariuszy."
+	/>
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap"
+		rel="stylesheet"
+	/>
+</svelte:head>
 
-	<section class="block">
-		<div class="sec-head">
-			<span class="sec-ic" style="--c: #F5A623"><Icon name="phone" size={20} color="#F5A623" /></span>
-			<h2>Telefony zaufania</h2>
-		</div>
-		<div class="grid two">
-			{#each visibleHelplines as h}
-				<div class="card helpline">
-					<span class="hl-ic"><Icon name="phone" size={20} color="#F5A623" /></span>
-					<div class="helpline-info">
+<a href="#main-content" class="skip-link">Przejdź do treści</a>
+
+<div class="landing2">
+	<RedesignNav active="wsparcie" />
+
+	<main id="main-content" tabindex="-1">
+		<!-- page header -->
+		<section class="page-head">
+			<div class="wrap head-inner">
+				<span class="eyebrow primary"><span class="rule"></span>Pomoc</span>
+				<h1>Wsparcie i pomoc</h1>
+				<p class="lead">
+					Jeśli Ty lub ktoś bliski potrzebuje pomocy — nie jesteś sam. Poniżej sprawdzone kontakty,
+					organizacje i materiały, po które możesz sięgnąć w każdej chwili.
+				</p>
+			</div>
+		</section>
+
+		<!-- emergency 112 -->
+		<section class="wrap emergency-wrap">
+			<a href="tel:112" class="emergency-banner">
+				<span class="em-left">
+					<span class="em-ic">☎</span>
+					<span class="em-title">W nagłym wypadku dzwoń 112</span>
+				</span>
+				<span class="em-sub">Pogotowie ratunkowe · policja · straż pożarna</span>
+				<span class="em-num">112</span>
+			</a>
+		</section>
+
+		<!-- helplines -->
+		<section class="wrap section">
+			<div class="sec-head">
+				<span class="sec-num">01</span>
+				<h2>Telefony zaufania</h2>
+			</div>
+			<p class="sec-lead">Bezpłatne linie wsparcia — z psychologiem, prawnikiem lub osobą, która po prostu wysłucha.</p>
+			<div class="helplines-grid">
+				{#each helplines as h}
+					<a href="tel:{h.phone?.replace(/\s/g, '')}" class="helpline-card">
 						<h3>{h.title}</h3>
 						<p>{h.description}</p>
+						<div class="helpline-foot">
+							<span class="hl-number">{h.phone}</span>
+							{#if h.tag}<span class="hl-tag">{h.tag}</span>{/if}
+						</div>
+					</a>
+				{/each}
+			</div>
+		</section>
+
+		<!-- organizations -->
+		<section class="wrap section">
+			<div class="sec-head">
+				<span class="sec-num">02</span>
+				<h2>Organizacje</h2>
+			</div>
+			<p class="sec-lead">Instytucje niosące pomoc seniorom — od wolontariatu towarzyszącego po opiekę domową.</p>
+			<div class="orgs-grid">
+				{#each organizations as o}
+					<div class="org-card">
+						<span class="org-initial">{orgInitial(o.title)}</span>
+						<h3>{o.title}</h3>
+						<p>{o.description}</p>
+						<div class="org-links">
+							{#if o.phone}
+								<a href="tel:{o.phone.replace(/\s/g, '')}" class="org-chip">Zadzwoń</a>
+							{/if}
+							{#if o.url}
+								<a href={o.url} target="_blank" rel="noopener" class="org-chip">Strona www</a>
+							{/if}
+						</div>
 					</div>
-					{#if h.phone}
-						<a href="tel:{h.phone.replace(/\s/g, '')}" class="call-btn">
-							<Icon name="phone" size={18} color="white" />
-							<span>{h.phone}</span>
-						</a>
-					{/if}
+				{/each}
+			</div>
+		</section>
+
+		<!-- materials -->
+		<section class="wrap section materials-section">
+			<div class="sec-head">
+				<span class="sec-num">03</span>
+				<h2>Materiały do pobrania</h2>
+			</div>
+			<p class="sec-lead">Praktyczne poradniki dla wolontariuszy, opiekunów i rodzin.</p>
+			<div class="materials-grid">
+				{#each guides as g}
+					<a href={g.url} target="_blank" rel="noopener" class="material-card">
+						<div class="material-top">
+							<span class="pdf-badge">PDF</span>
+							<span class="dl-ic">↓</span>
+						</div>
+						<h3>{g.title}</h3>
+						<p>{g.description}</p>
+						<span class="dl-link">Pobierz PDF →</span>
+					</a>
+				{/each}
+			</div>
+		</section>
+
+		<!-- reassurance CTA -->
+		<section class="wrap reassure-wrap">
+			<div class="reassure">
+				<div class="reassure-copy">
+					<span class="eyebrow accent-soft"><span class="rule accent-soft-rule"></span>Nie jesteś sam</span>
+					<h2>Porozmawiaj z kimś, kto rozumie</h2>
+					<p>Nasz Telefon Zaufania obsługują psychologowie i przeszkoleni wolontariusze. Rozmowa jest bezpłatna i poufna.</p>
 				</div>
-			{/each}
-		</div>
-		{#if helplines.length > HELPLINE_LIMIT}
-			<button class="show-more" onclick={() => (showAllHelplines = !showAllHelplines)}>
-				{showAllHelplines ? 'Pokaż mniej' : 'Pokaż więcej kontaktów'}
-				<Icon name="chevron-down" size={16} color="#169FDB" />
-			</button>
-		{/if}
-	</section>
-
-	<section class="block">
-		<div class="sec-head">
-			<span class="sec-ic" style="--c: #169FDB"><Icon name="shield" size={20} color="#169FDB" /></span>
-			<h2>Organizacje</h2>
-		</div>
-		<div class="org-list">
-			{#each visibleOrgs as org, i}
-				<div class="org-row" style="--c: {orgColors[i % orgColors.length]}">
-					<span class="org-mono">{org.title.charAt(0)}</span>
-					<div class="org-info">
-						<h3>{org.title}</h3>
-						<p>{org.description}</p>
-					</div>
-					<div class="org-actions">
-						{#if org.phone}
-							<a href="tel:{org.phone.replace(/\s/g, '')}" class="btn btn-secondary btn-sm">
-								<Icon name="phone" size={16} />
-								Zadzwoń
-							</a>
-						{/if}
-						{#if org.url}
-							<a href={org.url} target="_blank" rel="noopener" class="btn btn-secondary btn-sm">
-								<Icon name="external" size={16} />
-								Strona www
-							</a>
-						{/if}
-					</div>
+				<div class="reassure-actions">
+					<a href="tel:+48608018110" class="btn-solid">Zadzwoń: 608 018 110</a>
+					<a href="/asystent" class="btn-ghost-dark">Napisz do Asystenta AI</a>
 				</div>
-			{/each}
-		</div>
-		{#if organizations.length > ORG_LIMIT}
-			<button class="show-more" onclick={() => (showAllOrgs = !showAllOrgs)}>
-				{showAllOrgs ? 'Pokaż mniej' : 'Pokaż więcej organizacji'}
-				<Icon name="chevron-down" size={16} color="#169FDB" />
-			</button>
-		{/if}
-	</section>
+			</div>
+		</section>
+	</main>
 
-	<section class="block">
-		<div class="sec-head">
-			<span class="sec-ic" style="--c: #1FA138"><Icon name="book" size={20} color="#1FA138" /></span>
-			<h2>Materiały do pobrania</h2>
-		</div>
-		<div class="grid">
-			{#each guides as g}
-				<a href={g.url} target="_blank" rel="noopener" class="card guide">
-					<span class="guide-ic"><Icon name="book" size={22} color="#1FA138" /></span>
-					<span class="guide-body">
-						<span class="guide-h">{g.title}</span>
-						<span class="guide-p">{g.description}</span>
-					</span>
-					<Icon name="chevron-right" size={18} color="#8794A1" />
-				</a>
-			{/each}
-		</div>
-	</section>
-
-	<div class="emergency">
-		<span class="em-ic"><Icon name="shield" size={22} color="white" /></span>
-		<div class="em-body">
-			<strong>W nagłym wypadku dzwoń 112</strong>
-			<span>Pogotowie ratunkowe, policja, straż pożarna</span>
-		</div>
-		<a href="tel:112" class="em-btn">
-			<Icon name="phone" size={18} color="white" />
-			112
-		</a>
-	</div>
+	<RedesignFooter />
 </div>
 
 <style lang="scss">
-	@use 'variables' as *;
-
-	/* ── HEADER + ILLUSTRATION ── */
-	.head-row {
-		display: flex;
-		align-items: flex-start;
-		justify-content: space-between;
-		gap: $spacing-xl;
-
-		:global(.page-header) { flex: 1; margin-bottom: $spacing-xl; }
+	.landing2 {
+		font-family: 'Hanken Grotesk', system-ui, sans-serif;
+		color: var(--rd-ink);
+		background: var(--rd-bg-paper);
+		-webkit-font-smoothing: antialiased;
 	}
 
-	.hero-art {
-		width: 170px;
-		height: auto;
-		flex-shrink: 0;
-		margin-top: -4px;
-		@media (max-width: 860px) { display: none; }
-	}
-
-	.block { margin-bottom: $spacing-2xl; }
-
-	.sec-head {
-		display: flex;
-		align-items: center;
-		gap: $spacing-md;
-		margin-bottom: $spacing-lg;
-		h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; color: $color-secondary; }
-	}
-
-	.sec-ic {
-		width: 40px;
-		height: 40px;
-		border-radius: $radius-sm;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		background: color-mix(in srgb, var(--c) 12%, transparent);
-		flex-shrink: 0;
-	}
-
-	.grid {
-		display: grid;
-		gap: $spacing-md;
-		&.two {
-			grid-template-columns: repeat(2, 1fr);
-			@media (max-width: 720px) { grid-template-columns: 1fr; }
-		}
-	}
-
-	.card {
-		background: $color-bg-card;
-		border-radius: $radius;
-		padding: $spacing-xl;
-		border: 1px solid $color-border;
-		transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
-	}
-
-	.show-more {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 6px;
-		width: 100%;
-		margin-top: $spacing-lg;
-		padding: $spacing-sm;
-		font-size: $font-size-sm;
-		font-weight: 600;
-		color: $color-primary;
-		border-top: 1px solid $color-border;
-		padding-top: $spacing-lg;
-	}
-
-	/* ── Telefony (ton bursztynowy — zarezerwowany "czerwony alarm" tylko dla 112) ── */
-	.helpline {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: $spacing-sm;
-		&:hover { transform: translateY(-2px); border-color: color-mix(in srgb, $color-warm 45%, $color-border); box-shadow: $shadow-md; }
-	}
-
-	.hl-ic {
-		width: 44px;
-		height: 44px;
-		border-radius: 50%;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		background: $color-warm-light;
-		margin-bottom: 4px;
-	}
-
-	.helpline-info {
-		flex: 1;
-		h3 { font-size: $font-size-base; font-weight: 700; color: $color-secondary; margin-bottom: 4px; }
-		p { font-size: $font-size-sm; color: $color-text-muted; line-height: 1.5; }
-	}
-
-	.call-btn {
-		display: inline-flex;
-		align-self: stretch;
-		align-items: center;
-		justify-content: center;
-		gap: $spacing-sm;
-		margin-top: $spacing-sm;
-		padding: 11px $spacing-lg;
-		background: $color-warm;
-		color: white;
+	.skip-link {
+		position: fixed;
+		top: -80px;
+		left: 8px;
+		z-index: 1000;
+		background: var(--rd-primary);
+		color: #fff;
+		padding: 10px 18px;
+		border-radius: 8px;
 		font-weight: 700;
-		font-size: $font-size-base;
-		border-radius: $radius-sm;
 		text-decoration: none;
-		transition: filter 0.15s;
-		&:hover { filter: brightness(1.05); }
+		transition: top 0.16s ease;
+		&:focus { top: 8px; }
 	}
 
-	/* ── Organizacje (lista pełnej szerokości) ── */
-	.org-list { display: flex; flex-direction: column; gap: $spacing-md; }
+	.wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+	h1, h2, h3 { font-family: 'Newsreader', serif; }
 
-	.org-row {
-		display: flex;
+	.eyebrow {
+		display: inline-flex;
 		align-items: center;
-		gap: $spacing-lg;
-		background: $color-bg-card;
-		border: 1px solid $color-border;
-		border-radius: $radius;
-		padding: $spacing-lg $spacing-xl;
-		transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+		gap: 9px;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.09em;
+		text-transform: uppercase;
+		margin-bottom: 20px;
+		.rule { width: 22px; height: 1.5px; display: inline-block; }
+		&.primary { color: var(--rd-primary); .rule { background: var(--rd-primary); } }
+		&.accent-soft { color: var(--rd-accent-soft); .rule.accent-soft-rule { background: var(--rd-accent-soft); } }
+	}
+
+	/* ── page header ── */
+	.page-head { border-bottom: 1px solid var(--rd-border); background: var(--rd-bg-paper-2); }
+	.head-inner {
+		padding: 72px 24px 64px;
+		max-width: 760px;
+		h1 { font-weight: 500; font-size: 56px; line-height: 1.03; letter-spacing: -0.015em; margin: 0 0 18px; }
+	}
+	.lead { font-size: 19px; line-height: 1.6; color: var(--rd-muted); margin: 0; }
+
+	/* ── emergency ── */
+	.emergency-wrap { padding: 28px 24px 0; }
+	.emergency-banner {
+		text-decoration: none;
+		color: #fff;
+		display: flex;
 		flex-wrap: wrap;
-
-		&:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--c) 40%, $color-border); box-shadow: $shadow-md; }
-	}
-
-	.org-mono {
-		width: 48px;
-		height: 48px;
-		border-radius: $radius-sm;
-		display: inline-flex;
 		align-items: center;
-		justify-content: center;
-		background: color-mix(in srgb, var(--c) 14%, transparent);
-		color: var(--c);
-		font-weight: 800;
-		font-size: 20px;
-		flex-shrink: 0;
+		gap: 18px 28px;
+		background: var(--rd-accent);
+		border-radius: 16px;
+		padding: 22px 30px;
+		transition: background 0.15s ease;
+		&:hover { background: var(--rd-accent-hover); }
 	}
-
-	.org-info {
-		flex: 1;
-		min-width: 200px;
-		h3 { font-size: $font-size-base; font-weight: 700; color: $color-secondary; margin-bottom: 2px; }
-		p { font-size: $font-size-sm; color: $color-text-muted; line-height: 1.45; }
-	}
-
-	.org-actions { display: flex; gap: $spacing-sm; flex-shrink: 0; }
-
-	.btn-sm { padding: 9px $spacing-md; min-height: 40px; font-size: $font-size-sm; white-space: nowrap; }
-
-	/* ── Materiały ── */
-	.guide {
-		display: flex;
-		align-items: center;
-		gap: $spacing-md;
-		text-decoration: none;
-		color: inherit;
-		padding: $spacing-md $spacing-lg;
-		&:hover { transform: translateX(3px); border-color: color-mix(in srgb, $color-accent 40%, $color-border); box-shadow: $shadow-sm; }
-	}
-
-	.guide-ic {
-		width: 44px;
-		height: 44px;
-		border-radius: $radius-sm;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		background: $color-accent-bg;
-		flex-shrink: 0;
-	}
-
-	.guide-body { flex: 1; display: flex; flex-direction: column; gap: 2px; }
-	.guide-h { font-size: $font-size-base; font-weight: 700; color: $color-secondary; }
-	.guide-p { font-size: $font-size-sm; color: $color-text-muted; line-height: 1.4; }
-
-	/* ── 112 (jedyne miejsce, gdzie zostaje pełna czerwień — to prawdziwy alarm) ── */
-	.emergency {
-		display: flex;
-		align-items: center;
-		gap: $spacing-md;
-		background: color-mix(in srgb, $color-danger 7%, $color-bg-card);
-		border: 1.5px solid color-mix(in srgb, $color-danger 30%, $color-border);
-		border-radius: $radius;
-		padding: $spacing-lg $spacing-xl;
-		margin-top: $spacing-lg;
-	}
-
+	.em-left { display: inline-flex; align-items: center; gap: 12px; }
 	.em-ic {
 		width: 44px;
 		height: 44px;
 		border-radius: 50%;
-		background: $color-danger;
-		display: inline-flex;
+		background: rgba(255, 255, 255, 0.16);
+		display: flex;
 		align-items: center;
 		justify-content: center;
+		font-size: 22px;
 		flex-shrink: 0;
 	}
+	.em-title { font-family: 'Newsreader', serif; font-size: 23px; font-weight: 600; }
+	.em-sub { font-size: 15px; color: #f6dddd; }
+	.em-num { margin-left: auto; font-family: 'Newsreader', serif; font-weight: 600; font-size: 34px; letter-spacing: 0.02em; }
 
-	.em-body {
-		flex: 1;
+	/* ── section shared ── */
+	.section { padding: 64px 24px 0; }
+	.sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; h2 { font-weight: 500; font-size: 34px; line-height: 1.1; margin: 0; } }
+	.sec-num { font-family: 'Newsreader', serif; font-size: 15px; font-weight: 600; color: var(--rd-accent); }
+	.sec-lead { font-size: 16px; line-height: 1.6; color: var(--rd-muted-2); margin: 0 0 32px; max-width: 40em; }
+
+	/* ── helplines ── */
+	.helplines-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+	.helpline-card {
+		text-decoration: none;
+		color: inherit;
+		background: var(--rd-surface);
+		border: 1px solid var(--rd-border-card);
+		border-radius: 16px;
+		padding: 28px;
 		display: flex;
 		flex-direction: column;
-		gap: 2px;
-		strong { font-size: $font-size-base; color: $color-danger; font-weight: 800; }
-		span { font-size: $font-size-sm; color: $color-text-muted; }
+		transition: border-color 0.15s ease;
+		&:hover { border-color: var(--rd-primary); }
+		h3 { font-weight: 600; font-size: 22px; line-height: 1.2; margin: 0 0 10px; }
+		p { font-size: 15px; line-height: 1.55; color: var(--rd-muted-2); margin: 0 0 20px; }
+	}
+	.helpline-foot { margin-top: auto; display: flex; align-items: center; gap: 12px; }
+	.hl-number { font-family: 'Newsreader', serif; font-weight: 600; font-size: 28px; color: var(--rd-primary); letter-spacing: 0.01em; }
+	.hl-tag {
+		font-size: 12px;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--rd-muted-3);
+		background: var(--rd-bg-paper-2);
+		padding: 5px 10px;
+		border-radius: 999px;
 	}
 
-	.em-btn {
-		display: inline-flex;
+	/* ── organizations ── */
+	.orgs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+	.org-card {
+		background: var(--rd-surface);
+		border: 1px solid var(--rd-border-card);
+		border-radius: 16px;
+		padding: 28px 26px;
+		display: flex;
+		flex-direction: column;
+		min-height: 230px;
+		h3 { font-weight: 600; font-size: 20px; line-height: 1.2; margin: 0 0 9px; }
+		p { font-size: 14.5px; line-height: 1.55; color: var(--rd-muted-2); margin: 0 0 20px; }
+	}
+	.org-initial {
+		width: 46px;
+		height: 46px;
+		border-radius: 12px;
+		background: var(--rd-primary-soft-bg);
+		color: var(--rd-primary);
+		display: flex;
 		align-items: center;
-		gap: 6px;
-		padding: 10px $spacing-lg;
-		background: $color-danger;
-		color: white;
-		font-weight: 800;
-		font-size: $font-size-base;
-		border-radius: $radius-sm;
+		justify-content: center;
+		font-family: 'Newsreader', serif;
+		font-size: 24px;
+		font-weight: 600;
+		margin-bottom: 18px;
+	}
+	.org-links { margin-top: auto; display: flex; flex-wrap: wrap; gap: 10px; }
+	.org-chip {
 		text-decoration: none;
-		flex-shrink: 0;
-		&:hover { filter: brightness(1.08); }
+		font-weight: 600;
+		font-size: 14px;
+		color: var(--rd-primary);
+		border: 1.5px solid var(--rd-primary-soft-border);
+		background: var(--rd-primary-soft-bg);
+		padding: 8px 14px;
+		border-radius: 999px;
+		transition: background 0.15s ease, color 0.15s ease;
+		&:hover { background: var(--rd-primary); color: #fff; border-color: var(--rd-primary); }
+	}
+
+	/* ── materials ── */
+	.materials-section { padding-bottom: 40px; }
+	.materials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+	.material-card {
+		text-decoration: none;
+		color: inherit;
+		background: var(--rd-surface);
+		border: 1px solid var(--rd-border-card);
+		border-radius: 16px;
+		padding: 26px 24px;
+		display: flex;
+		flex-direction: column;
+		min-height: 200px;
+		transition: border-color 0.15s ease, transform 0.15s ease;
+		&:hover { border-color: var(--rd-primary); transform: translateY(-3px); }
+		h3 { font-weight: 600; font-size: 21px; line-height: 1.2; margin: 0 0 9px; }
+		p { font-size: 14.5px; line-height: 1.55; color: var(--rd-muted-2); margin: 0; }
+	}
+	.material-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+	.pdf-badge { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: var(--rd-accent); background: var(--rd-accent-soft-bg); padding: 5px 10px; border-radius: 7px; }
+	.dl-ic { font-size: 19px; color: #c3b6a2; }
+	.dl-link { margin-top: auto; padding-top: 16px; font-weight: 600; font-size: 14px; color: var(--rd-primary); }
+
+	/* ── reassure CTA ── */
+	.reassure-wrap { padding: 0 24px 88px; margin-top: 40px; }
+	.reassure {
+		background: var(--rd-ink-dark);
+		border-radius: 24px;
+		padding: 60px 56px;
+		color: #f1e8da;
+		display: grid;
+		grid-template-columns: 1.2fr 0.8fr;
+		gap: 40px;
+		align-items: center;
+	}
+	.reassure-copy {
+		h2 { font-weight: 500; font-size: 36px; line-height: 1.12; color: #fff; margin: 12px 0 12px; max-width: 15em; }
+		p { font-size: 16px; line-height: 1.6; color: var(--rd-muted-dark); margin: 0; max-width: 32em; }
+	}
+	.reassure-actions { display: flex; flex-direction: column; gap: 12px; }
+
+	.btn-solid, .btn-ghost-dark {
+		text-decoration: none;
+		text-align: center;
+		font-weight: 600;
+		font-size: 16px;
+		padding: 16px 24px;
+		border-radius: 999px;
+		transition: background 0.15s ease;
+	}
+	.btn-solid { background: var(--rd-primary); color: #fff; &:hover { background: var(--rd-primary-hover); } }
+	.btn-ghost-dark { border: 1.5px solid rgba(255, 255, 255, 0.5); color: #fff; &:hover { background: rgba(255, 255, 255, 0.12); } }
+
+	/* ── responsive ── */
+	@media (max-width: 980px) {
+		.helplines-grid { grid-template-columns: 1fr; }
+		.orgs-grid { grid-template-columns: repeat(2, 1fr); }
+		.materials-grid { grid-template-columns: repeat(2, 1fr); }
+		.reassure { grid-template-columns: 1fr; }
+	}
+
+	@media (max-width: 768px) {
+		.wrap { padding: 0 16px; }
+		.head-inner { padding: 40px 16px; }
+		.head-inner h1 { font-size: 38px; }
+		.emergency-wrap { padding: 20px 16px 0; }
+		.emergency-banner { padding: 20px; }
+		.em-num { margin-left: 0; }
+		.section { padding: 40px 16px 0; }
+		.sec-head h2 { font-size: 26px; }
+		.orgs-grid, .materials-grid { grid-template-columns: 1fr; }
+		.reassure-wrap { padding: 0 16px 56px; }
+		.reassure { padding: 40px 24px; }
+		.reassure-copy h2 { font-size: 26px; }
 	}
 </style>

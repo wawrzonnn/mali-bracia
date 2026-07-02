@@ -7,6 +7,10 @@
 
 	let { children } = $props();
 	const isAdmin = $derived(page.url.pathname.startsWith('/administracja'));
+	/* Strony przebudowane w nowym designie (własny nav/stopka) — na razie tylko
+	   te trzy trasy dokładnie; podstrony jak /wiedza/[slug] wciąż mają stary sidebar. */
+	const redesignedRoutes = ['/', '/wiedza', '/cwiczenia', '/wsparcie', '/pytania'];
+	const isLanding = $derived(redesignedRoutes.includes(page.url.pathname));
 	let mobileMenuOpen = $state(false);
 	let chatOpen = $state(false);
 	let chatInput = $state('');
@@ -71,7 +75,7 @@
 	}
 </script>
 
-{#if isAdmin}
+{#if isAdmin || isLanding}
 	{@render children()}
 {:else}
 <div class="app-layout">

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 
+	let { withSidebar = true }: { withSidebar?: boolean } = $props();
+
 	let open = $state(false);
 	let fontLevel = $state(0);
 	let contrast = $state(false);
@@ -33,7 +35,7 @@
 	}
 </script>
 
-<div class="a11y">
+<div class="a11y" class:no-sidebar={!withSidebar}>
 	{#if open}
 		<div class="panel" role="dialog" aria-label="Ustawienia dostępności">
 			<div class="panel-head">
@@ -108,6 +110,17 @@
 			right: 64px;
 			bottom: auto;
 			top: 8px;
+		}
+
+		&.no-sidebar {
+			left: 24px;
+
+			@media (max-width: 768px) {
+				left: 16px;
+				right: auto;
+				top: auto;
+				bottom: 16px;
+			}
 		}
 	}
 

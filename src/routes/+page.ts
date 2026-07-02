@@ -3,6 +3,6 @@ import { articles } from '$lib/data/articles';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = () => {
-	const recentArticles = articles.slice(0, 4);
+	const recentArticles = articles.slice(0, 3);
 	return { categories, recentArticles };
 };

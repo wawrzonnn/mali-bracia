@@ -5,6 +5,7 @@ export interface Resource {
 	url?: string;
 	type: 'helpline' | 'organization' | 'guide';
 	isNational: boolean;
+	tag?: string;
 }
 
 export const resources: Resource[] = [
@@ -14,28 +15,32 @@ export const resources: Resource[] = [
 		phone: '+48 608 018 110',
 		url: 'https://www.malibracia.org.pl',
 		type: 'helpline',
-		isNational: true
+		isNational: true,
+		tag: 'MBU'
 	},
 	{
 		title: 'Telefon Zaufania dla Dorosłych w Kryzysie',
 		description: 'Całodobowy telefon wsparcia emocjonalnego prowadzony przez Instytut Psychologii Zdrowia.',
 		phone: '116 123',
 		type: 'helpline',
-		isNational: true
+		isNational: true,
+		tag: '24 h'
 	},
 	{
 		title: 'Telefon dla Seniorów i Opiekunów',
 		description: 'Linia Rzecznika Praw Obywatelskich. Porady prawne i informacja o dostępnym wsparciu.',
 		phone: '800 676 676',
 		type: 'helpline',
-		isNational: true
+		isNational: true,
+		tag: 'Prawo'
 	},
 	{
 		title: 'Centrum Wsparcia',
 		description: 'Telefon wsparcia psychologicznego. Bezpłatny, czynny całodobowo.',
 		phone: '800 70 2222',
 		type: 'helpline',
-		isNational: true
+		isNational: true,
+		tag: '24 h'
 	},
 	{
 		title: 'Stowarzyszenie Mali Bracia Ubogich',

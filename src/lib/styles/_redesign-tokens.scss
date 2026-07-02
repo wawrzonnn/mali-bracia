@@ -1,0 +1,39 @@
+/* ─── Tokeny nowego designu (strona główna, baza wiedzy, ćwiczenia, ...) ───
+   Współdzielone przez wszystkie zredesignowane strony — prefiks rd- żeby
+   nie kolidować z tokenami a11y (--c-*) używanymi przez stary layout. */
+:root {
+	--rd-bg-paper: #faf6ef;
+	--rd-bg-paper-2: #f3ece0;
+	--rd-surface: #ffffff;
+	--rd-ink: #221d18;
+	--rd-ink-2: #181410;
+	--rd-ink-dark: #1e1a16;
+	--rd-ink-card-dark: #262019;
+	--rd-ink-card-dark-hover: #2c251d;
+	--rd-muted: #5c5349;
+	--rd-muted-2: #6e645a;
+	--rd-muted-3: #8a7f72;
+	--rd-muted-dark: #b7ac9c;
+	--rd-muted-dark-2: #c6bbab;
+	--rd-muted-dark-3: #9a8e7c;
+	--rd-faint-dark: #7e7466;
+	--rd-primary: #0a80c4;
+	--rd-primary-hover: #0b6da6;
+	--rd-primary-soft-text: #d6ecf9;
+	--rd-primary-soft-bg: #eaf5fb;
+	--rd-primary-soft-border: #bfe0f1;
+	--rd-accent: #b8324a;
+	--rd-accent-hover: #9e2a3f;
+	--rd-accent-soft: #e5896f;
+	--rd-accent-soft-bg: #f6e4e0;
+	--rd-border: #e7dbcb;
+	--rd-border-card: #ebe0d0;
+	--rd-border-outline: #d9ccb8;
+	--rd-border-tab: #e0d3c0;
+	--rd-border-dark: #3a342c;
+	--rd-border-dark-2: #2a241d;
+	--rd-dot: #d9ccb8;
+	--rd-ph-a: #efe6d8;
+	--rd-ph-b: #e8ddcb;
+	--rd-ph-border: #e2d6c4;
+}
