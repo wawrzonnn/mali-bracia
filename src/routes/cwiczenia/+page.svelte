@@ -289,7 +289,7 @@ h2{font-size:18px;margin-top:24px}ol,ul{margin:12px 0}li{margin:8px 0}
 		&:hover:not(:disabled) { background: var(--rd-primary-hover); }
 		&:disabled { opacity: 0.7; cursor: default; }
 	}
-	.gen-note { font-size: 14px; color: var(--rd-faint-dark); }
+	.gen-note { font-size: 14px; color: var(--rd-faint-dark); min-width: 0; flex: 1 1 200px; }
 
 	.spin {
 		display: inline-block;
@@ -328,6 +328,9 @@ h2{font-size:18px;margin-top:24px}ol,ul{margin:12px 0}li{margin:8px 0}
 		padding: 24px;
 		background: var(--rd-bg-paper);
 		color: var(--rd-ink);
+		max-width: 100%;
+		overflow-wrap: break-word;
+		:global(*) { max-width: 100%; overflow-wrap: break-word; }
 		:global(h1), :global(h2) { font-family: 'Newsreader', serif; color: var(--rd-ink); }
 		:global(h2) { margin-top: 20px; }
 	}

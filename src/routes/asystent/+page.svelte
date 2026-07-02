@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Icon from '$lib/components/Icon.svelte';
 	import { browser } from '$app/environment';
+	import { renderChatMarkdown } from '$lib/utils/markdown';
 
 	interface Message {
 		role: 'user' | 'assistant';
@@ -155,7 +156,7 @@
 					</div>
 				{/if}
 				<div class="msg-bubble">
-					{msg.content}
+					{@html renderChatMarkdown(msg.content)}
 				</div>
 			</div>
 		{/each}
@@ -393,7 +394,7 @@
 		border-radius: $radius;
 		font-size: $font-size-sm;
 		line-height: 1.65;
-		white-space: pre-wrap;
+		overflow-wrap: break-word;
 
 		.user & {
 			background: $color-primary;

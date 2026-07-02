@@ -9,6 +9,7 @@
 	import { page } from '$app/state';
 	import { browser } from '$app/environment';
 	import { afterNavigate } from '$app/navigation';
+	import { renderChatMarkdown } from '$lib/utils/markdown';
 
 	let { children } = $props();
 
@@ -132,7 +133,7 @@
 					{/if}
 					{#each chatMessages as msg}
 						<div class="popup-msg" class:user={msg.role === 'user'}>
-							{msg.content}
+							{@html renderChatMarkdown(msg.content)}
 						</div>
 					{/each}
 					{#if chatLoading}
@@ -433,6 +434,7 @@
 		min-height: 100dvh;
 		display: flex;
 		flex-direction: column;
+		overflow-x: hidden;
 
 		@media (max-width: 768px) {
 			margin-left: 0;
@@ -491,7 +493,7 @@
 		flex-shrink: 0;
 	}
 
-	main { flex: 1; min-height: 0; overflow-y: auto; }
+	main { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; }
 
 	/* ─── CHAT FAB ─── */
 	.chat-fab {
