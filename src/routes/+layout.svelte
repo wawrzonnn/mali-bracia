@@ -196,7 +196,7 @@
 						class:active={isActive(item.href)}
 						onclick={() => (mobileMenuOpen = false)}
 					>
-						<Icon name={item.icon} size={20} color={isActive(item.href) ? '#169FDB' : '#5A6B7A'} />
+						<Icon name={item.icon} size={20} color={isActive(item.href) ? '#0A80C4' : '#8A7F72'} />
 						<span>{item.label}</span>
 					</a>
 				{/each}
@@ -230,7 +230,7 @@
 	<div class="main-area">
 		<header class="topbar">
 			<button class="hamburger" onclick={() => (mobileMenuOpen = !mobileMenuOpen)} aria-label="Menu">
-				<Icon name={mobileMenuOpen ? 'x' : 'menu'} size={24} color="#1D1D1B" />
+				<Icon name={mobileMenuOpen ? 'x' : 'menu'} size={24} color="#221D18" />
 			</button>
 			<span class="topbar-title">Baza Wiedzy MBU</span>
 			<a href="/asystent" class="topbar-ai" aria-label="Otwórz asystenta AI">
@@ -273,8 +273,8 @@
 		left: 0;
 		bottom: 0;
 		width: $sidebar-width;
-		background: $color-bg-card;
-		border-right: 1px solid $color-border;
+		background: var(--rd-bg-paper, #{$color-bg-card});
+		border-right: 1px solid var(--rd-border, #{$color-border});
 		display: flex;
 		flex-direction: column;
 		z-index: 100;
@@ -292,7 +292,7 @@
 
 	.sidebar-header {
 		padding: 28px 24px 20px;
-		border-bottom: 1px solid $color-border;
+		border-bottom: 1px solid var(--rd-border, #{$color-border});
 	}
 
 	.logo-link {
@@ -319,7 +319,8 @@
 		font-weight: 700;
 		text-transform: uppercase;
 		letter-spacing: 0.6px;
-		color: $color-text-muted;
+		color: var(--rd-muted-3, #{$color-text-muted});
+		opacity: 0.85;
 	}
 
 	.nav-link {
@@ -329,26 +330,26 @@
 		padding: 12px $spacing-md;
 		border-radius: $radius-sm;
 		text-decoration: none;
-		color: $color-text-muted;
+		color: var(--rd-muted-2, #{$color-text-muted});
 		font-size: $font-size-sm;
 		font-weight: 500;
 		transition: all 0.12s ease;
 
 		&:hover {
-			background: $color-bg;
-			color: $color-text;
+			background: var(--rd-bg-paper-2, #{$color-bg});
+			color: var(--rd-ink, #{$color-text});
 		}
 
 		&.active {
-			background: $color-primary-bg;
-			color: $color-primary;
-			font-weight: 700;
+			background: transparent;
+			color: var(--rd-primary, #{$color-primary});
+			font-weight: 600;
 		}
 	}
 
 	.sidebar-foot {
 		padding: $spacing-md;
-		border-top: 1px solid $color-border;
+		border-top: 1px solid var(--rd-border, #{$color-border});
 		display: flex;
 		flex-direction: column;
 		gap: $spacing-sm;
@@ -359,17 +360,16 @@
 		align-items: center;
 		justify-content: center;
 		gap: $spacing-sm;
-		padding: 13px $spacing-md;
-		border-radius: $radius-sm;
-		background: linear-gradient(135deg, $color-accent, $color-accent-dark);
+		padding: 12px $spacing-md;
+		border-radius: 999px;
+		background: var(--rd-primary, #{$color-primary});
 		color: white;
 		text-decoration: none;
 		font-size: $font-size-sm;
-		font-weight: 700;
-		box-shadow: 0 2px 8px rgba($color-accent, 0.28);
-		transition: filter 0.15s ease, transform 0.15s ease;
+		font-weight: 600;
+		transition: background 0.15s ease;
 
-		&:hover { filter: brightness(1.06); transform: translateY(-1px); }
+		&:hover { background: var(--rd-primary-hover, #{$color-primary-dark}); }
 	}
 
 	.helpline {
@@ -378,19 +378,19 @@
 		gap: 10px;
 		padding: 9px 10px;
 		border-radius: $radius-sm;
-		border: 1px solid $color-border;
-		background: $color-bg-card;
+		border: 1px solid var(--rd-border-card, #{$color-border});
+		background: var(--rd-surface, #{$color-bg-card});
 		text-decoration: none;
-		transition: border-color 0.15s ease, box-shadow 0.15s ease;
+		transition: border-color 0.15s ease;
 
-		&:hover { border-color: rgba($color-danger, 0.4); box-shadow: $shadow-sm; }
+		&:hover { border-color: var(--rd-primary, #{$color-primary}); }
 	}
 
 	.helpline-ic {
 		width: 34px;
 		height: 34px;
 		border-radius: 50%;
-		background: $color-danger;
+		background: var(--rd-primary, #{$color-primary});
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -398,17 +398,17 @@
 	}
 
 	.helpline-body { display: flex; flex-direction: column; line-height: 1.25; }
-	.helpline-label { font-size: 11px; color: $color-text-muted; }
-	.helpline-num { font-size: $font-size-sm; font-weight: 800; color: $color-danger; letter-spacing: 0.3px; }
+	.helpline-label { font-size: 11px; color: var(--rd-muted-3, #{$color-text-muted}); }
+	.helpline-num { font-size: $font-size-sm; font-weight: 700; color: var(--rd-ink, #{$color-text}); letter-spacing: 0.3px; }
 
 	.sidebar-link {
 		text-align: center;
 		font-size: 11px;
-		color: $color-text-muted;
+		color: var(--rd-muted-3, #{$color-text-muted});
 		text-decoration: none;
 		padding-top: 2px;
 
-		&:hover { color: $color-primary; }
+		&:hover { color: var(--rd-primary, #{$color-primary}); }
 	}
 
 	.overlay {
@@ -441,8 +441,8 @@
 		align-items: center;
 		gap: $spacing-md;
 		padding: $spacing-md $spacing-lg;
-		background: $color-bg-card;
-		border-bottom: 1px solid $color-border;
+		background: var(--rd-bg-paper, #{$color-bg-card});
+		border-bottom: 1px solid var(--rd-border, #{$color-border});
 		position: sticky;
 		top: 0;
 		z-index: 50;
@@ -460,20 +460,21 @@
 		justify-content: center;
 		border-radius: $radius-sm;
 
-		&:hover { background: $color-bg; }
+		&:hover { background: var(--rd-bg-paper-2, #{$color-bg}); }
 	}
 
 	.topbar-title {
 		flex: 1;
-		font-weight: 700;
+		font-weight: 600;
 		font-size: $font-size-base;
+		color: var(--rd-ink, #{$color-text});
 	}
 
 	.topbar-ai {
 		width: 36px;
 		height: 36px;
 		border-radius: 50%;
-		background: linear-gradient(135deg, $color-primary, $color-primary-dark);
+		background: var(--rd-primary, #{$color-primary});
 		display: flex;
 		align-items: center;
 		justify-content: center;
