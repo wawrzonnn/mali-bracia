@@ -173,8 +173,8 @@
 </div>
 
 	{#if !navMobileOpen}
-		{@render chatWidget(false)}
-		<A11yToolbar withSidebar={false} />
+		{@render chatWidget(true)}
+		<div class="a11y-desktop-only"><A11yToolbar withSidebar={false} /></div>
 	{/if}
 {:else}
 <div class="app-layout">
@@ -268,6 +268,10 @@
 		flex-direction: column;
 		height: 100dvh;
 		overflow: hidden;
+	}
+
+	.a11y-desktop-only {
+		@media (max-width: 768px) { display: none; }
 	}
 
 	.sidebar {

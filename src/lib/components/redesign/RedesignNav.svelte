@@ -1,4 +1,6 @@
 <script lang="ts">
+	import A11yToolbar from '$lib/components/A11yToolbar.svelte';
+
 	let {
 		active = undefined,
 		mobileOpen = $bindable(false)
@@ -29,6 +31,13 @@
 
 <div class="nav-sticky">
 	<div class="wrap nav-inner">
+		<button class="nav-burger" onclick={() => (mobileOpen = !mobileOpen)} aria-label="Menu" aria-expanded={mobileOpen}>
+			{#if mobileOpen}
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M6 18L18 6" /></svg>
+			{:else}
+				<span></span><span></span><span></span>
+			{/if}
+		</button>
 		<a href="/" class="brand">
 			<span class="brand-badge">m</span>
 			<span class="brand-word">
@@ -45,25 +54,26 @@
 			<a href="/1-procent" class="btn-outline">Przekaż 1,5%</a>
 			<a href="/dolacz" class="btn-solid">Dołącz do nas</a>
 		</div>
-		<button class="nav-burger" onclick={() => (mobileOpen = !mobileOpen)} aria-label="Menu" aria-expanded={mobileOpen}>
-			<span></span><span></span><span></span>
-		</button>
-	</div>
-
-	{#if mobileOpen}
-		<div class="nav-mobile">
-			<div class="nav-mobile-links">
-				{#each links as l}
-					<a href={l.href} class:active={active === l.id} onclick={closeMobile}>{l.label}</a>
-				{/each}
-			</div>
-			<div class="nav-mobile-cta">
-				<a href="/1-procent" class="btn-outline" onclick={closeMobile}>Przekaż 1,5%</a>
-				<a href="/dolacz" class="btn-solid" onclick={closeMobile}>Dołącz do nas</a>
-			</div>
+		<div class="nav-mobile-icons">
+			<A11yToolbar inline />
+			<a href="/asystent" class="icon-btn" aria-label="Asystent AI">
+				<svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M13 3l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
+			</a>
 		</div>
-	{/if}
+	</div>
 </div>
+
+{#if mobileOpen}
+	<div class="nav-mobile">
+		<div class="nav-mobile-links">
+			{#each links as l}
+				<a href={l.href} class:active={active === l.id} onclick={closeMobile}>{l.label}</a>
+			{/each}
+			<a href="/1-procent" class="highlight" onclick={closeMobile}>Przekaż 1,5%</a>
+			<a href="/dolacz" class="highlight primary" onclick={closeMobile}>Dołącz do nas</a>
+		</div>
+	</div>
+{/if}
 
 <style lang="scss">
 	.wrap {
@@ -155,20 +165,37 @@
 		display: none;
 		flex-direction: column;
 		justify-content: center;
+		align-items: center;
 		gap: 5px;
 		width: 40px;
 		height: 40px;
-		margin-left: auto;
+		flex-shrink: 0;
+		color: var(--rd-ink);
 		span { display: block; width: 20px; height: 2px; background: var(--rd-ink); margin: 0 auto; }
+	}
+
+	.nav-mobile-icons {
+		display: none;
+		align-items: center;
+		gap: 8px;
+		margin-left: auto;
+	}
+
+	.icon-btn {
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		background: var(--rd-primary);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
 	}
 
 	.nav-mobile {
 		display: none;
 		flex-direction: column;
-		padding: 4px 20px 24px;
-		border-top: 1px solid var(--rd-border);
-		background: var(--rd-bg-paper);
-		box-shadow: 0 16px 32px -12px rgba(34, 29, 24, 0.22);
+		padding: 8px 20px 24px;
 	}
 
 	.nav-mobile-links {
@@ -183,17 +210,13 @@
 			color: var(--rd-ink);
 			border-bottom: 1px solid var(--rd-border);
 			&.active { color: var(--rd-primary); font-weight: 600; }
-			&:last-child { border-bottom: none; }
+
+			&.highlight {
+				font-weight: 700;
+				color: var(--rd-accent);
+				&.primary { color: var(--rd-primary); }
+			}
 		}
-	}
-
-	.nav-mobile-cta {
-		display: flex;
-		flex-direction: column;
-		gap: 10px;
-		margin-top: 18px;
-
-		.btn-outline, .btn-solid { text-align: center; padding: 15px 16px; font-size: 15.5px; }
 	}
 
 	.btn-solid, .btn-outline {
@@ -212,14 +235,23 @@
 	.btn-solid { background: var(--rd-primary); color: #fff; &:hover { background: var(--rd-primary-hover); } }
 	.btn-outline { border: 1.5px solid var(--rd-border-outline); color: var(--rd-ink); &:hover { border-color: var(--rd-ink); } }
 
-	@media (max-width: 860px) {
-		.nav-links, .nav-cta { display: none; }
-		.nav-burger { display: flex; }
-		.nav-mobile { display: flex; }
-	}
-
 	@media (max-width: 768px) {
 		.wrap { padding: 0 16px; }
-		.ann-inner { padding: 9px 16px 9px 74px; font-size: 12.5px; }
+		.ann-bar { display: none; }
+		.nav-links, .nav-cta { display: none; }
+		.nav-burger { display: flex; }
+		.nav-mobile-icons { display: flex; }
+
+		.nav-mobile {
+			display: flex;
+			position: fixed;
+			top: 70px;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 250;
+			overflow-y: auto;
+			background: var(--rd-bg-paper);
+		}
 	}
 </style>

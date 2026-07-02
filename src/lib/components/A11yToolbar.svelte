@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 
-	let { withSidebar = true }: { withSidebar?: boolean } = $props();
+	let { withSidebar = true, inline = false }: { withSidebar?: boolean; inline?: boolean } = $props();
 
 	let open = $state(false);
 	let fontLevel = $state(0);
@@ -35,7 +35,7 @@
 	}
 </script>
 
-<div class="a11y" class:no-sidebar={!withSidebar}>
+<div class="a11y" class:no-sidebar={!withSidebar} class:inline>
 	{#if open}
 		<div class="panel" role="dialog" aria-label="Ustawienia dostępności">
 			<div class="panel-head">
@@ -122,6 +122,21 @@
 				bottom: 16px;
 			}
 		}
+
+		&.inline {
+			position: relative;
+			left: auto;
+			right: auto;
+			top: auto;
+			bottom: auto;
+
+			@media (max-width: 768px) {
+				left: auto;
+				right: auto;
+				top: auto;
+				bottom: auto;
+			}
+		}
 	}
 
 	.launcher {
@@ -137,6 +152,8 @@
 
 		&:hover { transform: scale(1.06); }
 		@media (max-width: 768px) { width: 36px; height: 36px; }
+
+		.inline & { width: 36px; height: 36px; box-shadow: none; }
 	}
 
 	.panel {
@@ -158,6 +175,13 @@
 		}
 
 		@media (max-width: 340px) { width: calc(100vw - 32px); }
+
+		.inline & {
+			bottom: auto;
+			top: calc(100% + 10px);
+			left: auto;
+			right: 0;
+		}
 	}
 
 	.panel-head {
