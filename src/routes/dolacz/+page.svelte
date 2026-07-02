@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Icon from '$lib/components/Icon.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
+	import CommunityPanel from '$lib/components/CommunityPanel.svelte';
 	import type { IconName } from '$lib/components/Icon.svelte';
 	import { page } from '$app/state';
 
@@ -232,19 +233,12 @@
 				{/each}
 			</div>
 
-			<div class="community-panel">
-				<span class="community-ic"><Icon name="users" size={22} color="white" /></span>
-				<div class="community-text">
-					<h2>Razem możemy więcej</h2>
-					<p>
-						Dzięki Tobie osoby starsze odzyskują radość życia i czują, że nie są same. Dołącz do
-						naszej społeczności!
-					</p>
-				</div>
-				<a href="/" class="btn btn-secondary community-btn">
-					Poznaj nasze działania <Icon name="arrow-right" size={16} />
-				</a>
-			</div>
+			<CommunityPanel
+				heading="Razem możemy więcej"
+				text="Dzięki Tobie osoby starsze odzyskują radość życia i czują, że nie są same. Dołącz do naszej społeczności!"
+				ctaLabel="Poznaj nasze działania"
+				ctaHref="/"
+			/>
 		{/if}
 
 		{#if step === 1 && activePath}
@@ -709,38 +703,4 @@
 		justify-content: center;
 		box-shadow: 0 4px 20px rgba($color-accent, 0.3);
 	}
-
-	/* ── COMMUNITY PANEL ── */
-	.community-panel {
-		display: flex;
-		align-items: center;
-		gap: $spacing-lg;
-		margin-top: $spacing-xl;
-		background: $color-bg-card;
-		border: 1px solid $color-border;
-		border-radius: $radius-lg;
-		padding: $spacing-xl;
-		flex-wrap: wrap;
-	}
-
-	.community-ic {
-		width: 48px;
-		height: 48px;
-		border-radius: 50%;
-		background: linear-gradient(135deg, $color-primary, $color-primary-dark);
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		flex-shrink: 0;
-	}
-
-	.community-text {
-		flex: 1;
-		min-width: 220px;
-
-		h2 { font-size: $font-size-base; font-weight: 700; color: $color-secondary; margin-bottom: 2px; }
-		p { font-size: $font-size-sm; color: $color-text-muted; line-height: 1.5; }
-	}
-
-	.community-btn { flex-shrink: 0; white-space: nowrap; }
 </style>

@@ -4,7 +4,8 @@
 		| 'users' | 'brain' | 'shield' | 'arrow-right' | 'chevron-right'
 		| 'chevron-down' | 'sparkle' | 'clock' | 'send' | 'x'
 		| 'help-circle' | 'map-pin' | 'external' | 'puzzle' | 'menu'
-		| 'lightbulb' | 'alert-triangle' | 'gift' | 'check' | 'percent' | 'clipboard-check' | 'copy' | 'user';
+		| 'lightbulb' | 'alert-triangle' | 'gift' | 'check' | 'percent' | 'clipboard-check' | 'copy' | 'user'
+		| 'file-text' | 'edit' | 'building';
 
 	let { name, size = 24, color = 'currentColor' }: { name: IconName; size?: number; color?: string } = $props();
 
@@ -37,7 +38,10 @@
 		percent: 'M19 5L5 19M6.5 9a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM17.5 20a2.5 2.5 0 100-5 2.5 2.5 0 000 5z',
 		'clipboard-check': 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-5 9l2 2 4-4',
 		copy: 'M8 8V5a2 2 0 012-2h9a2 2 0 012 2v9a2 2 0 01-2 2h-3M8 8H5a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-3M8 8h6a2 2 0 012 2v6',
-		user: 'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z'
+		user: 'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z',
+		'file-text': 'M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9zM14 3v6h6M9 13h6M9 17h6M9 9h1',
+		edit: 'M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z',
+		building: 'M3 22h18M6 18V9M10 18V9M14 18V9M18 18V9M3 9l9-6 9 6'
 	};
 </script>
 
