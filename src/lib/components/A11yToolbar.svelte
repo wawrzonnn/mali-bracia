@@ -103,13 +103,10 @@
 		bottom: 24px;
 		z-index: 160;
 
-		/* Na mobile przenosimy widget do topbara (obok przycisku AI), żeby nigdy
-		   nie zasłaniał treści na dole ekranu — patrz $nav-height w layout. */
+		/* Na mobile ten sam przycisk pokazujemy juz w wariancie "inline" wewnatrz
+		   topbara (obok przycisku AI) — floating wersja chowa sie calkiem. */
 		@media (max-width: 768px) {
-			left: auto;
-			right: 64px;
-			bottom: auto;
-			top: 8px;
+			display: none;
 		}
 
 		&.no-sidebar {
@@ -131,6 +128,7 @@
 			bottom: auto;
 
 			@media (max-width: 768px) {
+				display: block;
 				left: auto;
 				right: auto;
 				top: auto;

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import A11yToolbar from '$lib/components/A11yToolbar.svelte';
+	import MobileFullMenu from '$lib/components/redesign/MobileFullMenu.svelte';
 
 	let {
 		active = undefined,
@@ -63,17 +64,7 @@
 	</div>
 </div>
 
-{#if mobileOpen}
-	<div class="nav-mobile">
-		<div class="nav-mobile-links">
-			{#each links as l}
-				<a href={l.href} class:active={active === l.id} onclick={closeMobile}>{l.label}</a>
-			{/each}
-			<a href="/1-procent" class="highlight" onclick={closeMobile}>Przekaż 1,5%</a>
-			<a href="/dolacz" class="highlight primary" onclick={closeMobile}>Dołącz do nas</a>
-		</div>
-	</div>
-{/if}
+<MobileFullMenu open={mobileOpen} {active} onClose={closeMobile} />
 
 <style lang="scss">
 	.wrap {
@@ -192,33 +183,6 @@
 		flex-shrink: 0;
 	}
 
-	.nav-mobile {
-		display: none;
-		flex-direction: column;
-		padding: 8px 20px 24px;
-	}
-
-	.nav-mobile-links {
-		display: flex;
-		flex-direction: column;
-
-		a {
-			padding: 15px 2px;
-			text-decoration: none;
-			font-weight: 500;
-			font-size: 16px;
-			color: var(--rd-ink);
-			border-bottom: 1px solid var(--rd-border);
-			&.active { color: var(--rd-primary); font-weight: 600; }
-
-			&.highlight {
-				font-weight: 700;
-				color: var(--rd-accent);
-				&.primary { color: var(--rd-primary); }
-			}
-		}
-	}
-
 	.btn-solid, .btn-outline {
 		text-decoration: none;
 		display: inline-flex;
@@ -241,17 +205,5 @@
 		.nav-links, .nav-cta { display: none; }
 		.nav-burger { display: flex; }
 		.nav-mobile-icons { display: flex; }
-
-		.nav-mobile {
-			display: flex;
-			position: fixed;
-			top: 70px;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			z-index: 250;
-			overflow-y: auto;
-			background: var(--rd-bg-paper);
-		}
 	}
 </style>

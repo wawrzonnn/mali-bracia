@@ -5,6 +5,7 @@
 	import RedesignNav from '$lib/components/redesign/RedesignNav.svelte';
 	import RedesignFooter from '$lib/components/redesign/RedesignFooter.svelte';
 	import ChromeSwitcher from '$lib/components/redesign/ChromeSwitcher.svelte';
+	import MobileFullMenu from '$lib/components/redesign/MobileFullMenu.svelte';
 	import { page } from '$app/state';
 	import { browser } from '$app/environment';
 
@@ -226,20 +227,21 @@
 		</div>
 	</aside>
 
-	{#if mobileMenuOpen}
-		<button class="overlay" onclick={() => (mobileMenuOpen = false)} aria-label="Zamknij menu"></button>
-	{/if}
-
 	<div class="main-area">
 		<header class="topbar">
-			<button class="hamburger" onclick={() => (mobileMenuOpen = !mobileMenuOpen)} aria-label="Menu">
+			<button class="hamburger" onclick={() => (mobileMenuOpen = !mobileMenuOpen)} aria-label="Menu" aria-expanded={mobileMenuOpen}>
 				<Icon name={mobileMenuOpen ? 'x' : 'menu'} size={24} color="#221D18" />
 			</button>
 			<span class="topbar-title">Baza Wiedzy MBU</span>
-			<a href="/asystent" class="topbar-ai" aria-label="Otwórz asystenta AI">
-				<Icon name="sparkle" size={18} color="white" />
-			</a>
+			<div class="topbar-icons">
+				<A11yToolbar inline />
+				<a href="/asystent" class="topbar-ai" aria-label="Otwórz asystenta AI">
+					<Icon name="sparkle" size={18} color="white" />
+				</a>
+			</div>
 		</header>
+
+		<MobileFullMenu open={mobileMenuOpen} active={navActive} onClose={() => (mobileMenuOpen = false)} />
 
 		<main id="main-content" tabindex="-1">
 			{@render children()}
@@ -287,13 +289,11 @@
 		z-index: 100;
 		transition: transform 0.25s ease;
 
+		/* Na mobile hamburger otwiera teraz pelnoekranowe MobileFullMenu zamiast
+		   wysuwania tego panelu - zostaje trwale poza ekranem ponizej 768px. */
 		@media (max-width: 768px) {
 			transform: translateX(-100%);
 			box-shadow: none;
-			&.open {
-				transform: translateX(0);
-				box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
-			}
 		}
 	}
 
@@ -418,18 +418,6 @@
 		&:hover { color: var(--rd-primary, #{$color-primary}); }
 	}
 
-	.overlay {
-		position: fixed;
-		inset: 0;
-		background: rgba(0, 0, 0, 0.3);
-		z-index: 90;
-		border: none;
-		cursor: pointer;
-
-		@media (min-width: 769px) {
-			display: none;
-		}
-	}
 
 	.main-area {
 		flex: 1;
@@ -477,6 +465,13 @@
 		color: var(--rd-ink, #{$color-text});
 	}
 
+	.topbar-icons {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		flex-shrink: 0;
+	}
+
 	.topbar-ai {
 		width: 36px;
 		height: 36px;
@@ -485,6 +480,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		flex-shrink: 0;
 	}
 
 	main { flex: 1; min-height: 0; overflow-y: auto; }
