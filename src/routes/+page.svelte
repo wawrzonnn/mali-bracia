@@ -10,13 +10,15 @@
 			slug: c.slug
 		}))
 	);
+	const articleImages = ['/article1.avif', '/article2.avif', '/article3.avif'];
 	const articlesShown = $derived(
-		data.recentArticles.slice(0, 3).map((a) => ({
+		data.recentArticles.slice(0, 3).map((a, i) => ({
 			cat: catMap[a.categorySlug]?.name ?? a.categorySlug,
 			title: a.title,
 			desc: a.summary,
 			read: `${a.readingTimeMin} min czytania`,
-			slug: a.slug
+			slug: a.slug,
+			img: articleImages[i]
 		}))
 	);
 </script>
@@ -53,7 +55,7 @@
 			</div>
 			<div class="hero-art">
 				<div class="placeholder ph-45">
-					<span class="ph-caption">zdjęcie — senior i wolontariusz przy stole</span>
+					<img src="/lp-1.avif" alt="Senior i wolontariusz spędzający czas razem" />
 				</div>
 				<div class="hero-float">
 					<div class="hero-float-num">1 godz.</div>
@@ -114,7 +116,7 @@
 		<!-- cytat założyciela -->
 		<section class="wrap quote-section">
 			<div class="placeholder ph-11">
-				<span class="ph-caption">portret — Armand Marquiset</span>
+				<img src="/armand.jfif" alt="Armand Marquiset, założyciel Stowarzyszenia" />
 			</div>
 			<div class="quote-body">
 				<div class="quote-mark">„</div>
@@ -168,7 +170,7 @@
 				<a href="/dolacz?sciezka=wolontariat" class="btn-accent btn-lg">Dołącz do wolontariatu →</a>
 			</div>
 			<div class="placeholder ph-54">
-				<span class="ph-caption">zdjęcie — wspólny spacer w parku</span>
+				<img src="/wspolnyspacer.avif" alt="Wolontariusz i senior podczas wspólnego spaceru w parku" />
 			</div>
 		</section>
 
@@ -209,7 +211,9 @@
 			<div class="art-grid">
 				{#each articlesShown as art}
 					<a href="/wiedza/{art.slug}" class="art-card">
-						<div class="placeholder ph-1610"></div>
+						<div class="placeholder ph-1610">
+							<img src={art.img} alt={art.title} />
+						</div>
 						<div class="art-body">
 							<span class="art-cat">{art.cat}</span>
 							<h3>{art.title}</h3>
@@ -282,25 +286,19 @@
 	.btn-ghost-white { border: 1.5px solid rgba(255, 255, 255, 0.55); color: #fff; &:hover { background: rgba(255, 255, 255, 0.12); } }
 	.btn-lg { font-size: 16px; padding: 16px 28px; }
 
-	/* ── placeholders ── */
+	/* ── zdjęcia ── */
 	.placeholder {
 		border-radius: 22px;
 		overflow: hidden;
-		background: repeating-linear-gradient(48deg, var(--rd-ph-a), var(--rd-ph-a) 12px, var(--rd-ph-b) 12px, var(--rd-ph-b) 24px);
+		background: var(--rd-ph-a);
 		border: 1px solid var(--rd-ph-border);
-		display: flex;
-		align-items: flex-end;
-		justify-content: center;
-		padding: 18px;
-	}
-	.ph-caption {
-		font-family: ui-monospace, Menlo, monospace;
-		font-size: 12px;
-		color: #9a8e7c;
-		background: rgba(250, 246, 239, 0.85);
-		padding: 6px 12px;
-		border-radius: 8px;
-		text-align: center;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+		}
 	}
 	.ph-45 { aspect-ratio: 4 / 5; }
 	.ph-11 { aspect-ratio: 1 / 1; border-radius: 20px; }
