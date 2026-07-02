@@ -48,11 +48,15 @@
 
 	{#if mobileOpen}
 		<div class="nav-mobile">
-			{#each links as l}
-				<a href={l.href} class:active={active === l.id} onclick={closeMobile}>{l.label}</a>
-			{/each}
-			<a href="/1-procent" class="btn-outline" onclick={closeMobile}>Przekaż 1,5%</a>
-			<a href="/dolacz" class="btn-solid" onclick={closeMobile}>Dołącz do nas</a>
+			<div class="nav-mobile-links">
+				{#each links as l}
+					<a href={l.href} class:active={active === l.id} onclick={closeMobile}>{l.label}</a>
+				{/each}
+			</div>
+			<div class="nav-mobile-cta">
+				<a href="/1-procent" class="btn-outline" onclick={closeMobile}>Przekaż 1,5%</a>
+				<a href="/dolacz" class="btn-solid" onclick={closeMobile}>Dołącz do nas</a>
+			</div>
 		</div>
 	{/if}
 </div>
@@ -157,11 +161,33 @@
 	.nav-mobile {
 		display: none;
 		flex-direction: column;
-		gap: 4px;
-		padding: 8px 24px 20px;
+		padding: 4px 20px 24px;
 		border-top: 1px solid var(--rd-border);
-		a { padding: 10px 0; text-decoration: none; font-weight: 500; font-size: 15px; color: var(--rd-ink); &.active { color: var(--rd-primary); font-weight: 600; } }
-		.btn-outline, .btn-solid { text-align: center; margin-top: 8px; }
+	}
+
+	.nav-mobile-links {
+		display: flex;
+		flex-direction: column;
+
+		a {
+			padding: 15px 2px;
+			text-decoration: none;
+			font-weight: 500;
+			font-size: 16px;
+			color: var(--rd-ink);
+			border-bottom: 1px solid var(--rd-border);
+			&.active { color: var(--rd-primary); font-weight: 600; }
+			&:last-child { border-bottom: none; }
+		}
+	}
+
+	.nav-mobile-cta {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		margin-top: 18px;
+
+		.btn-outline, .btn-solid { text-align: center; padding: 15px 16px; font-size: 15.5px; }
 	}
 
 	.btn-solid, .btn-outline {
@@ -187,7 +213,7 @@
 	}
 
 	@media (max-width: 768px) {
-		.ann-inner { padding: 9px 16px; font-size: 12.5px; }
 		.wrap { padding: 0 16px; }
+		.ann-inner { padding: 9px 16px 9px 74px; font-size: 12.5px; }
 	}
 </style>

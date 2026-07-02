@@ -176,7 +176,7 @@
 
 		<!-- jak pomóc (dark) -->
 		<section id="pomoc" class="dark-section">
-			<div class="wrap">
+			<div class="wrap dark-inner">
 				<span class="eyebrow accent-soft">Jak pomóc</span>
 				<h2 class="dark-h2 pomoc-h2">Każdy gest ma znaczenie</h2>
 				<div class="pomoc-grid">
@@ -530,7 +530,7 @@
 	/* ── responsive ── */
 	@media (max-width: 980px) {
 		.hero { grid-template-columns: 1fr; padding-top: 40px; }
-		.hero-art { order: -1; max-width: 420px; margin: 0 auto 40px; }
+		.hero-art { max-width: 380px; margin: 0 auto; }
 		.hero-copy h1 { font-size: 44px; }
 		.quote-section { grid-template-columns: 1fr; }
 		.quote-section .placeholder { max-width: 320px; margin: 0 auto; }
@@ -544,19 +544,29 @@
 
 	@media (max-width: 768px) {
 		.wrap { padding: 0 16px; }
-		.hero { padding: 32px 16px 24px; }
-		.hero-copy h1 { font-size: 34px; }
-		.lead { font-size: 17px; }
+		.hero { padding: 28px 16px 40px; }
+		.hero-copy h1 { font-size: 32px; }
+		.lead { font-size: 16px; }
+		.hero-actions { flex-direction: column; align-items: stretch; }
+		.hero-actions a { justify-content: center; }
+		.hero-art { max-width: 280px; margin: 0 auto; }
+		.hero-float {
+			position: static;
+			width: max-content;
+			max-width: 100%;
+			margin: -28px auto 0;
+		}
 		.trust-strip { grid-template-columns: repeat(2, 1fr); gap: 20px 12px; }
-		.dark-inner, .art-section, .vol-section, .quote-section { padding: 56px 16px; }
-		.wiedza-section { padding: 56px 0; }
-		.dark-h2 { font-size: 30px; }
-		.section-h2 { font-size: 28px; }
+		.dark-inner, .art-section, .vol-section, .quote-section { padding: 48px 16px; }
+		.wiedza-section { padding: 48px 0; }
+		.dark-h2 { font-size: 28px; }
+		.section-h2 { font-size: 26px; }
 		.wyzwanie-grid { grid-template-columns: 1fr; gap: 20px; }
 		.wyzwanie-big { font-size: 42px; }
-		blockquote { font-size: 28px; }
+		blockquote { font-size: 26px; }
 		.topics-grid { grid-template-columns: 1fr; }
 		.art-grid { grid-template-columns: 1fr; }
-		.cta-copy h2 { font-size: 30px; }
+		.cta-copy h2 { font-size: 28px; }
+		.pomoc-h2 { margin: 12px 0 32px; }
 	}
 </style>
