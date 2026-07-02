@@ -1,11 +1,12 @@
 <script lang="ts">
-	let { active = undefined }: { active?: 'wiedza' | 'cwiczenia' | 'wsparcie' | 'pytania' } = $props();
+	let { active = undefined }: { active?: 'wiedza' | 'cwiczenia' | 'wsparcie' | 'pytania' | 'asystent' } = $props();
 
 	let mobileOpen = $state(false);
 
-	const links: Array<{ id: 'wiedza' | 'cwiczenia' | 'wsparcie' | 'pytania'; href: string; label: string }> = [
+	const links: Array<{ id: 'wiedza' | 'cwiczenia' | 'wsparcie' | 'pytania' | 'asystent'; href: string; label: string }> = [
 		{ id: 'wiedza', href: '/wiedza', label: 'Baza wiedzy' },
 		{ id: 'cwiczenia', href: '/cwiczenia', label: 'Ćwiczenia' },
+		{ id: 'asystent', href: '/asystent', label: 'Asystent AI' },
 		{ id: 'wsparcie', href: '/wsparcie', label: 'Wsparcie' },
 		{ id: 'pytania', href: '/pytania', label: 'Pytania' }
 	];

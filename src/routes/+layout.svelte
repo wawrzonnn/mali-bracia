@@ -29,6 +29,7 @@
 		const p = page.url.pathname;
 		if (p.startsWith('/wiedza')) return 'wiedza' as const;
 		if (p.startsWith('/cwiczenia')) return 'cwiczenia' as const;
+		if (p.startsWith('/asystent')) return 'asystent' as const;
 		if (p.startsWith('/wsparcie')) return 'wsparcie' as const;
 		if (p.startsWith('/pytania')) return 'pytania' as const;
 		return undefined;
@@ -71,8 +72,7 @@
 			title: 'Poznaj',
 			items: [
 				{ href: '/wiedza', icon: 'book' as const, label: 'Baza wiedzy' },
-				{ href: '/cwiczenia', icon: 'puzzle' as const, label: 'Ćwiczenia' },
-				{ href: '/sprawdz-sygnaly', icon: 'clipboard-check' as const, label: 'Sprawdź sygnały' }
+				{ href: '/cwiczenia', icon: 'puzzle' as const, label: 'Ćwiczenia' }
 			]
 		},
 		{
