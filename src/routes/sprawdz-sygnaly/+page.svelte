@@ -70,6 +70,7 @@
 </svelte:head>
 
 <div class="page">
+<div class="content">
 	<div class="head-row">
 		<PageHeader
 			eyebrow="Poznaj"
@@ -179,11 +180,12 @@
 		ctaHref="/wsparcie"
 	/>
 </div>
+</div>
 
 <style lang="scss">
 	@use 'variables' as *;
 
-	.page { max-width: 780px; }
+	.content { max-width: 780px; }
 
 	/* ── HEADER + ILLUSTRATION ── */
 	.head-row {

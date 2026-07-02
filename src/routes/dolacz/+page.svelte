@@ -146,6 +146,7 @@
 </script>
 
 <div class="page">
+<div class="content">
 	{#if submitted}
 		<div class="success">
 			<span class="success-ic"><Icon name="check" size={32} color="white" /></span>
@@ -354,11 +355,12 @@
 		{/if}
 	{/if}
 </div>
+</div>
 
 <style lang="scss">
 	@use 'variables' as *;
 
-	.page { max-width: 1040px; }
+	.content { max-width: 1040px; }
 
 	/* ── HEADER + ILLUSTRATION ── */
 	.head-row {

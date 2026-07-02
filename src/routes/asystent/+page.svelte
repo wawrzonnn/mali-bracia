@@ -13,12 +13,55 @@
 	let chatContainer: HTMLDivElement | undefined = $state();
 
 	const quickTopics = [
-		{ icon: 'brain' as const, color: '#169FDB', label: 'Starzenie się', question: 'Jak przebiega naturalny proces starzenia się? Co się zmienia?' },
-		{ icon: 'heart' as const, color: '#1FA138', label: 'Relacje', question: 'Jak nawiązać i utrzymać przyjacielską relację z osobą starszą?' },
-		{ icon: 'users' as const, color: '#F5A623', label: 'Samotność', question: 'Jaka jest skala problemu samotności seniorów w Polsce?' },
-		{ icon: 'shield' as const, color: '#E74C3C', label: 'Pomoc', question: 'Gdzie mogę szukać pomocy dla samotnego seniora?' },
-		{ icon: 'message' as const, color: '#16A085', label: 'Rozmowa', question: 'Jak zacząć rozmowę z osobą starszą, której nie znam?' },
-		{ icon: 'puzzle' as const, color: '#9B59B6', label: 'Pamięć', question: 'Jakie ćwiczenia pomagają utrzymać sprawność umysłową seniora?' }
+		{
+			icon: 'lightbulb' as const,
+			color: '#169FDB',
+			label: 'Starzenie się',
+			desc: 'Informacje, procesy i wyzwania związane ze starzeniem się.',
+			question: 'Jak przebiega naturalny proces starzenia się? Co się zmienia?'
+		},
+		{
+			icon: 'heart' as const,
+			color: '#1FA138',
+			label: 'Relacje',
+			desc: 'Budowanie i utrzymywanie relacji, bliskość, kontakty z innymi.',
+			question: 'Jak nawiązać i utrzymać przyjacielską relację z osobą starszą?'
+		},
+		{
+			icon: 'users' as const,
+			color: '#F5A623',
+			label: 'Samotność',
+			desc: 'Rozumienie samotności, jej przyczyny i sposoby radzenia sobie.',
+			question: 'Jaka jest skala problemu samotności seniorów w Polsce?'
+		},
+		{
+			icon: 'shield' as const,
+			color: '#E74C3C',
+			label: 'Pomoc',
+			desc: 'Gdzie szukać pomocy, jak wspierać siebie lub innych.',
+			question: 'Gdzie mogę szukać pomocy dla samotnego seniora?'
+		},
+		{
+			icon: 'message' as const,
+			color: '#16A085',
+			label: 'Rozmowa',
+			desc: 'Jak rozmawiać o trudnych sprawach i gdzie szukać porad.',
+			question: 'Jak zacząć rozmowę z osobą starszą, której nie znam?'
+		},
+		{
+			icon: 'puzzle' as const,
+			color: '#9B59B6',
+			label: 'Pamięć',
+			desc: 'Pamięć, koncentracja i wsparcie w codziennym funkcjonowaniu.',
+			question: 'Jakie ćwiczenia pomagają utrzymać sprawność umysłową seniora?'
+		}
+	];
+
+	const exampleQuestions = [
+		'Czy smutek i apatia to normalna część starzenia się?',
+		'Jak rozpoznać demencję u bliskiej osoby?',
+		'Jestem opiekunem seniora i czuję się wyczerpany.',
+		'Jak zostać wolontariuszem MBU?'
 	];
 
 	async function send(text?: string) {
@@ -74,11 +117,11 @@
 					<h2>W czym mogę Ci pomóc?</h2>
 					<div class="topics-grid">
 						{#each quickTopics as topic}
-							<button class="topic-btn" style="--c: {topic.color}" onclick={() => send(topic.question)}>
-								<div class="topic-icon">
-									<Icon name={topic.icon} size={20} color={topic.color} />
-								</div>
-								<span>{topic.label}</span>
+							<button class="topic-card" style="--c: {topic.color}" onclick={() => send(topic.question)}>
+								<span class="topic-ic"><Icon name={topic.icon} size={20} color={topic.color} /></span>
+								<span class="topic-h">{topic.label}</span>
+								<span class="topic-p">{topic.desc}</span>
+								<span class="topic-arrow"><Icon name="chevron-right" size={16} color="#C9D2DA" /></span>
 							</button>
 						{/each}
 					</div>
@@ -87,24 +130,19 @@
 				<div class="welcome-section">
 					<h2>Lub zadaj własne pytanie</h2>
 					<div class="example-questions">
-						<button class="example-btn" onclick={() => send('Czy smutek i apatia to normalna część starzenia się?')}>
-							"Czy smutek i apatia to normalna część starzenia się?"
-						</button>
-						<button class="example-btn" onclick={() => send('Jak rozpoznać demencję u bliskiej osoby?')}>
-							"Jak rozpoznać demencję u bliskiej osoby?"
-						</button>
-						<button class="example-btn" onclick={() => send('Jestem opiekunem seniora i czuję się wyczerpany. Co mogę zrobić?')}>
-							"Jestem opiekunem seniora i czuję się wyczerpany."
-						</button>
-						<button class="example-btn" onclick={() => send('Jak zostać wolontariuszem Mali Bracia Ubogich?')}>
-							"Jak zostać wolontariuszem MBU?"
-						</button>
+						{#each exampleQuestions as q}
+							<button class="example-row" onclick={() => send(q)}>
+								<span class="example-ic"><Icon name="message" size={15} color="#169FDB" /></span>
+								<span class="example-text">„{q}"</span>
+								<Icon name="chevron-right" size={16} color="#C9D2DA" />
+							</button>
+						{/each}
 					</div>
 				</div>
 
 				<div class="welcome-note">
-					<Icon name="shield" size={16} color="#5A6B7A" />
-					<span>Nie diagnozuję medycznie -- w przypadku wątpliwości zawsze sugeruję konsultację z lekarzem.</span>
+					<Icon name="shield" size={16} color="#8794A1" />
+					<span>Nie diagnozuję medycznie — w przypadku wątpliwości zawsze sugeruję konsultację z lekarzem.</span>
 				</div>
 			</div>
 		{/if}
@@ -233,12 +271,14 @@
 		}
 	}
 
-	.topic-btn {
+	.topic-card {
+		position: relative;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		gap: $spacing-sm;
-		padding: $spacing-md;
+		align-items: flex-start;
+		text-align: left;
+		gap: 4px;
+		padding: $spacing-lg;
 		border-radius: $radius;
 		background: $color-bg-card;
 		border: 1.5px solid $color-border;
@@ -246,60 +286,79 @@
 
 		&:hover {
 			border-color: var(--c, $color-primary);
-			background: color-mix(in srgb, var(--c, $color-primary) 6%, $color-bg-card);
-			transform: translateY(-2px);
 			box-shadow: $shadow-sm;
-		}
-
-		span {
-			font-size: $font-size-sm;
-			font-weight: 600;
-			color: $color-secondary;
+			transform: translateY(-2px);
+			.topic-arrow { opacity: 1; transform: translateX(2px); }
 		}
 	}
 
-	.topic-icon {
-		width: 46px;
-		height: 46px;
-		border-radius: $radius-sm;
-		background: color-mix(in srgb, var(--c, $color-primary) 12%, transparent);
+	.topic-ic {
+		width: 44px;
+		height: 44px;
+		border-radius: 50%;
+		background: color-mix(in srgb, var(--c, $color-primary) 14%, transparent);
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		margin-bottom: 6px;
+	}
+
+	.topic-h { font-size: $font-size-base; font-weight: 700; color: $color-secondary; }
+	.topic-p { font-size: 13px; color: $color-text-muted; line-height: 1.4; }
+
+	.topic-arrow {
+		position: absolute;
+		bottom: $spacing-md;
+		right: $spacing-md;
+		opacity: 0;
+		transition: all 0.15s ease;
 	}
 
 	.example-questions {
-		display: grid;
+		display: flex;
+		flex-direction: column;
 		gap: $spacing-sm;
 	}
 
-	.example-btn {
+	.example-row {
+		display: flex;
+		align-items: center;
+		gap: $spacing-md;
 		text-align: left;
 		padding: $spacing-md $spacing-lg;
 		border-radius: $radius;
 		background: $color-bg-card;
 		border: 1.5px solid $color-border;
-		font-size: $font-size-sm;
-		color: $color-text-muted;
-		font-style: italic;
-		line-height: 1.4;
 		transition: all 0.15s ease;
 
-		&:hover {
-			border-color: $color-primary;
-			color: $color-primary;
-			background: $color-primary-bg;
-		}
+		&:hover { border-color: $color-primary-light; box-shadow: $shadow-sm; }
+	}
+
+	.example-ic {
+		width: 28px;
+		height: 28px;
+		border-radius: 50%;
+		background: $color-primary-bg;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+	}
+
+	.example-text {
+		flex: 1;
+		font-size: $font-size-sm;
+		color: $color-text;
+		line-height: 1.4;
 	}
 
 	.welcome-note {
 		display: flex;
 		align-items: center;
 		gap: $spacing-sm;
-		padding: $spacing-md;
-		background: $color-bg-card;
+		padding: $spacing-md $spacing-lg;
+		background: $color-bg-soft;
 		border-radius: $radius-sm;
-		border: 1px solid $color-border;
 		font-size: $font-size-xs;
 		color: $color-text-muted;
 	}
@@ -374,7 +433,7 @@
 	.chat-input-area {
 		padding: $spacing-md $spacing-lg;
 		border-top: 1px solid $color-border;
-		background: $color-bg-card;
+		background: $color-bg;
 		max-width: 760px;
 		margin: 0 auto;
 		width: 100%;
@@ -389,15 +448,23 @@
 		display: flex;
 		gap: $spacing-sm;
 		align-items: flex-end;
+		background: $color-bg-card;
+		border: 1px solid $color-border;
+		border-radius: $radius-lg;
+		padding: $spacing-sm;
+		box-shadow: $shadow-sm;
 
 		textarea {
 			flex: 1;
 			resize: none;
+			border: none;
 			border-radius: $radius;
-			padding: 14px $spacing-md;
+			padding: 10px $spacing-sm;
 			font-size: $font-size-base;
 			max-height: 120px;
-			background: $color-bg;
+			background: transparent;
+
+			&:focus { box-shadow: none; }
 		}
 	}
 

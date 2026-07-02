@@ -50,6 +50,7 @@
 </svelte:head>
 
 <div class="page">
+<div class="content">
 	<div class="head-row">
 		<PageHeader
 			eyebrow="Zaangażuj się"
@@ -156,11 +157,12 @@
 		ctaHref="/dolacz"
 	/>
 </div>
+</div>
 
 <style lang="scss">
 	@use 'variables' as *;
 
-	.page { max-width: 820px; }
+	.content { max-width: 820px; }
 
 	/* ── HEADER + ILLUSTRATION ── */
 	.head-row {
