@@ -1,7 +1,11 @@
 <script lang="ts">
-	let { active = undefined }: { active?: 'wiedza' | 'cwiczenia' | 'wsparcie' | 'pytania' | 'asystent' } = $props();
-
-	let mobileOpen = $state(false);
+	let {
+		active = undefined,
+		mobileOpen = $bindable(false)
+	}: {
+		active?: 'wiedza' | 'cwiczenia' | 'wsparcie' | 'pytania' | 'asystent';
+		mobileOpen?: boolean;
+	} = $props();
 
 	const links: Array<{ id: 'wiedza' | 'cwiczenia' | 'wsparcie' | 'pytania' | 'asystent'; href: string; label: string }> = [
 		{ id: 'wiedza', href: '/wiedza', label: 'Baza wiedzy' },
@@ -163,6 +167,8 @@
 		flex-direction: column;
 		padding: 4px 20px 24px;
 		border-top: 1px solid var(--rd-border);
+		background: var(--rd-bg-paper);
+		box-shadow: 0 16px 32px -12px rgba(34, 29, 24, 0.22);
 	}
 
 	.nav-mobile-links {

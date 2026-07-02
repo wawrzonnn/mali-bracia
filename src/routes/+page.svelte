@@ -301,7 +301,7 @@
 		}
 	}
 	.ph-45 { aspect-ratio: 4 / 5; }
-	.ph-11 { aspect-ratio: 1 / 1; border-radius: 20px; img { transform: scale(1.28); } }
+	.ph-11 { aspect-ratio: 1 / 1; border-radius: 20px; img { transform: scale(1.08); } }
 	.ph-54 { aspect-ratio: 5 / 4; }
 	.ph-1610 { aspect-ratio: 16 / 10; border-radius: 0; border: none; border-bottom: 1px solid var(--rd-border-card); padding: 0; }
 

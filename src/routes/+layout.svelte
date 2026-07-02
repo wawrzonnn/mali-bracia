@@ -36,6 +36,7 @@
 	});
 
 	let mobileMenuOpen = $state(false);
+	let navMobileOpen = $state(false);
 	let chatOpen = $state(false);
 	let chatInput = $state('');
 	let chatLoading = $state(false);
@@ -163,7 +164,7 @@
 {:else if chromeMode === 'navbar'}
 <div class="navbar-shell">
 	<a href="#main-content" class="skip-link">Przejdź do treści</a>
-	<RedesignNav active={navActive} />
+	<RedesignNav active={navActive} bind:mobileOpen={navMobileOpen} />
 
 	<main id="main-content" tabindex="-1">
 		{@render children()}
@@ -171,8 +172,10 @@
 	</main>
 </div>
 
-	{@render chatWidget(false)}
-	<A11yToolbar withSidebar={false} />
+	{#if !navMobileOpen}
+		{@render chatWidget(false)}
+		<A11yToolbar withSidebar={false} />
+	{/if}
 {:else}
 <div class="app-layout">
 	<a href="#main-content" class="skip-link">Przejdź do treści</a>
