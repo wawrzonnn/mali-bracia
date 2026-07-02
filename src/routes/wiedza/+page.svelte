@@ -12,13 +12,19 @@
 		}))
 	]);
 
+	const gridImages = ['/article1.avif', '/article2.avif', '/article3.avif', '/article4.avif', '/article5.avif', '/article6.avif'];
+
 	const featured = $derived(
 		data.articles.length
-			? { ...data.articles[0], catName: catMap[data.articles[0].categorySlug]?.name ?? data.articles[0].categorySlug }
+			? { ...data.articles[0], catName: catMap[data.articles[0].categorySlug]?.name ?? data.articles[0].categorySlug, img: '/articlefav.avif' }
 			: null
 	);
 	const gridArticles = $derived(
-		data.articles.slice(1).map((a) => ({ ...a, catName: catMap[a.categorySlug]?.name ?? a.categorySlug }))
+		data.articles.slice(1).map((a, i) => ({
+			...a,
+			catName: catMap[a.categorySlug]?.name ?? a.categorySlug,
+			img: gridImages[i % gridImages.length]
+		}))
 	);
 
 	const resultLabel = $derived.by(() => {
@@ -83,7 +89,7 @@
 			<section class="wrap featured-wrap">
 				<a href="/wiedza/{featured.slug}" class="featured">
 					<div class="placeholder ph-1611">
-						<span class="ph-caption">zdjęcie — artykuł wyróżniony</span>
+						<img src={featured.img} alt={featured.title} />
 					</div>
 					<div class="featured-body">
 						<div class="featured-meta">
@@ -105,7 +111,9 @@
 			<div class="art-grid">
 				{#each gridArticles as art}
 					<a href="/wiedza/{art.slug}" class="art-card">
-						<div class="placeholder ph-1610"></div>
+						<div class="placeholder ph-1610">
+							<img src={art.img} alt={art.title} />
+						</div>
 						<div class="art-body">
 							<div class="art-meta">
 								<span class="art-cat">{art.catName}</span>
@@ -221,19 +229,15 @@
 
 	/* ── placeholders ── */
 	.placeholder {
-		background: repeating-linear-gradient(48deg, var(--rd-ph-a), var(--rd-ph-a) 12px, var(--rd-ph-b) 12px, var(--rd-ph-b) 24px);
-		display: flex;
-		align-items: flex-end;
-		justify-content: flex-start;
-		padding: 16px;
-	}
-	.ph-caption {
-		font-family: ui-monospace, Menlo, monospace;
-		font-size: 12px;
-		color: #9a8e7c;
-		background: rgba(250, 246, 239, 0.85);
-		padding: 6px 12px;
-		border-radius: 8px;
+		background: var(--rd-ph-a);
+		overflow: hidden;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+		}
 	}
 	.ph-1611 { aspect-ratio: 16 / 11; }
 	.ph-1610 { aspect-ratio: 16 / 10; border-bottom: 1px solid var(--rd-border-card); }
