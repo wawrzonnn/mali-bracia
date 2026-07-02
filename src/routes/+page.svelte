@@ -301,7 +301,7 @@
 		}
 	}
 	.ph-45 { aspect-ratio: 4 / 5; }
-	.ph-11 { aspect-ratio: 1 / 1; border-radius: 20px; }
+	.ph-11 { aspect-ratio: 1 / 1; border-radius: 20px; img { transform: scale(1.28); } }
 	.ph-54 { aspect-ratio: 5 / 4; }
 	.ph-1610 { aspect-ratio: 16 / 10; border-radius: 0; border: none; border-bottom: 1px solid var(--rd-border-card); padding: 0; }
 
@@ -387,7 +387,7 @@
 		gap: 56px;
 		align-items: center;
 	}
-	.quote-mark { font-family: 'Newsreader', serif; font-size: 80px; line-height: 0.6; color: #d9ccb8; height: 44px; }
+	.quote-mark { font-family: 'Newsreader', serif; font-size: 80px; line-height: 1; color: #d9ccb8; margin-bottom: 4px; }
 	blockquote {
 		margin: 0;
 		font-style: italic;
