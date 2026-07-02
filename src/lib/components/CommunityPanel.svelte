@@ -4,14 +4,22 @@
 
 	let {
 		icon = 'users',
+		tone = 'blue',
 		heading,
 		text,
 		ctaLabel,
 		ctaHref
-	}: { icon?: IconName; heading: string; text: string; ctaLabel: string; ctaHref: string } = $props();
+	}: {
+		icon?: IconName;
+		tone?: 'blue' | 'green';
+		heading: string;
+		text: string;
+		ctaLabel: string;
+		ctaHref: string;
+	} = $props();
 </script>
 
-<div class="community-panel">
+<div class="community-panel" class:green={tone === 'green'}>
 	<span class="community-ic"><Icon name={icon} size={22} color="white" /></span>
 	<div class="community-text">
 		<h2>{heading}</h2>
@@ -46,6 +54,8 @@
 		align-items: center;
 		justify-content: center;
 		flex-shrink: 0;
+
+		.green & { background: linear-gradient(135deg, $color-accent, $color-accent-dark); }
 	}
 
 	.community-text {
@@ -56,5 +66,10 @@
 		p { font-size: $font-size-sm; color: $color-text-muted; line-height: 1.5; }
 	}
 
-	.community-btn { flex-shrink: 0; white-space: nowrap; }
+	.community-btn {
+		flex-shrink: 0;
+		white-space: nowrap;
+
+		.green & { border-color: color-mix(in srgb, $color-accent 45%, $color-border); color: $color-accent-dark; }
+	}
 </style>

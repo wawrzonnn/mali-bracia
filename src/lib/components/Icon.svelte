@@ -5,7 +5,7 @@
 		| 'chevron-down' | 'sparkle' | 'clock' | 'send' | 'x'
 		| 'help-circle' | 'map-pin' | 'external' | 'puzzle' | 'menu'
 		| 'lightbulb' | 'alert-triangle' | 'gift' | 'check' | 'percent' | 'clipboard-check' | 'copy' | 'user'
-		| 'file-text' | 'edit' | 'building';
+		| 'file-text' | 'edit' | 'building' | 'calendar' | 'door' | 'moon' | 'frown' | 'lock';
 
 	let { name, size = 24, color = 'currentColor' }: { name: IconName; size?: number; color?: string } = $props();
 
@@ -41,7 +41,12 @@
 		user: 'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z',
 		'file-text': 'M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9zM14 3v6h6M9 13h6M9 17h6M9 9h1',
 		edit: 'M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z',
-		building: 'M3 22h18M6 18V9M10 18V9M14 18V9M18 18V9M3 9l9-6 9 6'
+		building: 'M3 22h18M6 18V9M10 18V9M14 18V9M18 18V9M3 9l9-6 9 6',
+		calendar: 'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z',
+		door: 'M6 21V4a1 1 0 011-1h9a1 1 0 011 1v17M3 21h18M14 12h.01',
+		moon: 'M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z',
+		frown: 'M12 21a9 9 0 100-18 9 9 0 000 18zM8 9h.01M16 9h.01M16 16s-1.5-2-4-2-4 2-4 2',
+		lock: 'M5 11h14a1 1 0 011 1v8a1 1 0 01-1 1H5a1 1 0 01-1-1v-8a1 1 0 011-1zM7 11V7a5 5 0 0110 0v4'
 	};
 </script>
 
