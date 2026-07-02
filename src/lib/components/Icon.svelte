@@ -4,7 +4,7 @@
 		| 'users' | 'brain' | 'shield' | 'arrow-right' | 'chevron-right'
 		| 'chevron-down' | 'sparkle' | 'clock' | 'send' | 'x'
 		| 'help-circle' | 'map-pin' | 'external' | 'puzzle' | 'menu'
-		| 'lightbulb' | 'alert-triangle' | 'gift' | 'check';
+		| 'lightbulb' | 'alert-triangle' | 'gift' | 'check' | 'percent' | 'clipboard-check' | 'copy';
 
 	let { name, size = 24, color = 'currentColor' }: { name: IconName; size?: number; color?: string } = $props();
 
@@ -33,7 +33,10 @@
 		lightbulb: 'M9 18h6M10 21h4M12 3a6 6 0 00-6 6c0 2.276 1.237 4.061 3 5.15V16a1 1 0 001 1h4a1 1 0 001-1v-1.85c1.763-1.089 3-2.874 3-5.15a6 6 0 00-6-6z',
 		'alert-triangle': 'M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01',
 		gift: 'M20 12v9a1 1 0 01-1 1H5a1 1 0 01-1-1v-9M2 7h20v5H2V7zm10 0V21M12 7c-1.5 0-3-1-3-2.5A2.5 2.5 0 0111.5 2c1.5 0 2.5 2 2.5 5M12 7c1.5 0 3-1 3-2.5A2.5 2.5 0 0012.5 2C11 2 10 4 10 7',
-		check: 'M20 6L9 17l-5-5'
+		check: 'M20 6L9 17l-5-5',
+		percent: 'M19 5L5 19M6.5 9a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM17.5 20a2.5 2.5 0 100-5 2.5 2.5 0 000 5z',
+		'clipboard-check': 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-5 9l2 2 4-4',
+		copy: 'M8 8V5a2 2 0 012-2h9a2 2 0 012 2v9a2 2 0 01-2 2h-3M8 8H5a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-3M8 8h6a2 2 0 012 2v6'
 	};
 </script>
 

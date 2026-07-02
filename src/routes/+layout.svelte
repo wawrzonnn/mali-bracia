@@ -44,7 +44,15 @@
 			title: 'Poznaj',
 			items: [
 				{ href: '/wiedza', icon: 'book' as const, label: 'Baza wiedzy' },
-				{ href: '/cwiczenia', icon: 'puzzle' as const, label: 'Ćwiczenia' }
+				{ href: '/cwiczenia', icon: 'puzzle' as const, label: 'Ćwiczenia' },
+				{ href: '/sprawdz-sygnaly', icon: 'clipboard-check' as const, label: 'Sprawdź sygnały' }
+			]
+		},
+		{
+			title: 'Zaangażuj się',
+			items: [
+				{ href: '/1-procent', icon: 'percent' as const, label: 'Przekaż 1,5%' },
+				{ href: '/dolacz', icon: 'heart' as const, label: 'Dołącz do nas' }
 			]
 		},
 		{
