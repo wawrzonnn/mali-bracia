@@ -8,24 +8,43 @@
 	const guides = resources.filter((r) => r.type === 'guide');
 
 	const orgColors = ['#169FDB', '#1FA138', '#9B59B6', '#F5A623'];
+
+	const HELPLINE_LIMIT = 4;
+	const ORG_LIMIT = 3;
+	let showAllHelplines = $state(false);
+	let showAllOrgs = $state(false);
+
+	const visibleHelplines = $derived(showAllHelplines ? helplines : helplines.slice(0, HELPLINE_LIMIT));
+	const visibleOrgs = $derived(showAllOrgs ? organizations : organizations.slice(0, ORG_LIMIT));
 </script>
 
 <div class="page">
-	<PageHeader
-		eyebrow="Pomoc"
-		title="Wsparcie i pomoc"
-		subtitle="Jeśli Ty lub ktoś bliski potrzebuje pomocy — nie jesteś sam/sama. Poniżej sprawdzone kontakty."
-	/>
+	<div class="head-row">
+		<PageHeader
+			eyebrow="Pomoc"
+			title="Wsparcie i pomoc"
+			subtitle="Jeśli Ty lub ktoś bliski potrzebuje pomocy — nie jesteś sam/sama. Poniżej sprawdzone kontakty i materiały."
+		/>
+		<svg class="hero-art" viewBox="0 0 220 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+			<circle cx="150" cy="70" r="70" fill="#1FA138" opacity="0.08" />
+			<path d="M30 40q30-18 55 5" stroke="#169FDB" stroke-width="2" stroke-dasharray="4 6" stroke-linecap="round" opacity="0.5" />
+			<path d="M172 40c-4-6-13-6-16 1-3-7-12-7-16-1-5 7 0 15 16 26 16-11 21-19 16-26z" fill="#1FA138" opacity="0.55" />
+			<circle cx="88" cy="88" r="17" fill="#169FDB" opacity="0.85" />
+			<path d="M60 160c0-24 15-42 34-42s34 12 34 30v12H60z" fill="#169FDB" opacity="0.85" />
+			<circle cx="132" cy="94" r="15" fill="#1FA138" opacity="0.85" />
+			<path d="M104 162c0-22 13-38 30-38 15 0 27 12 29 28v10H104z" fill="#1FA138" opacity="0.85" />
+		</svg>
+	</div>
 
 	<section class="block">
 		<div class="sec-head">
-			<span class="sec-ic" style="--c: #E74C3C"><Icon name="phone" size={20} color="#E74C3C" /></span>
+			<span class="sec-ic" style="--c: #F5A623"><Icon name="phone" size={20} color="#F5A623" /></span>
 			<h2>Telefony zaufania</h2>
 		</div>
 		<div class="grid two">
-			{#each helplines as h}
+			{#each visibleHelplines as h}
 				<div class="card helpline">
-					<span class="hl-ic"><Icon name="phone" size={18} color="#E74C3C" /></span>
+					<span class="hl-ic"><Icon name="phone" size={20} color="#F5A623" /></span>
 					<div class="helpline-info">
 						<h3>{h.title}</h3>
 						<p>{h.description}</p>
@@ -39,6 +58,12 @@
 				</div>
 			{/each}
 		</div>
+		{#if helplines.length > HELPLINE_LIMIT}
+			<button class="show-more" onclick={() => (showAllHelplines = !showAllHelplines)}>
+				{showAllHelplines ? 'Pokaż mniej' : 'Pokaż więcej kontaktów'}
+				<Icon name="chevron-down" size={16} color="#169FDB" />
+			</button>
+		{/if}
 	</section>
 
 	<section class="block">
@@ -46,12 +71,14 @@
 			<span class="sec-ic" style="--c: #169FDB"><Icon name="shield" size={20} color="#169FDB" /></span>
 			<h2>Organizacje</h2>
 		</div>
-		<div class="grid two">
-			{#each organizations as org, i}
-				<div class="card org" style="--c: {orgColors[i % orgColors.length]}">
+		<div class="org-list">
+			{#each visibleOrgs as org, i}
+				<div class="org-row" style="--c: {orgColors[i % orgColors.length]}">
 					<span class="org-mono">{org.title.charAt(0)}</span>
-					<h3>{org.title}</h3>
-					<p>{org.description}</p>
+					<div class="org-info">
+						<h3>{org.title}</h3>
+						<p>{org.description}</p>
+					</div>
 					<div class="org-actions">
 						{#if org.phone}
 							<a href="tel:{org.phone.replace(/\s/g, '')}" class="btn btn-secondary btn-sm">
@@ -69,6 +96,12 @@
 				</div>
 			{/each}
 		</div>
+		{#if organizations.length > ORG_LIMIT}
+			<button class="show-more" onclick={() => (showAllOrgs = !showAllOrgs)}>
+				{showAllOrgs ? 'Pokaż mniej' : 'Pokaż więcej organizacji'}
+				<Icon name="chevron-down" size={16} color="#169FDB" />
+			</button>
+		{/if}
 	</section>
 
 	<section class="block">
@@ -105,6 +138,24 @@
 
 <style lang="scss">
 	@use 'variables' as *;
+
+	/* ── HEADER + ILLUSTRATION ── */
+	.head-row {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: $spacing-xl;
+
+		:global(.page-header) { flex: 1; margin-bottom: $spacing-xl; }
+	}
+
+	.hero-art {
+		width: 170px;
+		height: auto;
+		flex-shrink: 0;
+		margin-top: -4px;
+		@media (max-width: 860px) { display: none; }
+	}
 
 	.block { margin-bottom: $spacing-2xl; }
 
@@ -144,22 +195,39 @@
 		transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
 	}
 
-	/* ── Telefony ── */
+	.show-more {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		width: 100%;
+		margin-top: $spacing-lg;
+		padding: $spacing-sm;
+		font-size: $font-size-sm;
+		font-weight: 600;
+		color: $color-primary;
+		border-top: 1px solid $color-border;
+		padding-top: $spacing-lg;
+	}
+
+	/* ── Telefony (ton bursztynowy — zarezerwowany "czerwony alarm" tylko dla 112) ── */
 	.helpline {
 		display: flex;
 		flex-direction: column;
-		gap: $spacing-md;
-		&:hover { transform: translateY(-2px); border-color: color-mix(in srgb, $color-danger 40%, $color-border); box-shadow: $shadow-md; }
+		align-items: flex-start;
+		gap: $spacing-sm;
+		&:hover { transform: translateY(-2px); border-color: color-mix(in srgb, $color-warm 45%, $color-border); box-shadow: $shadow-md; }
 	}
 
 	.hl-ic {
-		width: 42px;
-		height: 42px;
-		border-radius: $radius-sm;
+		width: 44px;
+		height: 44px;
+		border-radius: 50%;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		background: color-mix(in srgb, $color-danger 12%, transparent);
+		background: $color-warm-light;
+		margin-bottom: 4px;
 	}
 
 	.helpline-info {
@@ -170,32 +238,42 @@
 
 	.call-btn {
 		display: inline-flex;
-		align-self: flex-start;
+		align-self: stretch;
 		align-items: center;
+		justify-content: center;
 		gap: $spacing-sm;
+		margin-top: $spacing-sm;
 		padding: 11px $spacing-lg;
-		background: $color-danger;
+		background: $color-warm;
 		color: white;
 		font-weight: 700;
 		font-size: $font-size-base;
 		border-radius: $radius-sm;
 		text-decoration: none;
 		transition: filter 0.15s;
-		&:hover { filter: brightness(1.08); }
+		&:hover { filter: brightness(1.05); }
 	}
 
-	/* ── Organizacje ── */
-	.org {
+	/* ── Organizacje (lista pełnej szerokości) ── */
+	.org-list { display: flex; flex-direction: column; gap: $spacing-md; }
+
+	.org-row {
 		display: flex;
-		flex-direction: column;
+		align-items: center;
+		gap: $spacing-lg;
+		background: $color-bg-card;
+		border: 1px solid $color-border;
+		border-radius: $radius;
+		padding: $spacing-lg $spacing-xl;
+		transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+		flex-wrap: wrap;
+
 		&:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--c) 40%, $color-border); box-shadow: $shadow-md; }
-		h3 { font-size: $font-size-base; font-weight: 700; color: $color-secondary; margin-bottom: 4px; }
-		p { font-size: $font-size-sm; color: $color-text-muted; line-height: 1.5; margin-bottom: $spacing-md; }
 	}
 
 	.org-mono {
-		width: 44px;
-		height: 44px;
+		width: 48px;
+		height: 48px;
 		border-radius: $radius-sm;
 		display: inline-flex;
 		align-items: center;
@@ -204,12 +282,19 @@
 		color: var(--c);
 		font-weight: 800;
 		font-size: 20px;
-		margin-bottom: $spacing-md;
+		flex-shrink: 0;
 	}
 
-	.org-actions { display: flex; gap: $spacing-sm; flex-wrap: wrap; margin-top: auto; }
+	.org-info {
+		flex: 1;
+		min-width: 200px;
+		h3 { font-size: $font-size-base; font-weight: 700; color: $color-secondary; margin-bottom: 2px; }
+		p { font-size: $font-size-sm; color: $color-text-muted; line-height: 1.45; }
+	}
 
-	.btn-sm { padding: 9px $spacing-md; min-height: 40px; font-size: $font-size-sm; }
+	.org-actions { display: flex; gap: $spacing-sm; flex-shrink: 0; }
+
+	.btn-sm { padding: 9px $spacing-md; min-height: 40px; font-size: $font-size-sm; white-space: nowrap; }
 
 	/* ── Materiały ── */
 	.guide {
@@ -237,7 +322,7 @@
 	.guide-h { font-size: $font-size-base; font-weight: 700; color: $color-secondary; }
 	.guide-p { font-size: $font-size-sm; color: $color-text-muted; line-height: 1.4; }
 
-	/* ── 112 ── */
+	/* ── 112 (jedyne miejsce, gdzie zostaje pełna czerwień — to prawdziwy alarm) ── */
 	.emergency {
 		display: flex;
 		align-items: center;
