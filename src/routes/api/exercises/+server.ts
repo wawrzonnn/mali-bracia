@@ -21,7 +21,6 @@ export const POST: RequestHandler = async ({ request }) => {
 
 		const response = await openai.chat.completions.create({
 			model: 'gpt-5.2',
-			reasoning_effort: 'minimal',
 			messages: [
 				{
 					role: 'system',
