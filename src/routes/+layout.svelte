@@ -8,8 +8,16 @@
 	import MobileFullMenu from '$lib/components/redesign/MobileFullMenu.svelte';
 	import { page } from '$app/state';
 	import { browser } from '$app/environment';
+	import { afterNavigate } from '$app/navigation';
 
 	let { children } = $props();
+
+	/* W trybie navbar strona przewija się wewnątrz <main> (overflow-y:auto),
+	   nie w oknie — domyślny reset scrolla SvelteKita go nie obejmuje. */
+	afterNavigate(() => {
+		document.getElementById('main-content')?.scrollTo(0, 0);
+		window.scrollTo(0, 0);
+	});
 	const isAdmin = $derived(page.url.pathname.startsWith('/administracja'));
 
 	/* Globalny przełącznik nawigacji (do prezentacji — porównanie dwóch ścieżek). */
