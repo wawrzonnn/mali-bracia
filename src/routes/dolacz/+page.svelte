@@ -6,27 +6,54 @@
 
 	type JoinPath = 'wolontariat' | 'wsparcie' | 'pytanie';
 
-	const paths: { id: JoinPath; icon: IconName; color: string; title: string; desc: string }[] = [
+	const paths: {
+		id: JoinPath;
+		icon: IconName;
+		color: string;
+		title: string;
+		desc: string;
+		cta: string;
+		decor: 'leaf' | 'dots' | null;
+		bullets: { icon: IconName; text: string }[];
+	}[] = [
 		{
 			id: 'wolontariat',
 			icon: 'heart',
 			color: '#1FA138',
 			title: 'Zostań wolontariuszem',
-			desc: 'Odwiedzaj seniora, buduj relację. Wystarczy 1 godzina tygodniowo.'
+			desc: 'Odwiedzaj seniora, buduj relację i wprowadź radość do czyjegoś życia.',
+			cta: 'Wybierz ścieżkę',
+			decor: 'leaf',
+			bullets: [
+				{ icon: 'clock', text: 'Wystarczy 1 godzina tygodniowo' },
+				{ icon: 'users', text: 'Szkolenie i wsparcie na każdym kroku' }
+			]
 		},
 		{
 			id: 'wsparcie',
 			icon: 'gift',
 			color: '#F5A623',
 			title: 'Wesprzyj finansowo',
-			desc: 'Jednorazowo lub cyklicznie — pomóż nam działać dalej.'
+			desc: 'Jednorazowo lub cyklicznie — pomóż nam działać dalej.',
+			cta: 'Wybierz ścieżkę',
+			decor: null,
+			bullets: [
+				{ icon: 'heart', text: 'Jednorazowo lub cyklicznie' },
+				{ icon: 'shield', text: 'Decydujesz o wysokości wsparcia' }
+			]
 		},
 		{
 			id: 'pytanie',
 			icon: 'message',
 			color: '#169FDB',
 			title: 'Mam pytanie',
-			desc: 'Napisz do nas, doradzimy najlepszą formę zaangażowania.'
+			desc: 'Napisz do nas, doradzimy najlepszą formę zaangażowania.',
+			cta: 'Napisz do nas',
+			decor: 'dots',
+			bullets: [
+				{ icon: 'message', text: 'Odpowiadamy najszybciej jak to możliwe' },
+				{ icon: 'user', text: 'Pomagamy dobrać najlepszą opcję' }
+			]
 		}
 	];
 
@@ -129,32 +156,94 @@
 			<a href="/" class="btn btn-primary">Wróć do strony głównej</a>
 		</div>
 	{:else}
-		<PageHeader
-			eyebrow="Zaangażuj się"
-			title="Dołącz do nas"
-			subtitle="Kilka kroków dzieli Cię od pierwszego spotkania z drugim człowiekiem."
-		/>
+		<div class="head-row">
+			<PageHeader
+				eyebrow="Zaangażuj się"
+				title="Dołącz do nas"
+				subtitle="Kilka kroków dzieli Cię od pierwszego spotkania z drugim człowiekiem."
+			/>
+			{#if step === 0}
+				<svg class="hero-art" viewBox="0 0 220 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+					<circle cx="150" cy="70" r="70" fill="#1FA138" opacity="0.08" />
+					<path d="M30 40q30-18 55 5" stroke="#169FDB" stroke-width="2" stroke-dasharray="4 6" stroke-linecap="round" opacity="0.5" />
+					<path d="M120 150c2-14 12-24 12-24" stroke="#169FDB" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.35" />
+					<!-- serce -->
+					<path d="M172 40c-4-6-13-6-16 1-3-7-12-7-16-1-5 7 0 15 16 26 16-11 21-19 16-26z" fill="#1FA138" opacity="0.55" />
+					<!-- postać niebieska -->
+					<circle cx="88" cy="88" r="17" fill="#169FDB" opacity="0.85" />
+					<path d="M60 160c0-24 15-42 34-42s34 12 34 30v12H60z" fill="#169FDB" opacity="0.85" />
+					<!-- postać zielona, oparta o niebieską -->
+					<circle cx="132" cy="94" r="15" fill="#1FA138" opacity="0.85" />
+					<path d="M104 162c0-22 13-38 30-38 15 0 27 12 29 28v10H104z" fill="#1FA138" opacity="0.85" />
+				</svg>
+			{/if}
+		</div>
 
 		<div class="stepper">
-			{#each steps as label, i}
-				<div class="step" class:active={i === step} class:done={i < step}>
-					<span class="step-dot">{#if i < step}<Icon name="check" size={12} color="white" />{:else}{i + 1}{/if}</span>
-					<span class="step-label">{label}</span>
-				</div>
-				{#if i < steps.length - 1}<span class="step-line" class:done={i < step}></span>{/if}
-			{/each}
+			<div class="stepper-inner">
+				{#each steps as label, i}
+					<div class="step" class:active={i === step} class:done={i < step}>
+						<span class="step-dot">{#if i < step}<Icon name="check" size={12} color="white" />{:else}{i + 1}{/if}</span>
+						<span class="step-label">{label}</span>
+					</div>
+					{#if i < steps.length - 1}<span class="step-line" class:done={i < step}></span>{/if}
+				{/each}
+			</div>
 		</div>
 
 		{#if step === 0}
 			<div class="paths">
 				{#each paths as p}
-					<button class="path-card" style="--c: {p.color}" onclick={() => choosePath(p.id)}>
-						<span class="path-ic"><Icon name={p.icon} size={26} color={p.color} /></span>
+					<div class="path-card" style="--c: {p.color}">
+						{#if p.decor === 'leaf'}
+							<svg class="decor decor-leaf" viewBox="0 0 60 60" fill="none" aria-hidden="true">
+								<path d="M10 50c-4-16 6-30 22-32" stroke={p.color} stroke-width="2" stroke-linecap="round" opacity="0.3" />
+								<path d="M18 42c6 2 12-1 14-8" stroke={p.color} stroke-width="2" stroke-linecap="round" opacity="0.3" />
+							</svg>
+						{:else if p.decor === 'dots'}
+							<svg class="decor decor-dots" viewBox="0 0 60 60" fill="none" aria-hidden="true">
+								{#each [0, 1, 2] as row}
+									{#each [0, 1, 2] as col}
+										<circle cx={10 + col * 12} cy={10 + row * 12} r="2" fill={p.color} opacity="0.22" />
+									{/each}
+								{/each}
+							</svg>
+						{/if}
+
+						<span class="path-ic-wrap">
+							<span class="path-ic"><Icon name={p.icon} size={30} color={p.color} /></span>
+						</span>
 						<span class="path-h">{p.title}</span>
 						<span class="path-p">{p.desc}</span>
-						<span class="path-go">Wybierz <Icon name="arrow-right" size={15} color={p.color} /></span>
-					</button>
+
+						<ul class="path-bullets">
+							{#each p.bullets as b}
+								<li>
+									<span class="bullet-ic"><Icon name={b.icon} size={13} color={p.color} /></span>
+									{b.text}
+								</li>
+							{/each}
+						</ul>
+
+						<button class="path-cta" onclick={() => choosePath(p.id)}>
+							{p.cta} <Icon name="arrow-right" size={15} color="white" />
+						</button>
+					</div>
 				{/each}
+			</div>
+
+			<div class="community-panel">
+				<span class="community-ic"><Icon name="users" size={22} color="white" /></span>
+				<div class="community-text">
+					<h2>Razem możemy więcej</h2>
+					<p>
+						Dzięki Tobie osoby starsze odzyskują radość życia i czują, że nie są same. Dołącz do
+						naszej społeczności!
+					</p>
+				</div>
+				<a href="/" class="btn btn-secondary community-btn">
+					Poznaj nasze działania <Icon name="arrow-right" size={16} />
+				</a>
 			</div>
 		{/if}
 
@@ -275,13 +364,38 @@
 <style lang="scss">
 	@use 'variables' as *;
 
-	.page { max-width: 760px; }
+	.page { max-width: 1040px; }
+
+	/* ── HEADER + ILLUSTRATION ── */
+	.head-row {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: $spacing-xl;
+
+		:global(.page-header) { flex: 1; margin-bottom: $spacing-xl; }
+	}
+
+	.hero-art {
+		width: 190px;
+		height: auto;
+		flex-shrink: 0;
+		margin-top: -8px;
+		@media (max-width: 860px) { display: none; }
+	}
 
 	/* ── STEPPER ── */
 	.stepper {
+		background: $color-bg-card;
+		border: 1px solid $color-border;
+		border-radius: $radius-lg;
+		padding: $spacing-lg $spacing-xl;
+		margin-bottom: $spacing-2xl;
+	}
+
+	.stepper-inner {
 		display: flex;
 		align-items: center;
-		margin-bottom: $spacing-2xl;
 	}
 
 	.step {
@@ -336,6 +450,7 @@
 	}
 
 	.path-card {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
@@ -344,38 +459,91 @@
 		border: 1.5px solid $color-border;
 		border-radius: $radius-lg;
 		padding: $spacing-xl;
+		overflow: hidden;
 		transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
 
 		&:hover {
 			transform: translateY(-3px);
 			border-color: color-mix(in srgb, var(--c) 45%, $color-border);
 			box-shadow: $shadow-md;
-			.path-go :global(svg) { transform: translateX(3px); }
 		}
+	}
+
+	.decor {
+		position: absolute;
+		width: 64px;
+		height: 64px;
+
+		&-leaf { top: $spacing-lg; right: $spacing-lg; }
+		&-dots { top: $spacing-lg; right: $spacing-lg; }
+	}
+
+	.path-ic-wrap {
+		width: 76px;
+		height: 76px;
+		border-radius: 50%;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		background: radial-gradient(circle, color-mix(in srgb, var(--c) 16%, transparent) 0%, color-mix(in srgb, var(--c) 6%, transparent) 70%, transparent 100%);
+		margin-bottom: $spacing-lg;
 	}
 
 	.path-ic {
 		width: 52px;
 		height: 52px;
-		border-radius: $radius;
+		border-radius: 50%;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		background: color-mix(in srgb, var(--c) 14%, transparent);
+	}
+
+	.path-h { font-size: 21px; font-weight: 700; color: $color-secondary; margin-bottom: 8px; line-height: 1.25; }
+	.path-p { font-size: $font-size-sm; color: $color-text-muted; line-height: 1.55; margin-bottom: $spacing-lg; }
+
+	.path-bullets {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: $spacing-sm;
+		margin-bottom: $spacing-xl;
+		flex: 1;
+
+		li {
+			display: flex;
+			align-items: center;
+			gap: $spacing-sm;
+			font-size: $font-size-sm;
+			color: $color-text;
+		}
+	}
+
+	.bullet-ic {
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
 		background: color-mix(in srgb, var(--c) 12%, transparent);
-		margin-bottom: $spacing-md;
+		flex-shrink: 0;
 	}
 
-	.path-h { font-size: $font-size-lg; font-weight: 700; color: $color-secondary; margin-bottom: 6px; }
-	.path-p { font-size: $font-size-sm; color: $color-text-muted; line-height: 1.5; flex: 1; margin-bottom: $spacing-md; }
-
-	.path-go {
+	.path-cta {
 		display: inline-flex;
 		align-items: center;
-		gap: 5px;
-		font-size: $font-size-sm;
+		justify-content: center;
+		gap: 6px;
+		width: 100%;
+		padding: 12px $spacing-lg;
+		border-radius: $radius-sm;
+		background: var(--c);
+		color: white;
 		font-weight: 700;
-		color: var(--c);
-		:global(svg) { transition: transform 0.16s ease; }
+		font-size: $font-size-sm;
+		transition: filter 0.15s ease;
+		&:hover { filter: brightness(1.08); }
 	}
 
 	/* ── STEP 1 & 2 PANEL ── */
@@ -541,4 +709,38 @@
 		justify-content: center;
 		box-shadow: 0 4px 20px rgba($color-accent, 0.3);
 	}
+
+	/* ── COMMUNITY PANEL ── */
+	.community-panel {
+		display: flex;
+		align-items: center;
+		gap: $spacing-lg;
+		margin-top: $spacing-xl;
+		background: $color-bg-card;
+		border: 1px solid $color-border;
+		border-radius: $radius-lg;
+		padding: $spacing-xl;
+		flex-wrap: wrap;
+	}
+
+	.community-ic {
+		width: 48px;
+		height: 48px;
+		border-radius: 50%;
+		background: linear-gradient(135deg, $color-primary, $color-primary-dark);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+	}
+
+	.community-text {
+		flex: 1;
+		min-width: 220px;
+
+		h2 { font-size: $font-size-base; font-weight: 700; color: $color-secondary; margin-bottom: 2px; }
+		p { font-size: $font-size-sm; color: $color-text-muted; line-height: 1.5; }
+	}
+
+	.community-btn { flex-shrink: 0; white-space: nowrap; }
 </style>
