@@ -377,8 +377,11 @@
 		.wrap { padding: 0 16px; }
 		.head-inner { padding: 40px 16px 40px; }
 		.head-inner h1 { font-size: 38px; }
-		.filter-row { gap: 8px; }
-		.result-label { margin-left: 0; width: 100%; margin-top: 4px; }
+		.filter-wrap { padding: 28px 16px 0; }
+		.filter-row { gap: 10px; row-gap: 14px; }
+		.pill { padding: 11px 18px; }
+		.result-label { margin-left: 0; width: 100%; margin-top: 10px; }
+		.featured-wrap { padding-top: 28px; }
 		.featured-wrap, .grid-wrap { padding-left: 16px; padding-right: 16px; }
 		.featured-body { padding: 28px 24px; }
 		.featured-body h2 { font-size: 26px; }
