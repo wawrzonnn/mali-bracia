@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum JoinPath {
+  WOLONTARIAT
+  WSPARCIE
+  PYTANIE
+}
+
+enum SupportType {
+  JEDNORAZOWE
+  CYKLICZNE
+}
+
+enum JoinRequestStatus {
+  NOWE
+  W_TOKU
+  ZAMKNIETE
+}
+
+/// Zgłoszenia z formularza "Dołącz do nas" (/dolacz).
+model JoinRequest {
+  id     String   @id @default(cuid())
+  path   JoinPath
+  name   String
+  email  String
+  phone  String?
+  city   String?
+
+  // Pola specyficzne dla ścieżki "wolontariat"
+  availability String?
+  motivation   String?
+
+  // Pola specyficzne dla ścieżki "wsparcie"
+  supportType SupportType?
+
+  // Pola specyficzne dla ścieżki "pytanie"
+  message String?
+
+  status    JoinRequestStatus @default(NOWE)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum UserRole {
+  ADMIN
+}
+
+/// Konta panelu administracyjnego (/administracja).
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         UserRole @default(ADMIN)
+  createdAt    DateTime @default(now())
+
+  sessions Session[]
+}
+
+/// Sesje logowania — token w cookie wskazuje na wiersz tutaj.
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}

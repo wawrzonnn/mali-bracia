@@ -13,12 +13,12 @@
 	let chatContainer: HTMLDivElement | undefined = $state();
 
 	const quickTopics = [
-		{ icon: 'brain' as const, label: 'Starzenie się', question: 'Jak przebiega naturalny proces starzenia się? Co się zmienia?' },
-		{ icon: 'heart' as const, label: 'Relacje', question: 'Jak nawiązać i utrzymać przyjacielską relację z osobą starszą?' },
-		{ icon: 'users' as const, label: 'Samotność', question: 'Jaka jest skala problemu samotności seniorów w Polsce?' },
-		{ icon: 'shield' as const, label: 'Pomoc', question: 'Gdzie mogę szukać pomocy dla samotnego seniora?' },
-		{ icon: 'message' as const, label: 'Rozmowa', question: 'Jak zacząć rozmowę z osobą starszą, której nie znam?' },
-		{ icon: 'puzzle' as const, label: 'Pamięć', question: 'Jakie ćwiczenia pomagają utrzymać sprawność umysłową seniora?' }
+		{ icon: 'brain' as const, color: '#169FDB', label: 'Starzenie się', question: 'Jak przebiega naturalny proces starzenia się? Co się zmienia?' },
+		{ icon: 'heart' as const, color: '#1FA138', label: 'Relacje', question: 'Jak nawiązać i utrzymać przyjacielską relację z osobą starszą?' },
+		{ icon: 'users' as const, color: '#F5A623', label: 'Samotność', question: 'Jaka jest skala problemu samotności seniorów w Polsce?' },
+		{ icon: 'shield' as const, color: '#E74C3C', label: 'Pomoc', question: 'Gdzie mogę szukać pomocy dla samotnego seniora?' },
+		{ icon: 'message' as const, color: '#16A085', label: 'Rozmowa', question: 'Jak zacząć rozmowę z osobą starszą, której nie znam?' },
+		{ icon: 'puzzle' as const, color: '#9B59B6', label: 'Pamięć', question: 'Jakie ćwiczenia pomagają utrzymać sprawność umysłową seniora?' }
 	];
 
 	async function send(text?: string) {
@@ -74,9 +74,9 @@
 					<h2>W czym mogę Ci pomóc?</h2>
 					<div class="topics-grid">
 						{#each quickTopics as topic}
-							<button class="topic-btn" onclick={() => send(topic.question)}>
+							<button class="topic-btn" style="--c: {topic.color}" onclick={() => send(topic.question)}>
 								<div class="topic-icon">
-									<Icon name={topic.icon} size={20} color="#169FDB" />
+									<Icon name={topic.icon} size={20} color={topic.color} />
 								</div>
 								<span>{topic.label}</span>
 							</button>
@@ -143,7 +143,7 @@
 				rows={1}
 				disabled={loading}
 			></textarea>
-			<button class="send-btn" onclick={() => send()} disabled={!input.trim() || loading}>
+			<button class="send-btn" onclick={() => send()} disabled={!input.trim() || loading} aria-label="Wyślij pytanie">
 				<Icon name="send" size={20} color="white" />
 			</button>
 		</div>
@@ -182,8 +182,11 @@
 		padding: $spacing-2xl 0 $spacing-xl;
 
 		h1 {
-			font-size: $font-size-xl;
-			font-weight: 800;
+			font-family: $font-serif;
+			font-size: 30px;
+			font-weight: 700;
+			letter-spacing: -0.01em;
+			color: $color-secondary;
 			margin: $spacing-md 0 $spacing-sm;
 		}
 
@@ -200,7 +203,7 @@
 		width: 64px;
 		height: 64px;
 		border-radius: 50%;
-		background: linear-gradient(135deg, $color-primary, #0D7AB5);
+		background: linear-gradient(135deg, $color-primary, $color-primary-dark);
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -235,31 +238,31 @@
 		flex-direction: column;
 		align-items: center;
 		gap: $spacing-sm;
-		padding: $spacing-lg $spacing-md;
+		padding: $spacing-md;
 		border-radius: $radius;
 		background: $color-bg-card;
 		border: 1.5px solid $color-border;
 		transition: all 0.15s ease;
 
 		&:hover {
-			border-color: $color-primary;
-			background: $color-primary-bg;
-			transform: translateY(-1px);
+			border-color: var(--c, $color-primary);
+			background: color-mix(in srgb, var(--c, $color-primary) 6%, $color-bg-card);
+			transform: translateY(-2px);
 			box-shadow: $shadow-sm;
 		}
 
 		span {
 			font-size: $font-size-sm;
 			font-weight: 600;
-			color: $color-text;
+			color: $color-secondary;
 		}
 	}
 
 	.topic-icon {
-		width: 44px;
-		height: 44px;
+		width: 46px;
+		height: 46px;
 		border-radius: $radius-sm;
-		background: $color-primary-bg;
+		background: color-mix(in srgb, var(--c, $color-primary) 12%, transparent);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -317,7 +320,7 @@
 		width: 30px;
 		height: 30px;
 		border-radius: 50%;
-		background: linear-gradient(135deg, $color-primary, #0D7AB5);
+		background: linear-gradient(135deg, $color-primary, $color-primary-dark);
 		display: flex;
 		align-items: center;
 		justify-content: center;

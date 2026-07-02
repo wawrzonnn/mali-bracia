@@ -1,21 +1,33 @@
-$color-primary: #169FDB;
+// ─── Kolory marki (mali bracia Ubogich) ───
+$color-primary: #169FDB;        // błękit marki — więź, zaufanie
 $color-primary-light: #B3E0F7;
 $color-primary-bg: #E8F6FD;
-$color-secondary: #1D1D1B;
-$color-accent: #1FA138;
+$color-primary-dark: #0E7CB5;   // do gradientów / hover
+
+$color-secondary: #1D1D1B;      // grafit — nagłówki, tekst
+
+$color-accent: #1FA138;         // zieleń — działanie, wolontariat
 $color-accent-light: #D4EDDA;
 $color-accent-bg: #F0F9F2;
-$color-warm: #F5A623;
+$color-accent-dark: #15852D;
+
+$color-warm: #F5A623;           // ciepły akcent — emocje, dane
 $color-warm-light: #FEF3D7;
-$color-bg: #F8FAFB;
-$color-bg-card: #FFFFFF;
-$color-text: #1D1D1B;
-$color-text-muted: #5A6B7A;
-$color-border: #E0E7ED;
+
+// ─── Powierzchnie (przez zmienne CSS → sterowalne trybem kontrastu) ───
+$color-bg: var(--c-bg, #FAF9F6);            // kremowe tło aplikacji
+$color-bg-soft: var(--c-bg-soft, #F4F1EA);  // cieplejsza sekcja / hero
+$color-bg-card: var(--c-card, #FFFFFF);
+$color-text: var(--c-text, #1D1D1B);
+$color-text-muted: var(--c-muted, #5A6B7A);
+$color-border: var(--c-border, #E7E3DA);    // ciepły jasnoszary
 $color-danger: #E74C3C;
 $color-success: #1FA138;
 
-$font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+// ─── Typografia ───
+$font-family: 'Figtree', 'Segoe UI', system-ui, -apple-system, sans-serif;
+$font-heading: 'Figtree', 'Segoe UI', system-ui, sans-serif;
+$font-serif: 'Lora', Georgia, 'Times New Roman', serif;
 $font-size-base: 18px;
 $font-size-sm: 15px;
 $font-size-xs: 13px;
@@ -29,9 +41,9 @@ $radius-sm: 10px;
 $radius-lg: 20px;
 $radius-full: 9999px;
 
-$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-$shadow-md: 0 4px 14px rgba(0, 0, 0, 0.08);
-$shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.1);
+$shadow-sm: 0 1px 3px rgba(29, 29, 27, 0.05);
+$shadow-md: 0 4px 14px rgba(29, 29, 27, 0.07);
+$shadow-lg: 0 8px 28px rgba(29, 29, 27, 0.09);
 
 $spacing-xs: 4px;
 $spacing-sm: 8px;

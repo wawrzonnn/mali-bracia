@@ -1,9 +1,10 @@
 <script lang="ts">
-	type IconName =
+	export type IconName =
 		| 'home' | 'search' | 'book' | 'heart' | 'phone' | 'message'
 		| 'users' | 'brain' | 'shield' | 'arrow-right' | 'chevron-right'
 		| 'chevron-down' | 'sparkle' | 'clock' | 'send' | 'x'
-		| 'help-circle' | 'map-pin' | 'external' | 'puzzle' | 'menu';
+		| 'help-circle' | 'map-pin' | 'external' | 'puzzle' | 'menu'
+		| 'lightbulb' | 'alert-triangle' | 'gift' | 'check';
 
 	let { name, size = 24, color = 'currentColor' }: { name: IconName; size?: number; color?: string } = $props();
 
@@ -28,7 +29,11 @@
 		'map-pin': 'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z',
 		external: 'M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14',
 		puzzle: 'M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z',
-		menu: 'M4 6h16M4 12h16M4 18h16'
+		menu: 'M4 6h16M4 12h16M4 18h16',
+		lightbulb: 'M9 18h6M10 21h4M12 3a6 6 0 00-6 6c0 2.276 1.237 4.061 3 5.15V16a1 1 0 001 1h4a1 1 0 001-1v-1.85c1.763-1.089 3-2.874 3-5.15a6 6 0 00-6-6z',
+		'alert-triangle': 'M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01',
+		gift: 'M20 12v9a1 1 0 01-1 1H5a1 1 0 01-1-1v-9M2 7h20v5H2V7zm10 0V21M12 7c-1.5 0-3-1-3-2.5A2.5 2.5 0 0111.5 2c1.5 0 2.5 2 2.5 5M12 7c1.5 0 3-1 3-2.5A2.5 2.5 0 0012.5 2C11 2 10 4 10 7',
+		check: 'M20 6L9 17l-5-5'
 	};
 </script>
 

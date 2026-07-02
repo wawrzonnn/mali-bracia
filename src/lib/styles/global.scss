@@ -1,5 +1,55 @@
 @use 'variables' as *;
 
+/* ─── Dostępność: neutralne kolory jako zmienne (sterowane trybem kontrastu) ─── */
+:root {
+	--c-bg: #FAF9F6;
+	--c-bg-soft: #F4F1EA;
+	--c-card: #FFFFFF;
+	--c-text: #1D1D1B;
+	--c-muted: #5A6B7A;
+	--c-border: #E7E3DA;
+}
+
+html.a11y-contrast {
+	--c-bg: #FFFFFF;
+	--c-bg-soft: #ECECEC;
+	--c-card: #FFFFFF;
+	--c-text: #000000;
+	--c-muted: #333B42;
+	--c-border: #47525D;
+}
+
+/* Powiększenie treści */
+html.a11y-text-1 #main-content { zoom: 1.12; }
+html.a11y-text-2 #main-content { zoom: 1.28; }
+
+/* Poszanowanie preferencji ograniczonego ruchu */
+@media (prefers-reduced-motion: reduce) {
+	*, *::before, *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* Pomiń nawigację */
+.skip-link {
+	position: fixed;
+	top: -80px;
+	left: 8px;
+	z-index: 1000;
+	background: $color-primary;
+	color: #fff;
+	padding: 10px 18px;
+	border-radius: 8px;
+	font-weight: 700;
+	text-decoration: none;
+	transition: top 0.16s ease;
+
+	&:focus { top: 8px; }
+}
+
 *, *::before, *::after {
 	box-sizing: border-box;
 	margin: 0;
@@ -19,6 +69,18 @@ body {
 	line-height: 1.6;
 	min-height: 100dvh;
 	overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: $font-heading;
+	line-height: 1.2;
+	letter-spacing: -0.01em;
+}
+
+:focus-visible {
+	outline: 2px solid $color-primary;
+	outline-offset: 3px;
+	border-radius: 4px;
 }
 
 a {
@@ -129,9 +191,9 @@ textarea {
 }
 
 .page {
-	max-width: $content-width;
+	max-width: 1140px;
 	margin: 0 auto;
-	padding: $spacing-xl $spacing-2xl $spacing-3xl;
+	padding: $spacing-2xl $spacing-2xl $spacing-3xl;
 
 	@media (max-width: 768px) {
 		padding: $spacing-lg $spacing-md $spacing-2xl;
@@ -187,7 +249,7 @@ textarea {
 }
 
 .article-content {
-	h2 { font-size: $font-size-lg; font-weight: 700; margin: $spacing-lg 0 $spacing-md; color: $color-primary; }
+	h2 { font-family: $font-serif; font-size: 23px; font-weight: 700; margin: $spacing-xl 0 $spacing-md; color: $color-secondary; }
 	h3 { font-size: $font-size-base; font-weight: 700; margin: $spacing-md 0 $spacing-sm; color: $color-secondary; }
 	p { margin-bottom: $spacing-md; line-height: 1.7; }
 	ul, ol { margin-bottom: $spacing-md; padding-left: $spacing-lg; }

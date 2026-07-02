@@ -2,7 +2,8 @@ export type IconName =
 	| 'home' | 'search' | 'book' | 'heart' | 'phone' | 'message'
 	| 'users' | 'brain' | 'shield' | 'arrow-right' | 'chevron-right'
 	| 'chevron-down' | 'sparkle' | 'clock' | 'send' | 'x'
-	| 'help-circle' | 'map-pin' | 'external' | 'puzzle' | 'menu';
+	| 'help-circle' | 'map-pin' | 'external' | 'puzzle' | 'menu'
+	| 'lightbulb' | 'alert-triangle';
 
 export interface Category {
 	slug: string;
@@ -17,7 +18,7 @@ export const categories: Category[] = [
 		slug: 'zrozumiec-starosc',
 		name: 'Zrozumieć starość',
 		description: 'Procesy starzenia się, zmiany psychologiczne, potrzeby seniorów, demencja i depresja.',
-		icon: 'brain',
+		icon: 'lightbulb',
 		color: '#169FDB'
 	},
 	{
@@ -31,7 +32,7 @@ export const categories: Category[] = [
 		slug: 'samotnosc',
 		name: 'Samotność',
 		description: 'Epidemia osamotnienia, jej przyczyny, skutki zdrowotne i społeczne, jak przeciwdziałać.',
-		icon: 'users',
+		icon: 'alert-triangle',
 		color: '#F5A623'
 	},
 	{

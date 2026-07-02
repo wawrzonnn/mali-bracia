@@ -1,10 +1,12 @@
 <script lang="ts">
 	import '$lib/styles/global.scss';
 	import Icon from '$lib/components/Icon.svelte';
+	import A11yToolbar from '$lib/components/A11yToolbar.svelte';
 	import { page } from '$app/state';
 	import { browser } from '$app/environment';
 
 	let { children } = $props();
+	const isAdmin = $derived(page.url.pathname.startsWith('/administracja'));
 	let mobileMenuOpen = $state(false);
 	let chatOpen = $state(false);
 	let chatInput = $state('');
@@ -33,13 +35,26 @@
 		}
 	}
 
-	const navItems = [
-		{ href: '/', icon: 'home' as const, label: 'Strona główna' },
-		{ href: '/wiedza', icon: 'book' as const, label: 'Baza wiedzy' },
-		{ href: '/cwiczenia', icon: 'puzzle' as const, label: 'Ćwiczenia' },
-		{ href: '/asystent', icon: 'sparkle' as const, label: 'Asystent AI' },
-		{ href: '/pytania', icon: 'help-circle' as const, label: 'FAQ' },
-		{ href: '/wsparcie', icon: 'phone' as const, label: 'Wsparcie' }
+	const navGroups = [
+		{
+			title: null,
+			items: [{ href: '/', icon: 'home' as const, label: 'Strona główna' }]
+		},
+		{
+			title: 'Poznaj',
+			items: [
+				{ href: '/wiedza', icon: 'book' as const, label: 'Baza wiedzy' },
+				{ href: '/cwiczenia', icon: 'puzzle' as const, label: 'Ćwiczenia' }
+			]
+		},
+		{
+			title: 'Pomoc',
+			items: [
+				{ href: '/asystent', icon: 'sparkle' as const, label: 'Asystent AI' },
+				{ href: '/wsparcie', icon: 'phone' as const, label: 'Wsparcie' },
+				{ href: '/pytania', icon: 'help-circle' as const, label: 'Najczęstsze pytania' }
+			]
+		}
 	];
 
 	function isActive(href: string): boolean {
@@ -48,7 +63,12 @@
 	}
 </script>
 
+{#if isAdmin}
+	{@render children()}
+{:else}
 <div class="app-layout">
+	<a href="#main-content" class="skip-link">Przejdź do treści</a>
+
 	<aside class="sidebar" class:open={mobileMenuOpen}>
 		<div class="sidebar-header">
 			<a href="/" class="logo-link" onclick={() => (mobileMenuOpen = false)}>
@@ -57,35 +77,41 @@
 		</div>
 
 		<nav class="sidebar-nav">
-			{#each navItems as item}
-				<a
-					href={item.href}
-					class="nav-link"
-					class:active={isActive(item.href)}
-					onclick={() => (mobileMenuOpen = false)}
-				>
-					<Icon name={item.icon} size={20} color={isActive(item.href) ? '#169FDB' : '#5A6B7A'} />
-					<span>{item.label}</span>
-				</a>
+			{#each navGroups as group}
+				{#if group.title}
+					<span class="nav-group-title">{group.title}</span>
+				{/if}
+				{#each group.items as item}
+					<a
+						href={item.href}
+						class="nav-link"
+						class:active={isActive(item.href)}
+						onclick={() => (mobileMenuOpen = false)}
+					>
+						<Icon name={item.icon} size={20} color={isActive(item.href) ? '#169FDB' : '#5A6B7A'} />
+						<span>{item.label}</span>
+					</a>
+				{/each}
 			{/each}
 		</nav>
 
-		<div class="sidebar-join">
-			<a href="https://www.malibracia.org.pl" target="_blank" rel="noopener" class="join-link">
+		<div class="sidebar-foot">
+			<a href="/dolacz" class="join-btn">
 				<Icon name="heart" size={18} color="white" />
 				<span>Dołącz do nas</span>
 			</a>
-		</div>
 
-		<div class="sidebar-footer">
-			<div class="sidebar-cta">
-				<Icon name="phone" size={18} color="#E74C3C" />
-				<div>
-					<span class="cta-label">Telefon Zaufania</span>
-					<a href="tel:+48608018110" class="cta-phone">608 018 110</a>
-				</div>
-			</div>
-			<p class="sidebar-copy">malibracia.org.pl</p>
+			<a href="tel:+48608018110" class="helpline">
+				<span class="helpline-ic"><Icon name="phone" size={16} color="white" /></span>
+				<span class="helpline-body">
+					<span class="helpline-label">Telefon Zaufania</span>
+					<span class="helpline-num">608 018 110</span>
+				</span>
+			</a>
+
+			<a href="https://www.malibracia.org.pl" target="_blank" rel="noopener" class="sidebar-link">
+				malibracia.org.pl
+			</a>
 		</div>
 	</aside>
 
@@ -99,12 +125,12 @@
 				<Icon name={mobileMenuOpen ? 'x' : 'menu'} size={24} color="#1D1D1B" />
 			</button>
 			<span class="topbar-title">Baza Wiedzy MBU</span>
-			<a href="/asystent" class="topbar-ai">
+			<a href="/asystent" class="topbar-ai" aria-label="Otwórz asystenta AI">
 				<Icon name="sparkle" size={18} color="white" />
 			</a>
 		</header>
 
-		<main>
+		<main id="main-content" tabindex="-1">
 			{@render children()}
 		</main>
 	</div>
@@ -115,7 +141,7 @@
 				<div class="popup-header">
 					<div class="popup-avatar"><Icon name="sparkle" size={16} color="white" /></div>
 					<span>Asystent MBU</span>
-					<button class="popup-close" onclick={() => (chatOpen = false)}>
+					<button class="popup-close" onclick={() => (chatOpen = false)} aria-label="Zamknij czat">
 						<Icon name="x" size={18} color="rgba(255,255,255,0.7)" />
 					</button>
 				</div>
@@ -147,7 +173,7 @@
 						onkeydown={(e) => e.key === 'Enter' && sendMiniChat()}
 						disabled={chatLoading}
 					/>
-					<button onclick={sendMiniChat} disabled={!chatInput.trim() || chatLoading}>
+					<button onclick={sendMiniChat} disabled={!chatInput.trim() || chatLoading} aria-label="Wyślij wiadomość">
 						<Icon name="send" size={16} color="white" />
 					</button>
 				</div>
@@ -166,7 +192,10 @@
 			{/if}
 		</button>
 	{/if}
+
+	<A11yToolbar />
 </div>
+{/if}
 
 <style lang="scss">
 	@use 'variables' as *;
@@ -222,6 +251,15 @@
 		gap: 2px;
 	}
 
+	.nav-group-title {
+		padding: $spacing-md $spacing-md 6px;
+		font-size: 11px;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.6px;
+		color: $color-text-muted;
+	}
+
 	.nav-link {
 		display: flex;
 		align-items: center;
@@ -246,38 +284,69 @@
 		}
 	}
 
-	.sidebar-footer {
-		padding: $spacing-md $spacing-lg $spacing-lg;
+	.sidebar-foot {
+		padding: $spacing-md;
 		border-top: 1px solid $color-border;
+		display: flex;
+		flex-direction: column;
+		gap: $spacing-sm;
 	}
 
-	.sidebar-cta {
+	.join-btn {
 		display: flex;
 		align-items: center;
+		justify-content: center;
 		gap: $spacing-sm;
-		padding: $spacing-md;
-		background: #FFF5F5;
+		padding: 13px $spacing-md;
 		border-radius: $radius-sm;
-		margin-bottom: $spacing-sm;
-	}
-
-	.cta-label {
-		display: block;
-		font-size: 11px;
-		color: $color-text-muted;
-	}
-
-	.cta-phone {
-		font-weight: 800;
-		font-size: $font-size-sm;
-		color: #E74C3C;
+		background: linear-gradient(135deg, $color-accent, $color-accent-dark);
+		color: white;
 		text-decoration: none;
+		font-size: $font-size-sm;
+		font-weight: 700;
+		box-shadow: 0 2px 8px rgba($color-accent, 0.28);
+		transition: filter 0.15s ease, transform 0.15s ease;
+
+		&:hover { filter: brightness(1.06); transform: translateY(-1px); }
 	}
 
-	.sidebar-copy {
+	.helpline {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 9px 10px;
+		border-radius: $radius-sm;
+		border: 1px solid $color-border;
+		background: $color-bg-card;
+		text-decoration: none;
+		transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+		&:hover { border-color: rgba($color-danger, 0.4); box-shadow: $shadow-sm; }
+	}
+
+	.helpline-ic {
+		width: 34px;
+		height: 34px;
+		border-radius: 50%;
+		background: $color-danger;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+	}
+
+	.helpline-body { display: flex; flex-direction: column; line-height: 1.25; }
+	.helpline-label { font-size: 11px; color: $color-text-muted; }
+	.helpline-num { font-size: $font-size-sm; font-weight: 800; color: $color-danger; letter-spacing: 0.3px; }
+
+	.sidebar-link {
+		text-align: center;
 		font-size: 11px;
 		color: $color-text-muted;
-		text-align: center;
+		text-decoration: none;
+		padding-top: 2px;
+
+		&:hover { color: $color-primary; }
 	}
 
 	.overlay {
@@ -342,34 +411,13 @@
 		width: 36px;
 		height: 36px;
 		border-radius: 50%;
-		background: linear-gradient(135deg, $color-primary, #0D7AB5);
+		background: linear-gradient(135deg, $color-primary, $color-primary-dark);
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
 
 	main { flex: 1; }
-
-	/* ─── JOIN LINK ─── */
-	.sidebar-join {
-		padding: 0 $spacing-sm $spacing-sm;
-	}
-
-	.join-link {
-		display: flex;
-		align-items: center;
-		gap: $spacing-sm;
-		padding: 12px $spacing-md;
-		border-radius: $radius-sm;
-		background: linear-gradient(135deg, $color-accent, #15852D);
-		color: white;
-		text-decoration: none;
-		font-size: $font-size-sm;
-		font-weight: 700;
-		transition: filter 0.15s;
-
-		&:hover { filter: brightness(1.1); }
-	}
 
 	/* ─── CHAT FAB ─── */
 	.chat-fab {
@@ -380,12 +428,16 @@
 		width: 56px;
 		height: 56px;
 		border-radius: 50%;
-		background: linear-gradient(135deg, $color-primary, #0D7AB5);
+		background: linear-gradient(135deg, $color-primary, $color-primary-dark);
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		box-shadow: 0 4px 20px rgba($color-primary, 0.35);
 		transition: transform 0.15s, box-shadow 0.15s;
+
+		/* Na mobile rolę szybkiego dostępu do AI pełni już przycisk w topbarze —
+		   ukrywamy FAB, żeby nie zasłaniał treści na dole ekranu. */
+		@media (max-width: 768px) { display: none; }
 
 		&:hover {
 			transform: scale(1.08);
@@ -436,7 +488,7 @@
 		width: 28px;
 		height: 28px;
 		border-radius: 50%;
-		background: linear-gradient(135deg, $color-primary, #0D7AB5);
+		background: linear-gradient(135deg, $color-primary, $color-primary-dark);
 		display: flex;
 		align-items: center;
 		justify-content: center;

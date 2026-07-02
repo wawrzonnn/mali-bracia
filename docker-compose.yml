@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: mali-bracia-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: mali_bracia
+      POSTGRES_PASSWORD: mali_bracia_dev
+      POSTGRES_DB: mali_bracia
+    ports:
+      - '5433:5432'
+    volumes:
+      - mali_bracia_pg_data:/var/lib/postgresql/data
+
+volumes:
+  mali_bracia_pg_data:
