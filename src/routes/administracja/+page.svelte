@@ -1,96 +1,120 @@
 <script lang="ts">
 	import Icon from '$lib/components/Icon.svelte';
-	import { enhance } from '$app/forms';
+	import { articles } from '$lib/data/articles';
+	import { adminMaterials, adminUsersMock, activityFeed, articleMeta } from '$lib/data/adminMock';
 
 	let { data } = $props();
 
-	const pathLabels: Record<string, string> = {
-		WOLONTARIAT: 'Wolontariat',
-		WSPARCIE: 'Wsparcie finansowe',
-		PYTANIE: 'Pytanie'
-	};
-
-	const pathColors: Record<string, string> = {
-		WOLONTARIAT: '#1FA138',
-		WSPARCIE: '#F5A623',
-		PYTANIE: '#169FDB'
-	};
-
-	const statusLabels: Record<string, string> = {
-		NOWE: 'Nowe',
-		W_TOKU: 'W toku',
-		ZAMKNIETE: 'Zamknięte'
-	};
-
-	let statusFilter = $state<'ALL' | 'NOWE' | 'W_TOKU' | 'ZAMKNIETE'>('ALL');
-
-	const filtered = $derived(
-		statusFilter === 'ALL' ? data.requests : data.requests.filter((r) => r.status === statusFilter)
+	const publishedCount = $derived(
+		articles.filter((a) => (articleMeta[a.slug]?.status ?? 'Opublikowany') === 'Opublikowany').length
 	);
+	const draftCount = $derived(articles.length - publishedCount);
 
-	function formatDate(iso: string) {
-		return new Date(iso).toLocaleString('pl-PL', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+	const stats = $derived([
+		{
+			label: 'Zgłoszenia',
+			value: data.requestsTotal,
+			sub: `${data.requestsNowe} nowych`,
+			icon: 'message' as const,
+			color: '#169FDB',
+			href: '/administracja/zgloszenia'
+		},
+		{
+			label: 'Artykuły',
+			value: articles.length,
+			sub: `${draftCount} w szkicu`,
+			icon: 'book' as const,
+			color: '#1FA138',
+			href: '/administracja/wiedza'
+		},
+		{
+			label: 'Materiały',
+			value: adminMaterials.length,
+			sub: 'plików PDF',
+			icon: 'file-text' as const,
+			color: '#F5A623',
+			href: '/administracja/materialy'
+		},
+		{
+			label: 'Użytkownicy',
+			value: adminUsersMock.length + 1,
+			sub: 'aktywnych kont',
+			icon: 'users' as const,
+			color: '#9B59B6',
+			href: '/administracja/uzytkownicy'
+		}
+	]);
+
+	function formatRelative(iso: string) {
+		const diffMs = Date.now() - new Date(iso).getTime();
+		const diffH = Math.round(diffMs / 3_600_000);
+		if (diffH < 1) return 'przed chwilą';
+		if (diffH < 24) return `${diffH} godz. temu`;
+		const diffD = Math.round(diffH / 24);
+		return `${diffD} dni temu`;
 	}
 </script>
 
-<svelte:head><title>Zgłoszenia — Panel administracyjny</title></svelte:head>
+<svelte:head><title>Przegląd — Panel administracyjny</title></svelte:head>
 
 <header class="dash-head">
-	<h1>Zgłoszenia z formularza</h1>
-	<p>Wszystkie zgłoszenia wysłane przez „Dołącz do nas".</p>
+	<h1>Witaj, {data.user?.name?.split(' ')[0] ?? 'Administratorze'}</h1>
+	<p>Skrót tego, co dzieje się na platformie mali bracia Ubogich.</p>
 </header>
 
-<div class="filters">
-	{#each [['ALL', 'Wszystkie'], ['NOWE', 'Nowe'], ['W_TOKU', 'W toku'], ['ZAMKNIETE', 'Zamknięte']] as [value, label]}
-		<button class="chip" class:active={statusFilter === value} onclick={() => (statusFilter = value as typeof statusFilter)}>
-			{label}
-			<span class="chip-count">{value === 'ALL' ? data.requests.length : data.requests.filter((r) => r.status === value).length}</span>
-		</button>
+<div class="stat-grid">
+	{#each stats as s}
+		<a href={s.href} class="stat-card">
+			<span class="stat-ic" style="--c: {s.color}"><Icon name={s.icon} size={20} color={s.color} /></span>
+			<div class="stat-body">
+				<strong>{s.value}</strong>
+				<span class="stat-label">{s.label}</span>
+			</div>
+			<span class="stat-sub">{s.sub}</span>
+		</a>
 	{/each}
 </div>
 
-{#if filtered.length === 0}
-	<div class="empty">
-		<Icon name="book" size={36} color="#C9D2DA" />
-		<p>Brak zgłoszeń w tej kategorii.</p>
-	</div>
-{:else}
-	<div class="list">
-		{#each filtered as r (r.id)}
-			<div class="row">
-				<div class="row-main">
-					<span class="path-badge" style="--c: {pathColors[r.path]}">{pathLabels[r.path] ?? r.path}</span>
-					<div class="row-info">
-						<strong>{r.name}</strong>
-						<span class="row-email">{r.email}</span>
-					</div>
-					<span class="row-date">{formatDate(r.createdAt)}</span>
+<div class="dash-grid">
+	<section class="panel">
+		<div class="panel-head">
+			<h2>Ostatnia aktywność</h2>
+		</div>
+		<div class="activity-list">
+			{#each activityFeed as item (item.id)}
+				<div class="activity-row">
+					<span class="activity-dot"></span>
+					<span class="activity-text">{item.text}</span>
+					<span class="activity-time">{formatRelative(item.time)}</span>
 				</div>
+			{/each}
+		</div>
+	</section>
 
-				<div class="row-details">
-					{#if r.phone}<span><b>Tel:</b> {r.phone}</span>{/if}
-					{#if r.city}<span><b>Miasto:</b> {r.city}</span>{/if}
-					{#if r.availability}<span><b>Dostępność:</b> {r.availability}</span>{/if}
-					{#if r.supportType}<span><b>Forma:</b> {r.supportType === 'JEDNORAZOWE' ? 'Jednorazowe' : 'Cykliczne'}</span>{/if}
-					{#if r.motivation}<span class="full"><b>Motywacja:</b> {r.motivation}</span>{/if}
-					{#if r.message}<span class="full"><b>Wiadomość:</b> {r.message}</span>{/if}
-				</div>
-
-				<form method="POST" action="?/updateStatus" use:enhance class="row-status">
-					<input type="hidden" name="id" value={r.id} />
-					<label>
-						Status:
-						<select name="status" value={r.status} onchange={(e) => e.currentTarget.form?.requestSubmit()}>
-							{#each Object.entries(statusLabels) as [value, label]}
-								<option {value}>{label}</option>
-							{/each}
-						</select>
-					</label>
-				</form>
-			</div>
-		{/each}
-	</div>
-{/if}
+	<section class="panel">
+		<div class="panel-head">
+			<h2>Szybkie akcje</h2>
+		</div>
+		<div class="quick-links">
+			<a href="/administracja/wiedza/nowy" class="quick-link">
+				<Icon name="edit" size={17} color="#169FDB" />
+				Nowy artykuł
+			</a>
+			<a href="/administracja/materialy/nowy" class="quick-link">
+				<Icon name="file-text" size={17} color="#169FDB" />
+				Dodaj materiał
+			</a>
+			<a href="/administracja/uzytkownicy/nowy" class="quick-link">
+				<Icon name="users" size={17} color="#169FDB" />
+				Zaproś użytkownika
+			</a>
+			<a href="/administracja/zgloszenia" class="quick-link">
+				<Icon name="message" size={17} color="#169FDB" />
+				Przejrzyj zgłoszenia
+			</a>
+		</div>
+	</section>
+</div>
 
 <style lang="scss">
 	@use '../../lib/styles/variables' as *;
@@ -101,108 +125,106 @@
 		p { font-size: $font-size-sm; color: $color-text-muted; margin-top: 4px; }
 	}
 
-	.filters { display: flex; gap: $spacing-sm; margin-bottom: $spacing-xl; flex-wrap: wrap; }
+	.stat-grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: $spacing-md;
+		margin-bottom: $spacing-xl;
+		@media (max-width: 900px) { grid-template-columns: repeat(2, 1fr); }
+		@media (max-width: 480px) { grid-template-columns: 1fr; }
+	}
 
-	.chip {
+	.stat-card {
+		display: flex;
+		flex-direction: column;
+		gap: $spacing-sm;
+		background: $color-bg-card;
+		border: 1px solid $color-border;
+		border-radius: $radius;
+		padding: $spacing-lg;
+		text-decoration: none;
+		color: inherit;
+		transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+
+		&:hover { transform: translateY(-2px); box-shadow: $shadow-md; border-color: color-mix(in srgb, var(--c) 40%, $color-border); }
+	}
+
+	.stat-ic {
+		width: 38px;
+		height: 38px;
+		border-radius: $radius-sm;
 		display: inline-flex;
 		align-items: center;
-		gap: 6px;
-		padding: 8px 14px;
-		border-radius: $radius-full;
-		border: 1.5px solid $color-border;
-		background: $color-bg-card;
-		font-size: $font-size-sm;
-		font-weight: 600;
-		color: $color-text-muted;
-		transition: all 0.15s ease;
-
-		&:hover { border-color: $color-primary; }
-		&.active { border-color: $color-primary; background: $color-primary-bg; color: $color-primary; }
+		justify-content: center;
+		background: color-mix(in srgb, var(--c) 14%, transparent);
 	}
 
-	.chip-count {
-		font-size: 11px;
-		font-weight: 700;
-		background: rgba(0, 0, 0, 0.08);
-		border-radius: $radius-full;
-		padding: 1px 7px;
+	.stat-body {
+		display: flex;
+		flex-direction: column;
+		strong { font-family: $font-serif; font-size: 28px; font-weight: 700; color: $color-secondary; line-height: 1; }
 	}
 
-	.empty { text-align: center; padding: $spacing-3xl; color: $color-text-muted; p { margin-top: $spacing-md; } }
+	.stat-label { font-size: $font-size-sm; font-weight: 600; color: $color-text; margin-top: 4px; }
+	.stat-sub { font-size: 12px; color: $color-text-muted; }
 
-	.list { display: flex; flex-direction: column; gap: $spacing-md; }
+	.dash-grid {
+		display: grid;
+		grid-template-columns: 1.4fr 1fr;
+		gap: $spacing-lg;
+		@media (max-width: 860px) { grid-template-columns: 1fr; }
+	}
 
-	.row {
+	.panel {
 		background: $color-bg-card;
 		border: 1px solid $color-border;
 		border-radius: $radius;
 		padding: $spacing-lg;
 	}
 
-	.row-main {
+	.panel-head {
+		margin-bottom: $spacing-md;
+		h2 { font-size: $font-size-base; font-weight: 700; color: $color-secondary; }
+	}
+
+	.activity-list { display: flex; flex-direction: column; gap: $spacing-md; }
+
+	.activity-row {
+		display: flex;
+		align-items: flex-start;
+		gap: $spacing-sm;
+		padding-bottom: $spacing-md;
+		border-bottom: 1px solid $color-border;
+		&:last-child { border-bottom: none; padding-bottom: 0; }
+	}
+
+	.activity-dot {
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background: $color-primary;
+		margin-top: 6px;
+		flex-shrink: 0;
+	}
+
+	.activity-text { flex: 1; font-size: $font-size-sm; color: $color-text; line-height: 1.5; }
+	.activity-time { font-size: 12px; color: $color-text-muted; white-space: nowrap; flex-shrink: 0; }
+
+	.quick-links { display: flex; flex-direction: column; gap: $spacing-sm; }
+
+	.quick-link {
 		display: flex;
 		align-items: center;
-		gap: $spacing-md;
-		flex-wrap: wrap;
-	}
-
-	.path-badge {
-		padding: 4px 12px;
-		border-radius: $radius-full;
-		font-size: 11px;
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 0.4px;
-		background: color-mix(in srgb, var(--c) 12%, transparent);
-		color: var(--c);
-	}
-
-	.row-info {
-		display: flex;
-		flex-direction: column;
-		strong { font-size: $font-size-base; color: $color-secondary; }
-		.row-email { font-size: $font-size-sm; color: $color-text-muted; }
-	}
-
-	.row-date {
-		margin-left: auto;
-		font-size: 12px;
-		color: $color-text-muted;
-	}
-
-	.row-details {
-		display: flex;
-		flex-wrap: wrap;
-		gap: $spacing-sm $spacing-lg;
-		margin-top: $spacing-md;
-		padding-top: $spacing-md;
-		border-top: 1px solid $color-border;
+		gap: $spacing-sm;
+		padding: $spacing-sm $spacing-md;
+		border-radius: $radius-sm;
+		border: 1.5px solid $color-border;
+		text-decoration: none;
 		font-size: $font-size-sm;
+		font-weight: 600;
 		color: $color-text;
+		transition: all 0.15s ease;
 
-		b { color: $color-text-muted; font-weight: 600; }
-		.full { width: 100%; }
-	}
-
-	.row-status {
-		margin-top: $spacing-md;
-
-		label {
-			display: inline-flex;
-			align-items: center;
-			gap: $spacing-sm;
-			font-size: $font-size-sm;
-			font-weight: 600;
-			color: $color-text-muted;
-		}
-
-		select {
-			padding: 6px 10px;
-			border-radius: $radius-sm;
-			border: 1.5px solid $color-border;
-			font-size: $font-size-sm;
-			font-family: inherit;
-			background: $color-bg;
-		}
+		&:hover { border-color: $color-primary; color: $color-primary; }
 	}
 </style>
